@@ -10,8 +10,7 @@
 
 .tileContainer {
   height: 16vh;
-  width: 12vw;
-  display: flex;
+  display: flex !important;
   flex-direction: column;
 }
 
