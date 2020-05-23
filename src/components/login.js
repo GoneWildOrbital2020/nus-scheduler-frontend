@@ -1,13 +1,19 @@
 import React, { useState } from 'react';
-import { TextField } from '@material-ui/core';
+import { TextField, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import '../css/login.css';
+import { Link } from 'react-router-dom';
 import logo from '../images/logo.png';
 
 const useStyles = makeStyles({
   root: {
     width: '100%',
     position: 'relative',
+  },
+  button: {
+    color: 'black',
+    width: '82%',
+    backgroundColor: '#33f0ff',
   },
 });
 
@@ -22,6 +28,11 @@ const Login = () => {
   const handleChangePassword = (event) => {
     console.log(event.target.value);
     setPassword(event.target.value);
+  };
+  const handleSubmit = (event) => {
+    // TODO: validate data
+    console.log('reloading!');
+    window.location.reload();
   };
   return (
     <div className="login">
@@ -45,8 +56,14 @@ const Login = () => {
             />
           </div>
         </form>
+        <Button className={classes.button} onClick={handleSubmit}>
+          Login
+        </Button>
+        <h5>Not a user?</h5>
+        <Link to="/signup" style={{ color: 'black' }}>
+          <Button className={classes.button}>Sign Up!</Button>
+        </Link>
       </div>
-      <h1>Login page!</h1>
     </div>
   );
 };

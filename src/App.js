@@ -3,6 +3,7 @@ import './App.css';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Navbar from './components/navbar';
 import Login from './components/login';
+import Signup from './components/signup';
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
         <Navbar />
         <Switch>
           <Route path="/login" exact component={Login} />
+          <Route path="/signup" exact component={Signup} />
         </Switch>
       </div>
     </Router>
