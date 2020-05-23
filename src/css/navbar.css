@@ -7,3 +7,19 @@ Link {
   text-decoration: none;
   color: white;
 }
+
+img {
+  width: 80%;
+  max-height: 64px;
+}
+
+.right {
+  width: 85%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.left {
+  width: 15%;
+  text-align: left;
+}

@@ -1,14 +1,8 @@
-import {
-  AppBar,
-  Toolbar,
-  IconButton,
-  Typography,
-  Button,
-} from '@material-ui/core';
+import { AppBar, Toolbar, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import MenuIcon from '@material-ui/icons/Menu';
 import React from 'react';
 import { Link } from 'react-router-dom';
+import Logo from '../images/logo.png';
 import '../css/navbar.css';
 
 const useStyles = makeStyles({
@@ -34,26 +28,25 @@ const Navbar = () => {
     <div>
       <AppBar position="static">
         <Toolbar>
-          <IconButton
-            edge="start"
-            className={classes.menuButton}
-            color="inherit"
-            aria-label="menu">
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" className={classes.title}>
-            NUS Scheduler
-          </Typography>
-          <Link to="/login">
+          <div className="left">
+            <Link to="/">
+              <Button color="inherit" className={classes.button}>
+                <img src={Logo} alt="logo" />
+              </Button>
+            </Link>
+          </div>
+          <div className="right">
+            <Link to="/login">
+              <Button color="inherit" className={classes.button}>
+                Login
+              </Button>
+            </Link>
             <Button color="inherit" className={classes.button}>
-              Login
+              <a href="https://github.com/GoneWildOrbital2020/nus-scheduler-frontend">
+                Source
+              </a>
             </Button>
-          </Link>
-          <Button color="inherit" className={classes.button}>
-            <a href="https://github.com/GoneWildOrbital2020/nus-scheduler-frontend">
-              Source
-            </a>
-          </Button>
+          </div>
         </Toolbar>
       </AppBar>
     </div>
