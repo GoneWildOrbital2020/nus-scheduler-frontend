@@ -22,16 +22,13 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const handleChangeEmail = (event) => {
-    console.log(event.target.value);
     setEmail(event.target.value);
   };
   const handleChangePassword = (event) => {
-    console.log(event.target.value);
     setPassword(event.target.value);
   };
   const handleSubmit = (event) => {
     // TODO: validate data
-    console.log('reloading!');
     window.location.reload();
   };
   return (
