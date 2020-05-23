@@ -1,0 +1,12 @@
+.login {
+  width: 100%;
+  text-align: center;
+}
+
+.form {
+  box-sizing: border-box;
+  margin-top: 2em;
+  display: inline-block;
+  border: solid blue 1em;
+  padding: 2em
+}
