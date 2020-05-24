@@ -24,10 +24,19 @@ const colors = [
   '#96897B',
   '#DFD5A5',
 ];
-const DayDialog = ({ events, saveEvents, handleClose, open }) => {
+const DayDialog = ({
+  events,
+  saveEvents,
+  handleClose,
+  open,
+  getNumOfEvents,
+  changeNumOfEvents,
+}) => {
   const [newEvents, setNewEvents] = React.useState(
     events.map((x) => ({ ...x })),
   );
+
+  const [count, setCount] = React.useState(0);
 
   const handleChange = (id, type) => (e) => {
     const tmp = newEvents.map((x) => ({ ...x }));
@@ -49,6 +58,7 @@ const DayDialog = ({ events, saveEvents, handleClose, open }) => {
 
   const shouldSave = (save) => () => {
     if (save) {
+      changeNumOfEvents(getNumOfEvents() + count);
       saveEvents(newEvents);
     } else {
       setNewEvents(events.map((x) => ({ ...x })));
@@ -58,8 +68,9 @@ const DayDialog = ({ events, saveEvents, handleClose, open }) => {
 
   const addEvent = () => {
     const tmp = newEvents.map((x) => ({ ...x }));
-    tmp.push({ id: newEvents.length, title: 'New Event' });
+    tmp.push({ id: getNumOfEvents() + count, title: 'New Event' });
     setNewEvents(tmp);
+    setCount(count + 1);
   };
 
   const deleteEvent = (id) => () => {
@@ -200,6 +211,8 @@ DayDialog.propTypes = {
   saveEvents: PropTypes.func.isRequired,
   handleClose: PropTypes.func.isRequired,
   open: PropTypes.bool,
+  getNumOfEvents: PropTypes.func.isRequired,
+  changeNumOfEvents: PropTypes.func.isRequired,
 };
 
 DayDialog.defaultProps = {

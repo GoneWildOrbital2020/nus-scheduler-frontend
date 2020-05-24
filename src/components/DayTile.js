@@ -3,7 +3,12 @@ import PropTypes from 'prop-types';
 import DayButton from './DayButton';
 import DayDialog from './DayDialog';
 
-const DayTile = ({ index, events: eventsProp }) => {
+const DayTile = ({
+  index,
+  events: eventsProp,
+  changeNumOfEvents,
+  getNumOfEvents,
+}) => {
   const [events, setEvents] = useState(eventsProp);
   const [open, setOpen] = React.useState(false);
 
@@ -26,6 +31,8 @@ const DayTile = ({ index, events: eventsProp }) => {
         saveEvents={saveEvents}
         handleClose={handleClose}
         open={open}
+        changeNumOfEvents={changeNumOfEvents}
+        getNumOfEvents={getNumOfEvents}
       />
     </>
   );
@@ -46,6 +53,8 @@ DayTile.propTypes = {
     }),
   ),
   index: PropTypes.number.isRequired,
+  changeNumOfEvents: PropTypes.func.isRequired,
+  getNumOfEvents: PropTypes.func.isRequired,
 };
 
 DayTile.defaultProps = {
