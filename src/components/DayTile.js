@@ -1,45 +1,42 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Paper, Button } from '@material-ui/core';
-import './DayTile.css';
+import DayButton from './DayButton';
+import DayDialog from './DayDialog';
 
-class DayTile extends React.Component {
-  constructor(props) {
-    super(props);
-    this.index = props.index;
-    this.events = props.events;
-  }
+const DayTile = ({ index, events: eventsProp }) => {
+  const [events, setEvents] = useState(eventsProp);
+  const [open, setOpen] = React.useState(false);
 
-  render() {
-    return (
-      <Button
-        variant="outlined"
-        classes={{
-          root: 'tileRoot',
-          outlined: 'tileOutlined',
-          label: 'tileContainer',
-        }}>
-        <div className="tileNumber">{this.index}</div>
-        <div className="tileEvents">
-          {this.events.map((event) => (
-            <Paper
-              className="tileEvent"
-              square={true}
-              style={{ background: event.color }}>
-              {event.title}
-            </Paper>
-          ))}
-        </div>
-      </Button>
-    );
-  }
-}
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const saveEvents = (e) => {
+    setEvents(e);
+  };
+  return (
+    <>
+      <DayButton index={index} events={events} handleOpen={handleOpen} />
+      <DayDialog
+        events={events}
+        saveEvents={saveEvents}
+        handleClose={handleClose}
+        open={open}
+      />
+    </>
+  );
+};
 
 export default DayTile;
 
 DayTile.propTypes = {
   events: PropTypes.arrayOf(
     PropTypes.shape({
+      id: PropTypes.int,
       color: PropTypes.string,
       title: PropTypes.string,
       desc: PropTypes.string,
