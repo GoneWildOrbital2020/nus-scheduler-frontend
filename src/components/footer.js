@@ -1,11 +1,17 @@
 import React from 'react';
+import '../css/footer.css';
+import logo from '../images/logo.png';
 
-const footer = () => {
+const Footer = () => {
   return (
-    <div className="footer">
-      <h1>Footer</h1>
-    </div>
+    <footer className="footer">
+      <div className="logo">
+        <img src={logo} alt="logo" />
+      </div>
+      <h3>&copy; Copyright 2020</h3>
+      <h3>Made by Audrey Felicio Anwar & Fidella Widjojo</h3>
+    </footer>
   );
 };
 
-export default footer;
+export default Footer;
