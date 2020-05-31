@@ -18,7 +18,7 @@ const DayButton = ({ index, events, handleOpen }) => {
       <div className="buttonEvents">
         {events.map((event) => (
           <Paper
-            key={event.id}
+            key={event.index}
             className="buttonEvent"
             square
             style={{ background: event.color }}
@@ -38,10 +38,10 @@ export default DayButton;
 DayButton.propTypes = {
   events: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.int,
+      index: PropTypes.int,
       color: PropTypes.string,
       title: PropTypes.string,
-      desc: PropTypes.string,
+      description: PropTypes.string,
       start: PropTypes.string,
       end: PropTypes.string,
       location: PropTypes.string,

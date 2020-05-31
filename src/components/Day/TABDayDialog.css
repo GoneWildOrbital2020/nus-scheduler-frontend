@@ -4,18 +4,19 @@
 }
 
 .dialogItem {
-  flex:1;
-  padding: 0.2rem 1rem;
+  flex: 1;
+  padding: 0rem 2rem;
 }
 
 .dialogTitle {
   display: flex;
-  padding: 1rem;
+  padding: 2rem;
+  padding-bottom: 1rem;
   justify-content: space-between;
 }
 
 .buttonContainer2 {
-  padding: 1rem;
+  padding: 2rem;
 }
 
 .panelSummary {
@@ -27,5 +28,6 @@
 
 .container {
   padding: 1rem;
-  width: 100%;
+  display: flex;
+  flex-direction: column;
 }

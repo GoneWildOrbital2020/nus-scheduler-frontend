@@ -1,0 +1,10 @@
+.headContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.calendarContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

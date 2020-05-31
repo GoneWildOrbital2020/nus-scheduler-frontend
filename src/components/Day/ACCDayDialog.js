@@ -12,7 +12,9 @@ import {
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import { TwitterPicker } from 'react-color';
-import './DayDialog.css';
+import './ACCDayDialog.css';
+import { connect } from 'react-redux';
+import { addNumOfEvents } from '../../redux/actions';
 
 const colors = [
   '#EFBC9B',
@@ -29,8 +31,8 @@ const DayDialog = ({
   saveEvents,
   handleClose,
   open,
-  getNumOfEvents,
-  changeNumOfEvents,
+  numOfEvents,
+  dispatch,
 }) => {
   const [newEvents, setNewEvents] = React.useState(
     events.map((x) => ({ ...x })),
@@ -38,27 +40,29 @@ const DayDialog = ({
 
   const [count, setCount] = React.useState(0);
 
-  const handleChange = (id, type) => (e) => {
+  React.useEffect(() => setNewEvents(events.map((x) => ({ ...x }))), [events]);
+
+  const handleChange = (index, type) => (e) => {
     const tmp = newEvents.map((x) => ({ ...x }));
     tmp.forEach((event) => {
       // eslint-disable-next-line no-param-reassign
-      if (event.id === id) event[type] = e.target.value;
+      if (event.index === index) event[type] = e.target.value;
     });
     setNewEvents(tmp);
   };
 
-  const handleColorChange = (id) => (e) => {
+  const handleColorChange = (index) => (e) => {
     const tmp = newEvents.map((x) => ({ ...x }));
     tmp.forEach((event) => {
       // eslint-disable-next-line no-param-reassign
-      if (event.id === id) event.color = e.hex;
+      if (event.index === index) event.color = e.hex;
     });
     setNewEvents(tmp);
   };
 
   const shouldSave = (save) => () => {
     if (save) {
-      changeNumOfEvents(getNumOfEvents() + count);
+      dispatch(addNumOfEvents(count));
       saveEvents(newEvents);
     } else {
       setNewEvents(events.map((x) => ({ ...x })));
@@ -68,13 +72,15 @@ const DayDialog = ({
 
   const addEvent = () => {
     const tmp = newEvents.map((x) => ({ ...x }));
-    tmp.push({ id: getNumOfEvents() + count, title: 'New Event' });
+    tmp.push({ index: numOfEvents + count, title: 'New Event' });
     setNewEvents(tmp);
     setCount(count + 1);
   };
 
-  const deleteEvent = (id) => () => {
-    const tmp = newEvents.filter((x) => x.id !== id).map((x) => ({ ...x }));
+  const deleteEvent = (index) => () => {
+    const tmp = newEvents
+      .filter((x) => x.index !== index)
+      .map((x) => ({ ...x }));
     setNewEvents(tmp);
   };
 
@@ -112,7 +118,7 @@ const DayDialog = ({
                 <TextField
                   fullWidth
                   defaultValue={event.title}
-                  onChange={handleChange(event.id, 'title')}
+                  onChange={handleChange(event.index, 'title')}
                 />
                 <Typography style={{ fontWeight: 'bold', paddingTop: '1rem' }}>
                   Description:
@@ -121,8 +127,8 @@ const DayDialog = ({
                   fullWidth
                   multiline
                   rows={2}
-                  defaultValue={event.desc}
-                  onChange={handleChange(event.id, 'desc')}
+                  defaultValue={event.description}
+                  onChange={handleChange(event.index, 'description')}
                 />
                 <Typography style={{ fontWeight: 'bold', paddingTop: '1rem' }}>
                   Start Time:
@@ -130,7 +136,7 @@ const DayDialog = ({
                 <TextField
                   fullWidth
                   defaultValue={event.start}
-                  onChange={handleChange(event.id, 'start')}
+                  onChange={handleChange(event.index, 'start')}
                 />
                 <Typography style={{ fontWeight: 'bold', paddingTop: '1rem' }}>
                   End Time:
@@ -138,7 +144,7 @@ const DayDialog = ({
                 <TextField
                   fullWidth
                   defaultValue={event.end}
-                  onChange={handleChange(event.id, 'end')}
+                  onChange={handleChange(event.index, 'end')}
                 />
                 <Typography style={{ fontWeight: 'bold', paddingTop: '1rem' }}>
                   Location:
@@ -146,7 +152,7 @@ const DayDialog = ({
                 <TextField
                   fullWidth
                   defaultValue={event.location}
-                  onChange={handleChange(event.id, 'location')}
+                  onChange={handleChange(event.index, 'location')}
                 />
                 <Typography style={{ fontWeight: 'bold', padding: '1rem 0' }}>
                   Color:
@@ -154,12 +160,12 @@ const DayDialog = ({
                 <TwitterPicker
                   triangle="hide"
                   colors={colors}
-                  onChange={handleColorChange(event.id)}
+                  onChange={handleColorChange(event.index)}
                 />
                 <Button
                   autoFocus
                   variant="contained"
-                  onClick={deleteEvent(event.id)}
+                  onClick={deleteEvent(event.index)}
                   color="primary"
                   style={{ float: 'right' }}
                 >
@@ -194,15 +200,13 @@ const DayDialog = ({
   );
 };
 
-export default DayDialog;
-
 DayDialog.propTypes = {
   events: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.int,
+      index: PropTypes.int,
       color: PropTypes.string,
       title: PropTypes.string,
-      desc: PropTypes.string,
+      description: PropTypes.string,
       start: PropTypes.string,
       end: PropTypes.string,
       location: PropTypes.string,
@@ -211,11 +215,17 @@ DayDialog.propTypes = {
   saveEvents: PropTypes.func.isRequired,
   handleClose: PropTypes.func.isRequired,
   open: PropTypes.bool,
-  getNumOfEvents: PropTypes.func.isRequired,
-  changeNumOfEvents: PropTypes.func.isRequired,
+  numOfEvents: PropTypes.number.isRequired,
+  dispatch: PropTypes.func.isRequired,
 };
 
 DayDialog.defaultProps = {
   events: [],
   open: false,
 };
+
+const mapStateToProps = (state) => ({
+  numOfEvents: state.numOfEvents,
+});
+
+export default connect(mapStateToProps)(DayDialog);
