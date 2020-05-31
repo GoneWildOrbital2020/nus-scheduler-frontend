@@ -1,0 +1,31 @@
+.closeButton {
+  float: right !important;
+  padding-top: 0 !important;
+}
+
+.dialogItem {
+  flex: 1;
+  padding: 0.2rem 1rem;
+}
+
+.dialogTitle {
+  display: flex;
+  padding: 1rem;
+  justify-content: space-between;
+}
+
+.buttonContainer2 {
+  padding: 1rem;
+}
+
+.panelSummary {
+  font-size: 1.5rem;
+  font-weight: bold;
+  min-height: 0;
+  height: 3rem;
+}
+
+.container {
+  padding: 1rem;
+  width: 100%;
+}

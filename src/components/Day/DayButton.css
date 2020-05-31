@@ -1,0 +1,40 @@
+.buttonRoot {
+  height: 16vh;
+  width: 12vw;
+  padding: 0 !important;
+  margin: 0.5rem !important;
+}
+
+.buttonOutlined {
+  padding: 0 !important;
+}
+
+.buttonContainer {
+  height: 16vh;
+  display: flex !important;
+  flex-direction: column;
+}
+
+.buttonNumber {
+  font-size: 3vh;
+  font-weight: bold;
+  flex: 1 1 0;
+}
+
+.buttonEvents {
+  flex: 3 1 0;
+  overflow: auto;
+  align-self: stretch;
+}
+
+.buttonEvent {
+  font-size: 2.5vh;
+  overflow: hidden;
+  padding: 0.1rem;
+  margin-top: 0.2rem;
+  text-transform: capitalize;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
