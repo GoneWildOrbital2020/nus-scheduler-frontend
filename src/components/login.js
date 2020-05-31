@@ -19,17 +19,42 @@ const useStyles = makeStyles({
 
 const Login = () => {
   const classes = useStyles();
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const handleChangeEmail = (event) => {
-    setEmail(event.target.value);
+  const handleChangeUsername = (event) => {
+    setUsername(event.target.value);
   };
   const handleChangePassword = (event) => {
     setPassword(event.target.value);
   };
   const handleSubmit = (event) => {
     // TODO: validate data
-    window.location.reload();
+    event.preventDefault();
+    const data = {
+      username,
+      password,
+    };
+    fetch('http://localhost:8000/token-auth/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+      .then((res) => {
+        if (res.status === 400) {
+          throw new Error('bad request!');
+        }
+        return res.json();
+      })
+      .then((json) => {
+        localStorage.setItem('token', json.token);
+        window.location.replace('/');
+      })
+      .catch((err) => {
+        console.log(err);
+        console.log('error login, try again!');
+      });
   };
   return (
     <div className="login">
@@ -38,10 +63,10 @@ const Login = () => {
         <form className={classes.root}>
           <div className="input">
             <TextField
-              label="email"
+              label="username"
               variant="outlined"
-              value={email}
-              onChange={handleChangeEmail}
+              value={username}
+              onChange={handleChangeUsername}
             />
           </div>
           <div className="input">

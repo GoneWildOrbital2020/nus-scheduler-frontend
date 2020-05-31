@@ -32,7 +32,31 @@ const Signup = () => {
   };
   const handleSubmit = (event) => {
     // TODO: validate data
-    window.location.reload();
+    event.preventDefault();
+    const data = {
+      username,
+      password,
+    };
+    fetch('http://localhost:8000/users/users/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+      .then((res) => {
+        if (res.status === 400) {
+          throw new Error('bad request!');
+        }
+        return res.json();
+      })
+      .then((json) => {
+        localStorage.setItem('token', json.token);
+        window.location.replace('/login');
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
   return (
     <div className="signup">
