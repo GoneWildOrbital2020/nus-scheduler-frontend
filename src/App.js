@@ -19,22 +19,24 @@ function App() {
     <Provider store={store}>
       <Router>
         <div className="App">
-          <Navbar />
-          <Switch>
-            <Route
-              path="/"
-              exact
-              component={() => (
-                <Calendar
-                  monthIdx={0}
-                  getNumOfEvents={getNumOfEvents}
-                  changeNumOfEvents={changeNumOfEvents}
-                />
-              )}
-            />
-            <Route path="/login" exact component={Login} />
-            <Route path="/signup" exact component={Signup} />
-          </Switch>
+          <div className="content">
+            <Navbar />
+            <Switch>
+              <Route
+                path="/"
+                exact
+                component={() => (
+                  <Calendar
+                    monthIdx={0}
+                    getNumOfEvents={getNumOfEvents}
+                    changeNumOfEvents={changeNumOfEvents}
+                  />
+                )}
+              />
+              <Route path="/login" exact component={Login} />
+              <Route path="/signup" exact component={Signup} />
+            </Switch>
+          </div>
           <Footer />
         </div>
       </Router>
