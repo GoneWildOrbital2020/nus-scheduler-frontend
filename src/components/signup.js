@@ -34,10 +34,11 @@ const Signup = () => {
     // TODO: validate data
     event.preventDefault();
     const data = {
+      email,
       username,
       password,
     };
-    fetch('http://localhost:8000/users/users/', {
+    fetch('http://localhost:8000/users/create/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -50,8 +51,7 @@ const Signup = () => {
         }
         return res.json();
       })
-      .then((json) => {
-        localStorage.setItem('token', json.token);
+      .then(() => {
         window.location.replace('/login');
       })
       .catch((err) => {

@@ -3,6 +3,9 @@ import { TextField, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import '../css/login.css';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { toggleLogin } from '../redux/actions';
 import logo from '../images/logo.png';
 
 const useStyles = makeStyles({
@@ -17,12 +20,12 @@ const useStyles = makeStyles({
   },
 });
 
-const Login = () => {
+const Login = (props) => {
   const classes = useStyles();
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const handleChangeUsername = (event) => {
-    setUsername(event.target.value);
+  const handleChangeEmail = (event) => {
+    setEmail(event.target.value);
   };
   const handleChangePassword = (event) => {
     setPassword(event.target.value);
@@ -31,10 +34,10 @@ const Login = () => {
     // TODO: validate data
     event.preventDefault();
     const data = {
-      username,
+      email,
       password,
     };
-    fetch('http://localhost:8000/token-auth/', {
+    fetch('http://localhost:8000/users/login/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -48,8 +51,8 @@ const Login = () => {
         return res.json();
       })
       .then((json) => {
-        localStorage.setItem('token', json.token);
-        window.location.replace('/');
+        props.ToggleLogin(json.token);
+        // window.location.replace('/');
       })
       .catch((err) => {
         console.log(err);
@@ -63,10 +66,10 @@ const Login = () => {
         <form className={classes.root}>
           <div className="input">
             <TextField
-              label="username"
+              label="email"
               variant="outlined"
-              value={username}
-              onChange={handleChangeUsername}
+              value={email}
+              onChange={handleChangeEmail}
             />
           </div>
           <div className="input">
@@ -90,4 +93,14 @@ const Login = () => {
   );
 };
 
-export default Login;
+Login.propTypes = {
+  ToggleLogin: PropTypes.func.isRequired,
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    ToggleLogin: (token) => dispatch(toggleLogin(token)),
+  };
+};
+
+export default connect(null, mapDispatchToProps)(Login);
