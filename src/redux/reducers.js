@@ -1,9 +1,16 @@
-import { CHANGE_ACTIVE_MONTH, ADD_NUM_OF_EVENTS } from './actions';
+import {
+  CHANGE_ACTIVE_MONTH,
+  ADD_NUM_OF_EVENTS,
+  TOGGLE_LOGIN,
+  TOGGLE_LOGOUT,
+} from './actions';
 
 const initalState = {
   userId: 0,
   numOfEvents: 0,
   activeMonth: 0,
+  isLoggedIn: false,
+  token: null,
 };
 
 const reducer = (state = initalState, action) => {
@@ -17,6 +24,18 @@ const reducer = (state = initalState, action) => {
       return {
         ...state,
         numOfEvents: state.numOfEvents + action.val,
+      };
+    case TOGGLE_LOGIN:
+      return {
+        ...state,
+        isLoggedIn: true,
+        token: action.token,
+      };
+    case TOGGLE_LOGOUT:
+      return {
+        ...state,
+        isLoggedIn: false,
+        token: null,
       };
     default:
       return state;

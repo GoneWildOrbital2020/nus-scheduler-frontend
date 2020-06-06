@@ -3,6 +3,9 @@ import { TextField, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import '../css/login.css';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { toggleLogin } from '../redux/actions';
 import logo from '../images/logo.png';
 
 const useStyles = makeStyles({
@@ -17,7 +20,7 @@ const useStyles = makeStyles({
   },
 });
 
-const Login = () => {
+const Login = (props) => {
   const classes = useStyles();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -29,7 +32,32 @@ const Login = () => {
   };
   const handleSubmit = (event) => {
     // TODO: validate data
-    window.location.reload();
+    event.preventDefault();
+    const data = {
+      email,
+      password,
+    };
+    fetch('http://localhost:8000/users/login/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+      .then((res) => {
+        if (res.status === 400) {
+          throw new Error('bad request!');
+        }
+        return res.json();
+      })
+      .then((json) => {
+        props.ToggleLogin(json.token);
+        // window.location.replace('/');
+      })
+      .catch((err) => {
+        console.log(err);
+        console.log('error login, try again!');
+      });
   };
   return (
     <div className="login">
@@ -65,4 +93,14 @@ const Login = () => {
   );
 };
 
-export default Login;
+Login.propTypes = {
+  ToggleLogin: PropTypes.func.isRequired,
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    ToggleLogin: (token) => dispatch(toggleLogin(token)),
+  };
+};
+
+export default connect(null, mapDispatchToProps)(Login);

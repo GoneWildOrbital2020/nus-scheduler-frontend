@@ -10,7 +10,12 @@ import Login from './components/login';
 import Signup from './components/signup';
 import Footer from './components/footer';
 
-const store = createStore(reducer);
+/* eslint-disable no-underscore-dangle */
+const store = createStore(
+  reducer,
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
+);
+/* eslint-enable */
 function App() {
   const [numOfEvents, setNumOfEvents] = React.useState(0);
   const getNumOfEvents = () => numOfEvents;
