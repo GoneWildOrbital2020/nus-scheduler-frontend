@@ -6,11 +6,11 @@ import {
 } from './actions';
 
 const initalState = {
-  username: '',
+  username: window.localStorage.getItem('username'),
   numOfEvents: 0,
   activeMonth: 0,
-  isLoggedIn: false,
-  token: null,
+  isLoggedIn: window.localStorage.getItem('isLoggedIn'),
+  token: window.localStorage.getItem('token'),
 };
 
 const reducer = (state = initalState, action) => {

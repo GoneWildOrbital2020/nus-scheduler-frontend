@@ -52,7 +52,10 @@ const Login = (props) => {
       })
       .then((json) => {
         props.ToggleLogin(json.token, json.username);
-        // window.location.replace('/');
+        window.localStorage.setItem('token', json.token);
+        window.localStorage.setItem('username', json.username);
+        window.localStorage.setItem('isLoggedIn', true);
+        window.location.replace('/');
       })
       .catch((err) => {
         console.log(err);

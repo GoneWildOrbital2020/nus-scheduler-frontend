@@ -31,7 +31,11 @@ const Navbar = (props) => {
   const classes = useStyles();
   const handleLogout = (event) => {
     event.preventDefault();
+    window.localStorage.setItem('token', null);
+    window.localStorage.setItem('username', null);
+    window.localStorage.setItem('isLoggedIn', false);
     ToggleLogout();
+    window.location.replace('/login');
   };
   return (
     <div>
@@ -45,7 +49,7 @@ const Navbar = (props) => {
             </Link>
           </div>
           <div className="right">
-            {isLoggedIn ? (
+            {JSON.parse(isLoggedIn) ? (
               <Button
                 color="inherit"
                 className={classes.button}
@@ -72,7 +76,7 @@ const Navbar = (props) => {
 };
 
 Navbar.propTypes = {
-  isLoggedIn: PropTypes.bool.isRequired,
+  isLoggedIn: PropTypes.string.isRequired,
   ToggleLogout: PropTypes.func.isRequired,
 };
 
