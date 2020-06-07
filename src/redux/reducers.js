@@ -6,7 +6,7 @@ import {
 } from './actions';
 
 const initalState = {
-  userId: 0,
+  username: '',
   numOfEvents: 0,
   activeMonth: 0,
   isLoggedIn: false,
@@ -30,12 +30,14 @@ const reducer = (state = initalState, action) => {
         ...state,
         isLoggedIn: true,
         token: action.token,
+        username: action.username,
       };
     case TOGGLE_LOGOUT:
       return {
         ...state,
         isLoggedIn: false,
         token: null,
+        username: '',
       };
     default:
       return state;

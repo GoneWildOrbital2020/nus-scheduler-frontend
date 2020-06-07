@@ -5,28 +5,38 @@ import DayButton from './DayButton';
 import DayDialog from './TABDayDialog';
 import { url } from '../constant';
 
-const fetchEvents = async (userId, month, day) => {
-  const response = await fetch(`${url}/calendars/${userId}/${month}/${day}`);
+const fetchEvents = async (token, username, month, day) => {
+  const response = await fetch(`${url}/calendars/${username}/${month}/${day}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  });
   if (!response.ok) throw new Error("Can't fetch data");
   const json = await response.json();
   return json.map((data) => data.fields);
 };
 
-const saveEventsToDB = (userId, month, day, events) => {
+const saveEventsToDB = (token, username, month, day, events) => {
   const options = {
     method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
     body: JSON.stringify({ events }),
   };
-  fetch(`${url}/calendars/${userId}/${month}/${day}`, options);
+  fetch(`${url}/calendars/${username}/${month}/${day}`, options);
 };
 
-const DayTile = ({ index, userId, activeMonth }) => {
+const DayTile = ({ index, username, activeMonth, token }) => {
   const [events, setEvents] = React.useState([]);
   const [open, setOpen] = React.useState(false);
 
   React.useEffect(() => {
     const getEvents = () => {
-      fetchEvents(userId, activeMonth, index)
+      fetchEvents(token, username, activeMonth, index)
         .then((data) => setEvents(data))
         .catch(() => {
           setEvents([]);
@@ -44,7 +54,7 @@ const DayTile = ({ index, userId, activeMonth }) => {
   };
 
   const saveEvents = (e) => {
-    saveEventsToDB(userId, activeMonth, index, e);
+    saveEventsToDB(token, username, activeMonth, index, e);
     setEvents(e);
   };
   return (
@@ -62,13 +72,15 @@ const DayTile = ({ index, userId, activeMonth }) => {
 
 DayTile.propTypes = {
   index: PropTypes.number.isRequired,
-  userId: PropTypes.number.isRequired,
+  username: PropTypes.string.isRequired,
   activeMonth: PropTypes.number.isRequired,
+  token: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   activeMonth: state.activeMonth,
-  userId: state.userId,
+  username: state.username,
+  token: state.token,
 });
 
 export default connect(mapStateToProps)(DayTile);

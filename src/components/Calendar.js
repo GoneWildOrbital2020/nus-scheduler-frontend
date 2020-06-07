@@ -11,18 +11,24 @@ import Month from './Month';
 
 import './Calendar.css';
 
-const fetchNumOfEvents = async (userId) => {
-  const response = await fetch(`${url}/calendars/${userId}`);
+const fetchNumOfEvents = async (token, username) => {
+  const response = await fetch(`${url}/calendars/${username}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  });
   if (!response.ok) throw new Error("Can't fetch data");
   const json = await response.json();
   return json.count;
 };
 
-const Calendar = ({ activeMonth, numOfEvents, userId, dispatch }) => {
+const Calendar = ({ activeMonth, numOfEvents, username, dispatch, token }) => {
   const clickLeft = () => dispatch(changeActiveMonth(-1));
   const clickRight = () => dispatch(changeActiveMonth(1));
 
-  fetchNumOfEvents(userId).then((data) =>
+  fetchNumOfEvents(token, username).then((data) =>
     dispatch(addNumOfEvents(data - numOfEvents)),
   );
 
@@ -47,14 +53,16 @@ const Calendar = ({ activeMonth, numOfEvents, userId, dispatch }) => {
 Calendar.propTypes = {
   activeMonth: PropTypes.number.isRequired,
   numOfEvents: PropTypes.number.isRequired,
-  userId: PropTypes.number.isRequired,
+  username: PropTypes.string.isRequired,
   dispatch: PropTypes.func.isRequired,
+  token: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   activeMonth: state.activeMonth,
   numOfEvents: state.numOfEvents,
-  userId: state.userId,
+  username: state.username,
+  token: state.token,
 });
 
 export default connect(mapStateToProps)(Calendar);

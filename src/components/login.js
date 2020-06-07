@@ -51,7 +51,7 @@ const Login = (props) => {
         return res.json();
       })
       .then((json) => {
-        props.ToggleLogin(json.token);
+        props.ToggleLogin(json.token, json.username);
         // window.location.replace('/');
       })
       .catch((err) => {
@@ -99,7 +99,7 @@ Login.propTypes = {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    ToggleLogin: (token) => dispatch(toggleLogin(token)),
+    ToggleLogin: (token, username) => dispatch(toggleLogin(token, username)),
   };
 };
 
