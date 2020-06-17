@@ -60,6 +60,7 @@ const Upload = (props) => {
   const [name, setName] = useState('');
   const [file, setFile] = useState([]);
   const [image, setImage] = useState([]);
+  const [tableData, setTableData] = useState([]);
   useEffect(() => {
     fetch(`http://localhost:8000/calendars/get/file/${username}/CS1101S`, {
       method: 'GET',
@@ -86,8 +87,37 @@ const Upload = (props) => {
       .then((json) => {
         console.log(json);
         setImage(json);
+        return 'successful';
       });
+    setTableData([]);
   }, []);
+  useEffect(() => {
+    console.log('changed');
+    const newTableData = tableData;
+    file.forEach((element) => {
+      console.log(element);
+      const obj = {};
+      obj.name = element.fields.name;
+      obj.date = '2020/06/17';
+      obj.fileType = '.pdf';
+      newTableData.push(obj);
+    });
+    setTableData(newTableData);
+  }, [file]);
+  useEffect(() => {
+    console.log('image');
+    const newTableData = tableData;
+    image.forEach((element) => {
+      console.log(element);
+      const obj = {};
+      obj.name = element.fields.name;
+      obj.date = '2020/06/17';
+      obj.fileType = '.jpeg';
+      newTableData.push(obj);
+    });
+    setTableData(newTableData);
+    console.log(tableData);
+  }, [image]);
   const handleChangeName = (event) => {
     setName(event.target.value);
   };
@@ -171,10 +201,7 @@ const Upload = (props) => {
           { title: 'Date', field: 'date' },
           { title: 'File Type', field: 'fileType' },
         ]}
-        data={[
-          { name: 'testImage', date: '2020/06/14', fileType: '.jpeg' },
-          { name: 'testFile', date: '2020/06/14', fileType: '.pdf' },
-        ]}
+        data={[...tableData]}
       />
     </div>
   );
