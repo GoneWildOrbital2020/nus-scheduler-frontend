@@ -3,6 +3,7 @@ import { TextField, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import '../css/signup.css';
 import logo from '../images/logo.png';
+import { dark, light, accent } from '../colors';
 
 const useStyles = makeStyles({
   root: {
@@ -10,9 +11,9 @@ const useStyles = makeStyles({
     position: 'relative',
   },
   button: {
-    color: 'black',
-    width: '82%',
-    backgroundColor: '#33f0ff',
+    color: light,
+    width: '100%',
+    backgroundColor: accent,
   },
 });
 
@@ -60,11 +61,12 @@ const Signup = () => {
   };
   return (
     <div className="signup">
-      <div className="form">
-        <img src={logo} alt="logo" />
+      <div className="form" style={{ backgroundColor: light }}>
+        <h1 style={{ color: dark }}>JOIN NOW</h1>
         <form className={classes.root}>
           <div className="input">
             <TextField
+              fullWidth
               label="email"
               variant="outlined"
               value={email}
@@ -73,6 +75,7 @@ const Signup = () => {
           </div>
           <div className="input">
             <TextField
+              fullWidth
               label="username"
               variant="outlined"
               value={username}
@@ -81,7 +84,9 @@ const Signup = () => {
           </div>
           <div className="input">
             <TextField
+              fullWidth
               label="password"
+              type="password"
               variant="outlined"
               value={password}
               onChange={handleChangePassword}

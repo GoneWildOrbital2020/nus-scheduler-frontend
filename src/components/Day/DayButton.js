@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Paper, Button, Typography } from '@material-ui/core';
+import { light } from '../../colors';
 import './DayButton.css';
 
 const DayButton = ({ index, events, handleOpen }) => {
@@ -12,6 +13,7 @@ const DayButton = ({ index, events, handleOpen }) => {
         outlined: 'buttonOutlined',
         label: 'buttonContainer',
       }}
+      style={{ backgroundColor: light }}
       onClick={handleOpen}
     >
       <div className="buttonNumber">{index}</div>

@@ -6,11 +6,12 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { toggleLogout } from '../redux/actions';
 import Logo from '../images/logo.png';
+import { light, dark } from '../colors';
 import '../css/navbar.css';
 
 const useStyles = makeStyles({
   root: {
-    flexGrow: 1,
+    backgroundColor: dark,
   },
   menuButton: {
     marginRight: 0,
@@ -21,7 +22,7 @@ const useStyles = makeStyles({
     textAlign: 'left',
   },
   button: {
-    color: 'white',
+    color: light,
   },
 });
 
@@ -39,7 +40,7 @@ const Navbar = (props) => {
   };
   return (
     <div>
-      <AppBar position="static">
+      <AppBar position="static" className={classes.root}>
         <Toolbar>
           <div className="left">
             <Link to="/">
@@ -53,7 +54,8 @@ const Navbar = (props) => {
               <Button
                 color="inherit"
                 className={classes.button}
-                onClick={handleLogout}>
+                onClick={handleLogout}
+              >
                 Logout
               </Button>
             ) : (
@@ -63,10 +65,12 @@ const Navbar = (props) => {
                 </Button>
               </Link>
             )}
-            <Button color="inherit" className={classes.button}>
-              <a href="https://github.com/GoneWildOrbital2020/nus-scheduler-frontend">
-                Source
-              </a>
+            <Button
+              color="inherit"
+              className={classes.button}
+              href="https://github.com/GoneWildOrbital2020/nus-scheduler-frontend"
+            >
+              Source
             </Button>
           </div>
         </Toolbar>
