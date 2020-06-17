@@ -58,66 +58,57 @@ const Upload = (props) => {
   const { token, username } = props;
   const classes = useStyles();
   const [name, setName] = useState('');
-  const [file, setFile] = useState([]);
-  const [image, setImage] = useState([]);
+  // const [file, setFile] = useState([]);
+  // const [image, setImage] = useState([]);
   const [tableData, setTableData] = useState([]);
   useEffect(() => {
-    fetch(`http://localhost:8000/calendars/get/file/${username}/CS1101S`, {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${token}`,
+    const fetchFile = fetch(
+      `http://localhost:8000/calendars/get/file/${username}/CS1101S`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       },
-    })
-      .then((res) => {
-        return res.json();
-      })
-      .then((json) => {
-        console.log(json);
-        setFile(json);
-      });
-    fetch(`http://localhost:8000/calendars/get/image/${username}/CS1101S`, {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${token}`,
+    ).then((res) => {
+      return res.json();
+    });
+    const fetchImage = fetch(
+      `http://localhost:8000/calendars/get/image/${username}/CS1101S`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       },
-    })
-      .then((res) => {
-        return res.json();
-      })
-      .then((json) => {
-        console.log(json);
-        setImage(json);
-        return 'successful';
+    ).then((res) => {
+      return res.json();
+    });
+    Promise.all([fetchFile, fetchImage]).then((values) => {
+      const file = values[0];
+      const image = values[1];
+      const newTableData = [];
+      file.forEach((element) => {
+        console.log(element);
+        const obj = {};
+        obj.name = element.fields.name;
+        obj.date = '2020/06/17';
+        obj.fileType = '.pdf';
+        obj.download = `http://localhost:8000/media/${element.fields.file}`;
+        newTableData.push(obj);
       });
-    setTableData([]);
+      image.forEach((element) => {
+        console.log(element);
+        const obj = {};
+        obj.name = element.fields.name;
+        obj.date = '2020/06/17';
+        obj.fileType = '.jpeg';
+        obj.download = `http://localhost:8000/media/${element.fields.image}`;
+        newTableData.push(obj);
+      });
+      setTableData(newTableData);
+    });
   }, []);
-  useEffect(() => {
-    console.log('changed');
-    const newTableData = tableData;
-    file.forEach((element) => {
-      console.log(element);
-      const obj = {};
-      obj.name = element.fields.name;
-      obj.date = '2020/06/17';
-      obj.fileType = '.pdf';
-      newTableData.push(obj);
-    });
-    setTableData(newTableData);
-  }, [file]);
-  useEffect(() => {
-    console.log('image');
-    const newTableData = tableData;
-    image.forEach((element) => {
-      console.log(element);
-      const obj = {};
-      obj.name = element.fields.name;
-      obj.date = '2020/06/17';
-      obj.fileType = '.jpeg';
-      newTableData.push(obj);
-    });
-    setTableData(newTableData);
-    console.log(tableData);
-  }, [image]);
   const handleChangeName = (event) => {
     setName(event.target.value);
   };
@@ -165,6 +156,32 @@ const Upload = (props) => {
   };
   return (
     <div className={classes.root}>
+      <MaterialTable
+        icons={tableIcons}
+        title="CS1101S Files"
+        columns={[
+          { title: 'Name', field: 'name' },
+          { title: 'Date', field: 'date' },
+          { title: 'File Type', field: 'fileType' },
+          {
+            title: 'Actions',
+            field: 'download',
+            render: (rowData) => {
+              return (
+                <Button
+                  href={rowData.download}
+                  color="primary"
+                  component="span"
+                  variant="contained"
+                  style={{ color: 'white' }}>
+                  Download
+                </Button>
+              );
+            },
+          },
+        ]}
+        data={[...tableData]}
+      />
       <label htmlFor="image-upload">
         <input
           className={classes.input}
@@ -192,16 +209,6 @@ const Upload = (props) => {
         variant="outlined"
         value={name}
         onChange={handleChangeName}
-      />
-      <MaterialTable
-        icons={tableIcons}
-        title="Insert Module Name Files"
-        columns={[
-          { title: 'Name', field: 'name' },
-          { title: 'Date', field: 'date' },
-          { title: 'File Type', field: 'fileType' },
-        ]}
-        data={[...tableData]}
       />
     </div>
   );
