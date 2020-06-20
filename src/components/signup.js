@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { TextField, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import '../css/signup.css';
-import logo from '../images/logo.png';
 import { dark, light, accent } from '../colors';
 
 const useStyles = makeStyles({

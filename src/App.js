@@ -3,13 +3,14 @@ import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import './App.css';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import Navbar from './components/navbar';
+
 import Calendar from './components/Calendar';
 import reducer from './redux/reducers';
 import Login from './components/login';
 import Signup from './components/signup';
 import Footer from './components/footer';
 import Upload from './components/upload';
+import NavbarDrawer from './components/NavbarDrawer';
 
 /* eslint-disable no-underscore-dangle */
 const store = createStore(
@@ -26,7 +27,7 @@ function App() {
       <Router>
         <div className="App">
           <div className="content">
-            <Navbar />
+            <NavbarDrawer />
             <Switch>
               <Route
                 path="/"

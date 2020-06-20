@@ -88,7 +88,7 @@ const DayDialog = ({
     setNewEvents(tmp);
   };
 
-  const handleValueChange = (_event, newValue) => setValue(newValue);
+  const handleValueChange = (event, newValue) => setValue(newValue);
 
   if (!newEvents.length) addEvent();
 

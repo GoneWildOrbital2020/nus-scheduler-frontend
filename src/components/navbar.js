@@ -1,10 +1,10 @@
 import { AppBar, Toolbar, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import MenuIcon from '@material-ui/icons/Menu';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { toggleLogout } from '../redux/actions';
 import Logo from '../images/logo.png';
 import { light, dark } from '../colors';
 import '../css/navbar.css';
@@ -12,6 +12,8 @@ import '../css/navbar.css';
 const useStyles = makeStyles({
   root: {
     backgroundColor: dark,
+    position: 'relative',
+    zIndex: 1400,
   },
   menuButton: {
     marginRight: 0,
@@ -27,17 +29,8 @@ const useStyles = makeStyles({
 });
 
 const Navbar = (props) => {
-  const { isLoggedIn } = props;
-  const { ToggleLogout } = props;
+  const { isLoggedIn, toggleDrawer } = props;
   const classes = useStyles();
-  const handleLogout = (event) => {
-    event.preventDefault();
-    window.localStorage.setItem('token', null);
-    window.localStorage.setItem('username', null);
-    window.localStorage.setItem('isLoggedIn', false);
-    ToggleLogout();
-    window.location.replace('/login');
-  };
   return (
     <div>
       <AppBar position="static" className={classes.root}>
@@ -54,9 +47,9 @@ const Navbar = (props) => {
               <Button
                 color="inherit"
                 className={classes.button}
-                onClick={handleLogout}
+                onClick={toggleDrawer}
               >
-                Logout
+                <MenuIcon style={{ color: light }} />
               </Button>
             ) : (
               <Link to="/login">
@@ -65,13 +58,6 @@ const Navbar = (props) => {
                 </Button>
               </Link>
             )}
-            <Button
-              color="inherit"
-              className={classes.button}
-              href="https://github.com/GoneWildOrbital2020/nus-scheduler-frontend"
-            >
-              Source
-            </Button>
           </div>
         </Toolbar>
       </AppBar>
@@ -81,7 +67,7 @@ const Navbar = (props) => {
 
 Navbar.propTypes = {
   isLoggedIn: PropTypes.string.isRequired,
-  ToggleLogout: PropTypes.func.isRequired,
+  toggleDrawer: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => {
@@ -90,10 +76,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    ToggleLogout: () => dispatch(toggleLogout()),
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Navbar);
+export default connect(mapStateToProps)(Navbar);
