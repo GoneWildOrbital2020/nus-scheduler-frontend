@@ -16,6 +16,7 @@ import { TwitterPicker } from 'react-color';
 import './TABDayDialog.css';
 import { connect } from 'react-redux';
 import { addNumOfEvents } from '../../redux/actions';
+import { dark, light, accent, medium } from '../../colors';
 
 const colors = [
   '#EFBC9B',
@@ -89,13 +90,22 @@ const DayDialog = ({
 
   const handleValueChange = (_event, newValue) => setValue(newValue);
 
+  if (!newEvents.length) addEvent();
+
+  const styles = {
+    card: {
+      backgroundColor: `${light} !important`,
+    },
+  };
+
   return (
     <Dialog onClose={handleClose} open={open} fullWidth maxWidth="lg">
-      <div className="dialogTitle">
+      <div className="dialogTitle" style={{ backgroundColor: medium }}>
         <Typography
           style={{
             fontWeight: 'bold',
             fontSize: '2.5rem',
+            color: light,
           }}
         >
           Events
@@ -104,13 +114,13 @@ const DayDialog = ({
           <CloseIcon />
         </IconButton>
       </div>
-      <div className="dialogItem">
+      <div className="dialogItem" style={{ backgroundColor: medium }}>
         <AppBar position="static" color="default">
           <Tabs
             value={value}
             onChange={handleValueChange}
             variant="scrollable"
-            indicatorColor="primary"
+            TabIndicatorProps={{ style: { background: accent } }}
           >
             {newEvents.map((event) => {
               const label = (
@@ -125,14 +135,26 @@ const DayDialog = ({
         {newEvents.map(
           (event, index) =>
             value === index && (
-              <Box boxShadow={2} className="container">
-                <Typography style={{ fontWeight: 'bold' }}>Title:</Typography>
+              <Box
+                boxShadow={2}
+                className="container"
+                style={{ backgroundColor: light }}
+              >
+                <Typography style={{ fontWeight: 'bold', color: dark }}>
+                  Title:
+                </Typography>
                 <TextField
                   fullWidth
                   defaultValue={event.title}
                   onChange={handleChange(event.index, 'title')}
                 />
-                <Typography style={{ fontWeight: 'bold', paddingTop: '1rem' }}>
+                <Typography
+                  style={{
+                    fontWeight: 'bold',
+                    paddingTop: '1rem',
+                    color: dark,
+                  }}
+                >
                   Description:
                 </Typography>
                 <TextField
@@ -142,7 +164,13 @@ const DayDialog = ({
                   defaultValue={event.description}
                   onChange={handleChange(event.index, 'description')}
                 />
-                <Typography style={{ fontWeight: 'bold', paddingTop: '1rem' }}>
+                <Typography
+                  style={{
+                    fontWeight: 'bold',
+                    paddingTop: '1rem',
+                    color: dark,
+                  }}
+                >
                   Start Time:
                 </Typography>
                 <TextField
@@ -150,7 +178,13 @@ const DayDialog = ({
                   defaultValue={event.start}
                   onChange={handleChange(event.index, 'start')}
                 />
-                <Typography style={{ fontWeight: 'bold', paddingTop: '1rem' }}>
+                <Typography
+                  style={{
+                    fontWeight: 'bold',
+                    paddingTop: '1rem',
+                    color: dark,
+                  }}
+                >
                   End Time:
                 </Typography>
                 <TextField
@@ -158,7 +192,13 @@ const DayDialog = ({
                   defaultValue={event.end}
                   onChange={handleChange(event.index, 'end')}
                 />
-                <Typography style={{ fontWeight: 'bold', paddingTop: '1rem' }}>
+                <Typography
+                  style={{
+                    fontWeight: 'bold',
+                    paddingTop: '1rem',
+                    color: dark,
+                  }}
+                >
                   Location:
                 </Typography>
                 <TextField
@@ -166,20 +206,28 @@ const DayDialog = ({
                   defaultValue={event.location}
                   onChange={handleChange(event.index, 'location')}
                 />
-                <Typography style={{ fontWeight: 'bold', padding: '1rem 0' }}>
+                <Typography
+                  style={{ fontWeight: 'bold', padding: '1rem 0', color: dark }}
+                >
                   Color:
                 </Typography>
                 <TwitterPicker
                   triangle="hide"
                   colors={colors}
                   onChange={handleColorChange(event.index)}
+                  styles={styles}
                 />
                 <Button
                   autoFocus
                   variant="contained"
                   onClick={deleteEvent(event.index)}
                   color="primary"
-                  style={{ flex: '1', alignSelf: 'flex-end' }}
+                  style={{
+                    flex: '1',
+                    alignSelf: 'flex-end',
+                    backgroundColor: accent,
+                    color: light,
+                  }}
                 >
                   Delete Event
                 </Button>
@@ -187,13 +235,19 @@ const DayDialog = ({
             ),
         )}
       </div>
-      <div className="buttonContainer2">
+      <div className="buttonContainer2" style={{ backgroundColor: medium }}>
         <Button
           autoFocus
           variant="contained"
           onClick={shouldSave(true)}
           color="primary"
-          style={{ float: 'right', position: 'relative', marginLeft: '2rem' }}
+          style={{
+            float: 'right',
+            position: 'relative',
+            marginLeft: '2rem',
+            backgroundColor: accent,
+            color: light,
+          }}
         >
           Save Changes
         </Button>
@@ -202,7 +256,7 @@ const DayDialog = ({
           variant="contained"
           onClick={addEvent}
           color="primary"
-          style={{ float: 'right' }}
+          style={{ float: 'right', backgroundColor: accent, color: light }}
         >
           Add Event
         </Button>

@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { toggleLogin } from '../redux/actions';
-import logo from '../images/logo.png';
+import { dark, light, accent } from '../colors';
 
 const useStyles = makeStyles({
   root: {
@@ -14,9 +14,9 @@ const useStyles = makeStyles({
     position: 'relative',
   },
   button: {
-    color: 'black',
-    width: '82%',
-    backgroundColor: '#33f0ff',
+    color: light,
+    backgroundColor: accent,
+    width: '100%',
   },
 });
 
@@ -64,11 +64,12 @@ const Login = (props) => {
   };
   return (
     <div className="login">
-      <div className="form">
-        <img src={logo} alt="logo" />
+      <div className="form" style={{ backgroundColor: light }}>
+        <h1 style={{ color: dark }}>WELCOME</h1>
         <form className={classes.root}>
           <div className="input">
             <TextField
+              fullWidth
               label="email"
               variant="outlined"
               value={email}
@@ -77,7 +78,9 @@ const Login = (props) => {
           </div>
           <div className="input">
             <TextField
+              fullWidth
               label="password"
+              type="password"
               variant="outlined"
               value={password}
               onChange={handleChangePassword}
@@ -87,9 +90,11 @@ const Login = (props) => {
         <Button className={classes.button} onClick={handleSubmit}>
           Login
         </Button>
-        <h5>Not a user?</h5>
+        <h5 style={{ color: dark, marginTop: '1rem', marginBottom: '0.25rem' }}>
+          Not a user ?
+        </h5>
         <Link to="/signup" style={{ color: 'black' }}>
-          <Button className={classes.button}>Sign Up!</Button>
+          <Button className={classes.button}>SignUp</Button>
         </Link>
       </div>
     </div>
