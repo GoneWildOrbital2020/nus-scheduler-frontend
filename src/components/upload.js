@@ -63,7 +63,7 @@ const Upload = (props) => {
   const [tableData, setTableData] = useState([]);
   useEffect(() => {
     const fetchFile = fetch(
-      `http://localhost:8000/calendars/get/file/${username}/CS1101S`,
+      `http://localhost:8000/upload/get/file/${username}/CS1101S`,
       {
         method: 'GET',
         headers: {
@@ -74,7 +74,7 @@ const Upload = (props) => {
       return res.json();
     });
     const fetchImage = fetch(
-      `http://localhost:8000/calendars/get/image/${username}/CS1101S`,
+      `http://localhost:8000/upload/get/image/${username}/CS1101S`,
       {
         method: 'GET',
         headers: {
@@ -119,7 +119,7 @@ const Upload = (props) => {
     data.append('name', name);
     data.append('image', event.target.files[0]);
     console.log(data);
-    fetch('http://localhost:8000/calendars/upload/image/CS1101S', {
+    fetch(`http://localhost:8000/upload/image/${username}/CS1101S`, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -140,7 +140,7 @@ const Upload = (props) => {
     data.append('name', name);
     data.append('file', event.target.files[0]);
     console.log(data);
-    fetch('http://localhost:8000/calendars/upload/file/CS1101S', {
+    fetch(`http://localhost:8000/upload/file/${username}/CS1101S`, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,
