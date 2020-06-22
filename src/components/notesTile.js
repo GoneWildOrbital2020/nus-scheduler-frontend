@@ -1,48 +1,56 @@
 import React from 'react';
-import { makeStyles, Button, Paper, Typography } from '@material-ui/core';
+import { makeStyles, Button, Typography } from '@material-ui/core';
+import PropTypes from 'prop-types';
 import { light } from '../colors';
 
 const useStyles = makeStyles(() => ({
-  root: {},
   button: {
-    backgroundColor: `${light}`,
     border: 0,
     padding: 0,
+    margin: '0.5rem',
   },
   buttonInside: {
     display: 'flex',
     flexDirection: 'column',
-    maxHeight: '12rem',
-    height: '12rem',
-    width: '13vw',
+    maxHeight: '20rem',
+    height: '20rem',
+    width: '20rem',
   },
   buttonTitle: {
     fontWeight: 'bold',
     overflowWrap: 'break-word',
     maxHeight: '3rem',
+    height: '2rem',
     overflow: 'auto',
   },
-  paper: {
+  typography: {
     backgroundColor: `${light}`,
     overflowWrap: 'break-word',
     overflow: 'auto',
+    maxHeight: '10rem',
   },
 }));
 
-const NotesTile = () => {
+const NotesTile = (props) => {
+  const { title, text } = props;
   const classes = useStyles();
   return (
-    <div className={classes.root}>
-      <Button variant="outlined" className={classes.button}>
-        <div className={classes.buttonInside}>
-          <div className={classes.buttonTitle}>Title</div>
-          <Paper square className={classes.paper}>
-            <Typography>Insert text notes here!</Typography>
-          </Paper>
-        </div>
-      </Button>
-    </div>
+    <Button
+      variant="outlined"
+      className={classes.button}
+      style={{ backgroundColor: light }}
+    >
+      <div className={classes.buttonInside}>
+        <div className={classes.buttonTitle}>{title}</div>
+        <Typography className={classes.typography}>{text}</Typography>
+      </div>
+    </Button>
   );
+};
+
+NotesTile.propTypes = {
+  title: PropTypes.string.isRequired,
+  text: PropTypes.string.isRequired,
 };
 
 export default NotesTile;
