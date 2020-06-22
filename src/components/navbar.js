@@ -5,7 +5,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import Logo from '../images/logo.png';
+import Logo from '../images/logov2light.png';
 import { light, dark } from '../colors';
 import '../css/navbar.css';
 

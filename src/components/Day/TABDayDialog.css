@@ -6,6 +6,7 @@
 .dialogItem {
   flex: 1;
   padding: 0rem 2rem;
+  overflow: scroll;
 }
 
 .dialogTitle {
