@@ -19,9 +19,6 @@ const store = createStore(
 );
 /* eslint-enable */
 function App() {
-  const [numOfEvents, setNumOfEvents] = React.useState(0);
-  const getNumOfEvents = () => numOfEvents;
-  const changeNumOfEvents = (e) => setNumOfEvents(e);
   return (
     <Provider store={store}>
       <Router>
@@ -32,13 +29,7 @@ function App() {
               <Route
                 path="/"
                 exact
-                component={() => (
-                  <Calendar
-                    monthIdx={0}
-                    getNumOfEvents={getNumOfEvents}
-                    changeNumOfEvents={changeNumOfEvents}
-                  />
-                )}
+                component={() => <Calendar monthIdx={0} />}
               />
               <Route path="/login" exact component={Login} />
               <Route path="/signup" exact component={Signup} />

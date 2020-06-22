@@ -3,7 +3,8 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background-color: #6b7f82;
+  background-image: url(./images/background.png);
+  background-size: 631.4px 428.4px;
 }
 
 .content {
