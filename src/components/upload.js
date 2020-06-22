@@ -173,7 +173,8 @@ const Upload = (props) => {
                   color="primary"
                   component="span"
                   variant="contained"
-                  style={{ color: 'white' }}>
+                  style={{ color: 'white' }}
+                >
                   Download
                 </Button>
               );

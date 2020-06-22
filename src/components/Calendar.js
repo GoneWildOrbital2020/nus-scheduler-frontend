@@ -48,14 +48,14 @@ const Calendar = ({
     <div className="calendarContainer">
       <div className="headContainer">
         <IconButton onClick={clickLeft}>
-          <ArrowLeftIcon fontSize="large" color={dark} />
+          <ArrowLeftIcon fontSize="large" style={{ color: dark }} />
         </IconButton>
         <Typography
           style={{ fontSize: '3rem', fontWeight: 'bold', color: dark }}
         >
           {monthProperties[activeMonth].name}
         </Typography>
-        <IconButton onClick={clickRight} color={dark}>
+        <IconButton onClick={clickRight} style={{ color: dark }}>
           <ArrowRightIcon fontSize="large" />
         </IconButton>
       </div>

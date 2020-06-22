@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Paper, Button, Typography } from '@material-ui/core';
+import { LabelImportant } from '@material-ui/icons';
 import { light } from '../../colors';
 import './DayButton.css';
 
@@ -19,16 +20,14 @@ const DayButton = ({ index, events, handleOpen }) => {
       <div className="buttonNumber">{index}</div>
       <div className="buttonEvents">
         {events.map((event) => (
-          <Paper
-            key={event.index}
-            className="buttonEvent"
-            square
-            style={{ background: event.color }}
-          >
-            <Typography style={{ opacity: '50%', fontWeight: 550 }}>
+          <div key={event.index} className="buttonEvent">
+            <LabelImportant
+              style={{ color: event.color, marginRight: '0.5rem' }}
+            />
+            <Typography style={{ color: event.color, textAlign: 'left' }}>
               {event.title}
             </Typography>
-          </Paper>
+          </div>
         ))}
       </div>
     </Button>

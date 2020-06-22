@@ -13,3 +13,8 @@
 Footer {
   flex-shrink: 0;
 }
+
+.MuiDrawer-paperAnchorRight {
+  background-color: #e4dfda !important;
+  width: 20%;
+}
