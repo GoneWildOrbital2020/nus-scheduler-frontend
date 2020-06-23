@@ -32,13 +32,14 @@ const useStyles = makeStyles(() => ({
 }));
 
 const NotesTile = (props) => {
-  const { title, text } = props;
+  const { title, text, handleOpen } = props;
   const classes = useStyles();
   return (
     <Button
       variant="outlined"
       className={classes.button}
       style={{ backgroundColor: light }}
+      onClick={handleOpen}
     >
       <div className={classes.buttonInside}>
         <div className={classes.buttonTitle}>{title}</div>
@@ -51,6 +52,7 @@ const NotesTile = (props) => {
 NotesTile.propTypes = {
   title: PropTypes.string.isRequired,
   text: PropTypes.string.isRequired,
+  handleOpen: PropTypes.func.isRequired,
 };
 
 export default NotesTile;
