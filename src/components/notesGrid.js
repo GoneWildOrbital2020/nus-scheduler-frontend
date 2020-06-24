@@ -11,7 +11,7 @@ const useStyles = makeStyles(() => ({
     maxHeight: '6rem',
   },
   title: {
-    display: 'inline-block',
+    // display: 'inline-block',
     color: dark,
     fontSize: '3rem',
     fontWeight: 'bold',
@@ -20,11 +20,10 @@ const useStyles = makeStyles(() => ({
     width: 'max-content',
   },
   button: {
-    position: 'absolute',
-    right: 0,
-    display: 'inline-block',
+    // position: 'absolute',
+    // right: 0,
+    // display: 'inline-block',
     fontSize: '2rem',
-    backgroundColor: accent,
     color: light,
   },
 }));
@@ -50,6 +49,25 @@ const NotesGrid = (props) => {
     setRows(newRows);
   };
 
+  const uploadNoteToDB = (identifier, title, text) => {
+    const data = {
+      identifier,
+      title,
+      text,
+    };
+    fetch(`http://localhost:8000/upload/note/${username}/CS1101S`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(data),
+    }).then((res) => {
+      console.log(res);
+      window.location.reload();
+    });
+  };
+
   useEffect(() => {
     fetch(`http://localhost:8000/upload/get/note/${username}/CS1101S`, {
       method: 'GET',
@@ -67,12 +85,13 @@ const NotesGrid = (props) => {
           const details = {};
           details.title = element.fields.title;
           details.text = element.fields.text;
-          details.id = newCount;
+          details.identifier = element.fields.identifier;
           newNotes.push(details);
           newCount += 1;
         });
+        newNotes.sort((a, b) => a.identifier - b.identifier);
         setNotes(newNotes);
-        setCount(newCount + 1);
+        setCount(newCount);
       });
   }, []);
 
@@ -84,9 +103,6 @@ const NotesGrid = (props) => {
     <>
       <div className={classes.top}>
         <Typography className={classes.title}>Notes</Typography>
-        <Button variant="outlined" className={classes.button}>
-          Add Notes
-        </Button>
       </div>
       <Grid container direction="column" className={classes.grid}>
         {rows.map((element) => {
@@ -96,10 +112,12 @@ const NotesGrid = (props) => {
               {sliced.map((obj) => {
                 return (
                   <Notes
-                    index={obj.id}
-                    key={obj.id}
+                    index={obj.identifier}
+                    key={obj.identifier}
+                    identifier={obj.identifier}
                     title={obj.title}
                     text={obj.text}
+                    upload={uploadNoteToDB}
                   />
                 );
               })}
@@ -107,6 +125,13 @@ const NotesGrid = (props) => {
           );
         })}
       </Grid>
+      <Button
+        variant="outlined"
+        className={classes.button}
+        style={{ backgroundColor: accent }}
+      >
+        Add Notes
+      </Button>
     </>
   );
 };

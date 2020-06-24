@@ -5,6 +5,7 @@ import {
   DialogTitle,
   makeStyles,
   TextField,
+  Button,
 } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import { light, medium, accent } from '../colors';
@@ -27,10 +28,13 @@ const useStyles = makeStyles(() => ({
   typography: {
     fontWeight: 'bold',
   },
+  button: {
+    color: light,
+  },
 }));
 
 const NotesDialog = (props) => {
-  const { open, handleClose, text, title } = props;
+  const { open, handleClose, text, title, identifier, upload } = props;
   const [newTitle, setNewTitle] = useState(title);
   const [newText, setNewText] = useState(text);
   const classes = useStyles();
@@ -43,6 +47,11 @@ const NotesDialog = (props) => {
   const handleChangeText = (event) => {
     event.preventDefault();
     setNewText(event.target.value);
+  };
+
+  const handleSave = (event) => {
+    event.preventDefault();
+    upload(identifier, newTitle, newText);
   };
 
   return (
@@ -66,6 +75,14 @@ const NotesDialog = (props) => {
           className={classes.textField}
           onChange={handleChangeText}
         />
+        <Button
+          className={classes.button}
+          variant="contained"
+          style={{ backgroundColor: accent }}
+          onClick={handleSave}
+        >
+          Save changes
+        </Button>
       </div>
     </Dialog>
   );
@@ -76,6 +93,8 @@ NotesDialog.propTypes = {
   handleClose: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
   text: PropTypes.string.isRequired,
+  identifier: PropTypes.number.isRequired,
+  upload: PropTypes.func.isRequired,
 };
 
 export default NotesDialog;
