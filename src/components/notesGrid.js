@@ -11,7 +11,7 @@ const useStyles = makeStyles(() => ({
     maxHeight: '6rem',
   },
   title: {
-    // display: 'inline-block',
+    display: 'inline-block',
     color: dark,
     fontSize: '3rem',
     fontWeight: 'bold',
@@ -20,9 +20,9 @@ const useStyles = makeStyles(() => ({
     width: 'max-content',
   },
   button: {
-    // position: 'absolute',
-    // right: 0,
-    // display: 'inline-block',
+    position: 'absolute',
+    right: 0,
+    display: 'inline-block',
     fontSize: '2rem',
     color: light,
   },
@@ -35,12 +35,12 @@ const NotesGrid = (props) => {
   const [rows, setRows] = useState([0]);
   const classes = useStyles();
 
-  const generateRows = () => {
+  const generateRows = (x) => {
     let rowCount = 0;
-    if (count % 4 === 0) {
-      rowCount = count / 4;
+    if (count % x === 0) {
+      rowCount = count / x;
     } else {
-      rowCount = count / 4 + 1;
+      rowCount = Math.floor(count / x) + 1;
     }
     const newRows = [];
     for (let i = 0; i < rowCount; i += 1) {
@@ -64,8 +64,16 @@ const NotesGrid = (props) => {
       body: JSON.stringify(data),
     }).then((res) => {
       console.log(res);
-      window.location.reload();
+      const newNotes = [...notes];
+      newNotes.push(data);
+      setCount(count + 1);
+      setNotes(newNotes);
     });
+  };
+
+  const handleAddNote = (event) => {
+    event.preventDefault();
+    uploadNoteToDB(count + 1, '', '');
   };
 
   useEffect(() => {
@@ -96,13 +104,21 @@ const NotesGrid = (props) => {
   }, []);
 
   useEffect(() => {
-    generateRows();
+    generateRows(4);
   }, [count]);
 
   return (
     <>
       <div className={classes.top}>
         <Typography className={classes.title}>Notes</Typography>
+        <Button
+          variant="outlined"
+          className={classes.button}
+          style={{ backgroundColor: accent }}
+          onClick={handleAddNote}
+        >
+          Add Notes
+        </Button>
       </div>
       <Grid container direction="column" className={classes.grid}>
         {rows.map((element) => {
@@ -125,13 +141,6 @@ const NotesGrid = (props) => {
           );
         })}
       </Grid>
-      <Button
-        variant="outlined"
-        className={classes.button}
-        style={{ backgroundColor: accent }}
-      >
-        Add Notes
-      </Button>
     </>
   );
 };
