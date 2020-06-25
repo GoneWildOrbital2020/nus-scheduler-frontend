@@ -71,9 +71,39 @@ const NotesGrid = (props) => {
     });
   };
 
+  const editNote = (identifier, title, text) => {
+    const data = {
+      identifier,
+      title,
+      text,
+    };
+    fetch(`http://localhost:8000/upload/note/${username}/CS1101S`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(data),
+    }).then((res) => {
+      console.log(res);
+      setNotes(
+        notes.map((element) => {
+          if (element.identifier === identifier) {
+            return {
+              identifier,
+              title,
+              text,
+            };
+          }
+          return element;
+        }),
+      );
+    });
+  };
+
   const handleAddNote = (event) => {
     event.preventDefault();
-    uploadNoteToDB(count + 1, '', '');
+    uploadNoteToDB(count + 1, 'New Note', '');
   };
 
   useEffect(() => {
@@ -133,7 +163,7 @@ const NotesGrid = (props) => {
                     identifier={obj.identifier}
                     title={obj.title}
                     text={obj.text}
-                    upload={uploadNoteToDB}
+                    upload={editNote}
                   />
                 );
               })}
