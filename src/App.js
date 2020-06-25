@@ -10,6 +10,7 @@ import Login from './components/login';
 import Signup from './components/signup';
 import Footer from './components/footer';
 import Upload from './components/upload';
+import NotesGrid from './components/notesGrid';
 import NavbarDrawer from './components/NavbarDrawer';
 
 /* eslint-disable no-underscore-dangle */
@@ -34,6 +35,7 @@ function App() {
               <Route path="/login" exact component={Login} />
               <Route path="/signup" exact component={Signup} />
               <Route path="/upload" exact component={Upload} />
+              <Route path="/upload/notes" exact component={NotesGrid} />
             </Switch>
           </div>
           <Footer />

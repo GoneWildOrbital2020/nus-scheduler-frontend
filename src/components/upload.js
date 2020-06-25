@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { useState, forwardRef, useEffect } from 'react';
-import { makeStyles, Button, TextField } from '@material-ui/core';
+import { makeStyles, Button, TextField, Paper } from '@material-ui/core';
 import MaterialTable from 'material-table';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -19,6 +19,7 @@ import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
+import { accent, light } from '../colors';
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -52,18 +53,38 @@ const useStyles = makeStyles(() => ({
   input: {
     display: 'none',
   },
+  paper: {
+    height: '300px',
+    backgroundColor: `${light}`,
+    margin: '2rem auto',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-around',
+    width: '50%',
+  },
+  buttons: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+  },
+  button: {
+    backgroundColor: `${accent}`,
+    color: `${light}`,
+  },
+  textField: {
+    width: '50%',
+    margin: '0 auto',
+  },
 }));
 
 const Upload = (props) => {
   const { token, username } = props;
   const classes = useStyles();
   const [name, setName] = useState('');
-  // const [file, setFile] = useState([]);
-  // const [image, setImage] = useState([]);
   const [tableData, setTableData] = useState([]);
   useEffect(() => {
     const fetchFile = fetch(
-      `http://localhost:8000/calendars/get/file/${username}/CS1101S`,
+      `http://localhost:8000/upload/get/file/${username}/CS1101S`,
       {
         method: 'GET',
         headers: {
@@ -74,7 +95,7 @@ const Upload = (props) => {
       return res.json();
     });
     const fetchImage = fetch(
-      `http://localhost:8000/calendars/get/image/${username}/CS1101S`,
+      `http://localhost:8000/upload/get/image/${username}/CS1101S`,
       {
         method: 'GET',
         headers: {
@@ -119,7 +140,7 @@ const Upload = (props) => {
     data.append('name', name);
     data.append('image', event.target.files[0]);
     console.log(data);
-    fetch('http://localhost:8000/calendars/upload/image/CS1101S', {
+    fetch(`http://localhost:8000/upload/image/${username}/CS1101S`, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -128,6 +149,7 @@ const Upload = (props) => {
     })
       .then((res) => {
         console.log(res);
+        window.location.reload();
       })
       .catch((error) => {
         console.log(error);
@@ -140,7 +162,7 @@ const Upload = (props) => {
     data.append('name', name);
     data.append('file', event.target.files[0]);
     console.log(data);
-    fetch('http://localhost:8000/calendars/upload/file/CS1101S', {
+    fetch(`http://localhost:8000/upload/file/${username}/CS1101S`, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -149,6 +171,7 @@ const Upload = (props) => {
     })
       .then((res) => {
         console.log(res);
+        window.location.reload();
       })
       .catch((error) => {
         console.log(error);
@@ -157,23 +180,54 @@ const Upload = (props) => {
   return (
     <div className={classes.root}>
       <MaterialTable
+        style={{
+          backgroundColor: `${light}`,
+        }}
         icons={tableIcons}
         title="CS1101S Files"
         columns={[
-          { title: 'Name', field: 'name' },
-          { title: 'Date', field: 'date' },
-          { title: 'File Type', field: 'fileType' },
+          {
+            title: 'Name',
+            field: 'name',
+            headerStyle: {
+              backgroundColor: `${light}`,
+              fontWeight: 'bold',
+            },
+          },
+          {
+            title: 'Date',
+            field: 'date',
+            headerStyle: {
+              backgroundColor: `${light}`,
+              fontWeight: 'bold',
+            },
+          },
+          {
+            title: 'File Type',
+            field: 'fileType',
+            headerStyle: {
+              backgroundColor: `${light}`,
+              fontWeight: 'bold',
+            },
+          },
           {
             title: 'Actions',
             field: 'download',
+            headerStyle: {
+              backgroundColor: `${light}`,
+              fontWeight: 'bold',
+            },
             render: (rowData) => {
+              const handleRedirect = (event) => {
+                event.preventDefault();
+                window.open(rowData.download);
+              };
               return (
                 <Button
-                  href={rowData.download}
-                  color="primary"
+                  onClick={handleRedirect}
                   component="span"
                   variant="contained"
-                  style={{ color: 'white' }}
+                  style={{ backgroundColor: `${accent}`, color: `${light}` }}
                 >
                   Download
                 </Button>
@@ -183,34 +237,51 @@ const Upload = (props) => {
         ]}
         data={[...tableData]}
       />
-      <label htmlFor="image-upload">
-        <input
-          className={classes.input}
-          id="image-upload"
-          type="file"
-          onChange={handleUploadImage}
+      <Paper className={classes.paper}>
+        <h1>Upload Files & Images</h1>
+        <TextField
+          label="name"
+          variant="outlined"
+          required
+          value={name}
+          onChange={handleChangeName}
+          className={classes.textField}
         />
-        <Button variant="contained" color="primary" component="span">
-          Upload Image
-        </Button>
-      </label>
-      <label htmlFor="file-upload">
-        <input
-          className={classes.input}
-          id="file-upload"
-          type="file"
-          onChange={handleUploadFile}
-        />
-        <Button variant="contained" color="primary" component="span">
-          Upload File
-        </Button>
-      </label>
-      <TextField
-        label="name"
-        variant="outlined"
-        value={name}
-        onChange={handleChangeName}
-      />
+        <div className={classes.buttons}>
+          <label htmlFor="image-upload">
+            <input
+              className={classes.input}
+              id="image-upload"
+              type="file"
+              onChange={handleUploadImage}
+            />
+            <Button
+              variant="contained"
+              className={classes.button}
+              component="span"
+              disabled={!name}
+            >
+              Upload Image
+            </Button>
+          </label>
+          <label htmlFor="file-upload">
+            <input
+              className={classes.input}
+              id="file-upload"
+              type="file"
+              onChange={handleUploadFile}
+            />
+            <Button
+              variant="contained"
+              className={classes.button}
+              component="span"
+              disabled={!name}
+            >
+              Upload File
+            </Button>
+          </label>
+        </div>
+      </Paper>
     </div>
   );
 };
