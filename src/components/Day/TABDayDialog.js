@@ -9,7 +9,6 @@ import {
   Tabs,
   TextField,
   Typography,
-  DialogContent,
 } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
@@ -85,7 +84,7 @@ const DayDialog = ({
 
   const addEvent = () => {
     const tmp = newEvents.map((x) => ({ ...x }));
-    tmp.push({ index: numOfEvents + count, title: 'New Event' });
+    tmp.push({ index: numOfEvents + count, title: 'New Event', color: accent });
     setNewEvents(tmp);
     setCount(count + 1);
   };
