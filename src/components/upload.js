@@ -227,7 +227,8 @@ const Upload = (props) => {
                   onClick={handleRedirect}
                   component="span"
                   variant="contained"
-                  style={{ backgroundColor: `${accent}`, color: `${light}` }}>
+                  style={{ backgroundColor: `${accent}`, color: `${light}` }}
+                >
                   Download
                 </Button>
               );

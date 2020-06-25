@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 import { changeActiveMonth, addNumOfEvents } from '../redux/actions';
 import { monthProperties, url } from './constant';
 import Month from './Month';
-import { dark } from '../colors';
+import { light } from '../colors';
 
 import './Calendar.css';
 
@@ -48,14 +48,14 @@ const Calendar = ({
     <div className="calendarContainer">
       <div className="headContainer">
         <IconButton onClick={clickLeft}>
-          <ArrowLeftIcon fontSize="large" color={dark} />
+          <ArrowLeftIcon fontSize="large" style={{ color: light }} />
         </IconButton>
         <Typography
-          style={{ fontSize: '3rem', fontWeight: 'bold', color: dark }}
+          style={{ fontSize: '3rem', fontWeight: 'bold', color: light }}
         >
           {monthProperties[activeMonth].name}
         </Typography>
-        <IconButton onClick={clickRight} color={dark}>
+        <IconButton onClick={clickRight} style={{ color: light }}>
           <ArrowRightIcon fontSize="large" />
         </IconButton>
       </div>

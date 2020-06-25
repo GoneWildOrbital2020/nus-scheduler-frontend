@@ -3,7 +3,7 @@ import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import './App.css';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import Navbar from './components/navbar';
+
 import Calendar from './components/Calendar';
 import reducer from './redux/reducers';
 import Login from './components/login';
@@ -11,6 +11,7 @@ import Signup from './components/signup';
 import Footer from './components/footer';
 import Upload from './components/upload';
 import NotesGrid from './components/notesGrid';
+import NavbarDrawer from './components/NavbarDrawer';
 
 /* eslint-disable no-underscore-dangle */
 const store = createStore(
@@ -19,26 +20,17 @@ const store = createStore(
 );
 /* eslint-enable */
 function App() {
-  const [numOfEvents, setNumOfEvents] = React.useState(0);
-  const getNumOfEvents = () => numOfEvents;
-  const changeNumOfEvents = (e) => setNumOfEvents(e);
   return (
     <Provider store={store}>
       <Router>
         <div className="App">
           <div className="content">
-            <Navbar />
+            <NavbarDrawer />
             <Switch>
               <Route
                 path="/"
                 exact
-                component={() => (
-                  <Calendar
-                    monthIdx={0}
-                    getNumOfEvents={getNumOfEvents}
-                    changeNumOfEvents={changeNumOfEvents}
-                  />
-                )}
+                component={() => <Calendar monthIdx={0} />}
               />
               <Route path="/login" exact component={Login} />
               <Route path="/signup" exact component={Signup} />

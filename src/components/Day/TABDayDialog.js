@@ -9,6 +9,7 @@ import {
   Tabs,
   TextField,
   Typography,
+  DialogContent,
 } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
@@ -28,6 +29,7 @@ const colors = [
   '#96897B',
   '#DFD5A5',
 ];
+
 const DayDialog = ({
   events,
   saveEvents,
@@ -45,6 +47,13 @@ const DayDialog = ({
   const [count, setCount] = React.useState(0);
 
   const [value, setValue] = React.useState(0);
+
+  const ref = React.useCallback((node) => {
+    if (node) {
+      // eslint-disable-next-line no-param-reassign
+      node.scrollTop = 0;
+    }
+  });
 
   const handleChange = (index, type) => (e) => {
     const tmp = newEvents.map((x) => ({ ...x }));
@@ -88,7 +97,9 @@ const DayDialog = ({
     setNewEvents(tmp);
   };
 
-  const handleValueChange = (_event, newValue) => setValue(newValue);
+  const handleValueChange = (event, newValue) => {
+    setValue(newValue);
+  };
 
   if (!newEvents.length) addEvent();
 
@@ -99,7 +110,13 @@ const DayDialog = ({
   };
 
   return (
-    <Dialog onClose={handleClose} open={open} fullWidth maxWidth="lg">
+    <Dialog
+      onClose={handleClose}
+      open={open}
+      fullWidth
+      maxWidth="lg"
+      style={{ zIndex: 1401 }}
+    >
       <div className="dialogTitle" style={{ backgroundColor: medium }}>
         <Typography
           style={{
@@ -114,8 +131,8 @@ const DayDialog = ({
           <CloseIcon />
         </IconButton>
       </div>
-      <div className="dialogItem" style={{ backgroundColor: medium }}>
-        <AppBar position="static" color="default">
+      <div className="dialogItem" style={{ backgroundColor: medium }} ref={ref}>
+        <AppBar position="sticky" color="default">
           <Tabs
             value={value}
             onChange={handleValueChange}
