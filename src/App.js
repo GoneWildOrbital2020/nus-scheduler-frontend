@@ -12,6 +12,7 @@ import Footer from './components/footer';
 import Upload from './components/upload';
 import NotesGrid from './components/notesGrid';
 import NavbarDrawer from './components/NavbarDrawer';
+import EventGroup from './components/EventGroup';
 
 /* eslint-disable no-underscore-dangle */
 const store = createStore(
@@ -34,6 +35,12 @@ function App() {
               />
               <Route path="/login" exact component={Login} />
               <Route path="/signup" exact component={Signup} />
+              <Route
+                path="/event-group/:name"
+                render={({ match }) => (
+                  <EventGroup name={match.params.name} path={match.path} />
+                )}
+              />
               <Route path="/upload" exact component={Upload} />
               <Route path="/upload/notes" exact component={NotesGrid} />
             </Switch>
