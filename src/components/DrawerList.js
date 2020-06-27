@@ -1,10 +1,28 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
-import { GitHub, ExitToApp, Backup } from '@material-ui/icons';
+import {
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Collapse,
+  Divider,
+} from '@material-ui/core';
+import {
+  AccountCircle,
+  Label,
+  GitHub,
+  ExitToApp,
+  Backup,
+  ExpandLess,
+  ExpandMore,
+  Event,
+} from '@material-ui/icons';
+import { Link } from 'react-router-dom';
 import { toggleLogout } from '../redux/actions';
 import { dark, light } from '../colors';
+import { url } from './constant';
 
 const DrawerList = ({ dispatch, token, username }) => {
   const handleLogout = (event) => {
@@ -20,8 +38,7 @@ const DrawerList = ({ dispatch, token, username }) => {
     event.preventDefault();
     const reader = new FileReader();
     reader.onload = (e) => {
-      console.log(e.target.result);
-      fetch(`http://localhost:8000/events/nusmod/${username}`, {
+      fetch(`${url}/events/nusmod/${username}`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -33,8 +50,54 @@ const DrawerList = ({ dispatch, token, username }) => {
     };
     reader.readAsText(event.target.files[0]);
   };
+
+  const [open, setOpen] = React.useState(false);
+
+  const [titles, setTitles] = React.useState([]);
+  const fetchTitles = fetch(`${url}/events/${username}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  React.useEffect(() => {
+    fetchTitles
+      .then((response) => response.json())
+      .then((data) => setTitles(data.map((x) => x.fields.name)));
+  }, []);
+
   return (
     <List style={{ backgroundColor: light }}>
+      <ListItem button divider>
+        <ListItemIcon>
+          <AccountCircle style={{ color: dark }} />
+        </ListItemIcon>
+        <ListItemText primary="Profile" style={{ color: dark }} />
+      </ListItem>
+      <ListItem onClick={() => setOpen((state) => !state)} button>
+        <ListItemIcon>
+          <Event style={{ color: dark }} />
+        </ListItemIcon>
+        <ListItemText primary="Event Groups" style={{ color: dark }} />
+        {open ? <ExpandLess /> : <ExpandMore />}
+      </ListItem>
+      <Collapse in={open} timeout="auto" unmountOnExit>
+        {titles.map((title) => (
+          <List component="div" disablePadding>
+            <Link to={`/event-group/${title}/customize`}>
+              <ListItem button style={{ paddingLeft: '2rem' }}>
+                <ListItemIcon>
+                  <Label style={{ color: dark }} />
+                </ListItemIcon>
+                <ListItemText primary={title} style={{ color: dark }} />
+              </ListItem>
+            </Link>
+          </List>
+        ))}
+      </Collapse>
+      <Divider />
       <ListItem button divider component="label">
         <ListItemIcon>
           <Backup style={{ color: dark }} />
