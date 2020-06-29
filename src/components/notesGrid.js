@@ -3,16 +3,20 @@ import { Grid, makeStyles, Typography, Button } from '@material-ui/core';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Notes from './notes';
-import { dark, accent, light } from '../colors';
+import { accent, light } from '../colors';
 
 const useStyles = makeStyles(() => ({
+  container: {
+    width: '85%',
+    float: 'right',
+  },
   top: {
     height: '6rem',
     maxHeight: '6rem',
   },
   title: {
     display: 'inline-block',
-    color: dark,
+    color: light,
     fontSize: '3rem',
     fontWeight: 'bold',
   },
@@ -29,7 +33,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 const NotesGrid = (props) => {
-  const { token, username } = props;
+  const { token, username, name } = props;
   const [count, setCount] = useState(0);
   const [notes, setNotes] = useState([]);
   const [rows, setRows] = useState([0]);
@@ -55,7 +59,7 @@ const NotesGrid = (props) => {
       title,
       text,
     };
-    fetch(`http://localhost:8000/upload/note/${username}/CS1101S`, {
+    fetch(`http://localhost:8000/upload/note/${username}/${name}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -77,7 +81,7 @@ const NotesGrid = (props) => {
       title,
       text,
     };
-    fetch(`http://localhost:8000/upload/note/${username}/CS1101S`, {
+    fetch(`http://localhost:8000/upload/note/${username}/${name}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -107,7 +111,7 @@ const NotesGrid = (props) => {
   };
 
   useEffect(() => {
-    fetch(`http://localhost:8000/upload/get/note/${username}/CS1101S`, {
+    fetch(`http://localhost:8000/upload/get/note/${username}/${name}`, {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -138,7 +142,7 @@ const NotesGrid = (props) => {
   }, [count]);
 
   return (
-    <>
+    <div className={classes.container}>
       <div className={classes.top}>
         <Typography className={classes.title}>Notes</Typography>
         <Button
@@ -171,13 +175,14 @@ const NotesGrid = (props) => {
           );
         })}
       </Grid>
-    </>
+    </div>
   );
 };
 
 NotesGrid.propTypes = {
   username: PropTypes.string.isRequired,
   token: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (state) => {

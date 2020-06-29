@@ -13,6 +13,8 @@ import {
 import { Edit, Folder, Note } from '@material-ui/icons';
 import { dark, light } from '../colors';
 import Customize from './Customize';
+import Upload from './upload';
+import NotesGrid from './notesGrid';
 
 const EventGroup = ({ name, path }) => {
   return (
@@ -50,7 +52,13 @@ const EventGroup = ({ name, path }) => {
         </List>
       </Drawer>
       <Typography
-        style={{ fontSize: '2rem', color: light, fontWeight: 'bold' }}
+        style={{
+          fontSize: '2rem',
+          color: light,
+          fontWeight: 'bold',
+          width: '85%',
+          float: 'right',
+        }}
       >
         {name}
       </Typography>
@@ -58,6 +66,11 @@ const EventGroup = ({ name, path }) => {
         <Route
           path={`${path}/customize`}
           render={() => <Customize name={name} />}
+        />
+        <Route path={`${path}/uploads`} render={() => <Upload name={name} />} />
+        <Route
+          path={`${path}/notes`}
+          render={() => <NotesGrid name={name} />}
         />
       </Switch>
     </>
