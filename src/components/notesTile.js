@@ -14,7 +14,7 @@ const useStyles = makeStyles(() => ({
     flexDirection: 'column',
     maxHeight: '20rem',
     height: '20rem',
-    width: '20rem',
+    width: '20vw',
   },
   buttonTitle: {
     fontWeight: 'bold',

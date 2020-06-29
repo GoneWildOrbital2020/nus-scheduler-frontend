@@ -47,8 +47,12 @@ const tableIcons = {
 
 const useStyles = makeStyles(() => ({
   root: {
-    width: '75%',
+    width: '85%',
     margin: '1em auto',
+    float: 'right',
+  },
+  table: {
+    padding: '0 2rem',
   },
   input: {
     display: 'none',
@@ -78,13 +82,13 @@ const useStyles = makeStyles(() => ({
 }));
 
 const Upload = (props) => {
-  const { token, username } = props;
+  const { token, username, name: groupName } = props;
   const classes = useStyles();
   const [name, setName] = useState('');
   const [tableData, setTableData] = useState([]);
   useEffect(() => {
     const fetchFile = fetch(
-      `http://localhost:8000/upload/get/file/${username}/CS1101S`,
+      `http://localhost:8000/upload/get/file/${username}/${groupName}`,
       {
         method: 'GET',
         headers: {
@@ -95,7 +99,7 @@ const Upload = (props) => {
       return res.json();
     });
     const fetchImage = fetch(
-      `http://localhost:8000/upload/get/image/${username}/CS1101S`,
+      `http://localhost:8000/upload/get/image/${username}/${groupName}`,
       {
         method: 'GET',
         headers: {
@@ -110,7 +114,6 @@ const Upload = (props) => {
       const image = values[1];
       const newTableData = [];
       file.forEach((element) => {
-        console.log(element);
         const obj = {};
         obj.name = element.fields.name;
         obj.date = '2020/06/17';
@@ -119,7 +122,6 @@ const Upload = (props) => {
         newTableData.push(obj);
       });
       image.forEach((element) => {
-        console.log(element);
         const obj = {};
         obj.name = element.fields.name;
         obj.date = '2020/06/17';
@@ -135,12 +137,10 @@ const Upload = (props) => {
   };
   const handleUploadImage = (event) => {
     event.preventDefault();
-    console.log(event.target.files[0]);
     const data = new FormData();
     data.append('name', name);
     data.append('image', event.target.files[0]);
-    console.log(data);
-    fetch(`http://localhost:8000/upload/image/${username}/CS1101S`, {
+    fetch(`http://localhost:8000/upload/image/${username}/${groupName}`, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -148,7 +148,6 @@ const Upload = (props) => {
       body: data,
     })
       .then((res) => {
-        console.log(res);
         window.location.reload();
       })
       .catch((error) => {
@@ -157,12 +156,10 @@ const Upload = (props) => {
   };
   const handleUploadFile = (event) => {
     event.preventDefault();
-    console.log(event.target.files[0]);
     const data = new FormData();
     data.append('name', name);
     data.append('file', event.target.files[0]);
-    console.log(data);
-    fetch(`http://localhost:8000/upload/file/${username}/CS1101S`, {
+    fetch(`http://localhost:8000/upload/file/${username}/${groupName}`, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -170,7 +167,6 @@ const Upload = (props) => {
       body: data,
     })
       .then((res) => {
-        console.log(res);
         window.location.reload();
       })
       .catch((error) => {
@@ -179,64 +175,66 @@ const Upload = (props) => {
   };
   return (
     <div className={classes.root}>
-      <MaterialTable
-        style={{
-          backgroundColor: `${light}`,
-        }}
-        icons={tableIcons}
-        title="CS1101S Files"
-        columns={[
-          {
-            title: 'Name',
-            field: 'name',
-            headerStyle: {
-              backgroundColor: `${light}`,
-              fontWeight: 'bold',
+      <div className={classes.table}>
+        <MaterialTable
+          style={{
+            backgroundColor: `${light}`,
+          }}
+          icons={tableIcons}
+          title="CS1101S Files"
+          columns={[
+            {
+              title: 'Name',
+              field: 'name',
+              headerStyle: {
+                backgroundColor: `${light}`,
+                fontWeight: 'bold',
+              },
             },
-          },
-          {
-            title: 'Date',
-            field: 'date',
-            headerStyle: {
-              backgroundColor: `${light}`,
-              fontWeight: 'bold',
+            {
+              title: 'Date',
+              field: 'date',
+              headerStyle: {
+                backgroundColor: `${light}`,
+                fontWeight: 'bold',
+              },
             },
-          },
-          {
-            title: 'File Type',
-            field: 'fileType',
-            headerStyle: {
-              backgroundColor: `${light}`,
-              fontWeight: 'bold',
+            {
+              title: 'File Type',
+              field: 'fileType',
+              headerStyle: {
+                backgroundColor: `${light}`,
+                fontWeight: 'bold',
+              },
             },
-          },
-          {
-            title: 'Actions',
-            field: 'download',
-            headerStyle: {
-              backgroundColor: `${light}`,
-              fontWeight: 'bold',
+            {
+              title: 'Actions',
+              field: 'download',
+              headerStyle: {
+                backgroundColor: `${light}`,
+                fontWeight: 'bold',
+              },
+              render: (rowData) => {
+                const handleRedirect = (event) => {
+                  event.preventDefault();
+                  window.open(rowData.download);
+                };
+                return (
+                  <Button
+                    onClick={handleRedirect}
+                    component="span"
+                    variant="contained"
+                    style={{ backgroundColor: `${accent}`, color: `${light}` }}
+                  >
+                    Download
+                  </Button>
+                );
+              },
             },
-            render: (rowData) => {
-              const handleRedirect = (event) => {
-                event.preventDefault();
-                window.open(rowData.download);
-              };
-              return (
-                <Button
-                  onClick={handleRedirect}
-                  component="span"
-                  variant="contained"
-                  style={{ backgroundColor: `${accent}`, color: `${light}` }}
-                >
-                  Download
-                </Button>
-              );
-            },
-          },
-        ]}
-        data={[...tableData]}
-      />
+          ]}
+          data={[...tableData]}
+        />
+      </div>
       <Paper className={classes.paper}>
         <h1>Upload Files & Images</h1>
         <TextField
@@ -289,6 +287,7 @@ const Upload = (props) => {
 Upload.propTypes = {
   token: PropTypes.string.isRequired,
   username: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (state) => {
