@@ -51,9 +51,11 @@ const Login = (props) => {
         return res.json();
       })
       .then((json) => {
-        props.ToggleLogin(json.token, json.username);
+        props.ToggleLogin(json.email, json.token, json.username, json.avatar);
+        window.localStorage.setItem('email', json.email);
         window.localStorage.setItem('token', json.token);
         window.localStorage.setItem('username', json.username);
+        window.localStorage.setItem('avatar', json.avatar);
         window.localStorage.setItem('isLoggedIn', true);
         window.location.replace('/');
       })
@@ -107,7 +109,8 @@ Login.propTypes = {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    ToggleLogin: (token, username) => dispatch(toggleLogin(token, username)),
+    ToggleLogin: (email, token, username, avatar) =>
+      dispatch(toggleLogin(email, token, username, avatar)),
   };
 };
 

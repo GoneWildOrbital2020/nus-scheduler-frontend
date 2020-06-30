@@ -30,6 +30,8 @@ const DrawerList = ({ dispatch, token, username }) => {
     window.localStorage.setItem('token', null);
     window.localStorage.setItem('username', null);
     window.localStorage.setItem('isLoggedIn', false);
+    window.localStorage.setItem('email', null);
+    window.localStorage.setItem('avatar', null);
     dispatch(toggleLogout());
     window.location.replace('/login');
   };
@@ -70,12 +72,14 @@ const DrawerList = ({ dispatch, token, username }) => {
 
   return (
     <List style={{ backgroundColor: light }}>
-      <ListItem button divider>
-        <ListItemIcon>
-          <AccountCircle style={{ color: dark }} />
-        </ListItemIcon>
-        <ListItemText primary="Profile" style={{ color: dark }} />
-      </ListItem>
+      <Link to={`/profile/${username}`}>
+        <ListItem button divider>
+          <ListItemIcon>
+            <AccountCircle style={{ color: dark }} />
+          </ListItemIcon>
+          <ListItemText primary="Profile" style={{ color: dark }} />
+        </ListItem>
+      </Link>
       <ListItem onClick={() => setOpen((state) => !state)} button>
         <ListItemIcon>
           <Event style={{ color: dark }} />

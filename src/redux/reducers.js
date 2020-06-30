@@ -11,6 +11,8 @@ const initalState = {
   activeMonth: 0,
   isLoggedIn: window.localStorage.getItem('isLoggedIn'),
   token: window.localStorage.getItem('token'),
+  email: window.localStorage.getItem('email'),
+  avatar: window.localStorage.getItem('avatar'),
 };
 
 const reducer = (state = initalState, action) => {
@@ -29,8 +31,10 @@ const reducer = (state = initalState, action) => {
       return {
         ...state,
         isLoggedIn: true,
+        email: action.email,
         token: action.token,
         username: action.username,
+        avatar: action.avatar,
       };
     case TOGGLE_LOGOUT:
       return {
@@ -38,6 +42,8 @@ const reducer = (state = initalState, action) => {
         isLoggedIn: false,
         token: null,
         username: '',
+        email: '',
+        avatar: '',
       };
     default:
       return state;
