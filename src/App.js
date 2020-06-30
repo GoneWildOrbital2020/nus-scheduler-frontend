@@ -13,6 +13,7 @@ import Upload from './components/upload';
 import NotesGrid from './components/notesGrid';
 import NavbarDrawer from './components/NavbarDrawer';
 import EventGroup from './components/EventGroup';
+import Profile from './components/profile';
 
 /* eslint-disable no-underscore-dangle */
 const store = createStore(
@@ -43,6 +44,11 @@ function App() {
               />
               <Route path="/upload" exact component={Upload} />
               <Route path="/upload/notes" exact component={NotesGrid} />
+              <Route
+                path={`/profile/${store.getState().username}`}
+                exact
+                render={() => <Profile />}
+              />
             </Switch>
           </div>
           <Footer />

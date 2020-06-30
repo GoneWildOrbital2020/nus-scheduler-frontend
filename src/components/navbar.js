@@ -1,5 +1,10 @@
-import { AppBar, Toolbar, Button } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import {
+  AppBar,
+  Toolbar,
+  Button,
+  makeStyles,
+  Typography,
+} from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -26,10 +31,15 @@ const useStyles = makeStyles({
   button: {
     color: light,
   },
+  avatar: {
+    borderRadius: '50%',
+    width: '3rem',
+    height: '3rem',
+  },
 });
 
 const Navbar = (props) => {
-  const { isLoggedIn, toggleDrawer } = props;
+  const { isLoggedIn, toggleDrawer, username, avatar } = props;
   const classes = useStyles();
   return (
     <div>
@@ -49,7 +59,12 @@ const Navbar = (props) => {
                 className={classes.button}
                 onClick={toggleDrawer}
               >
-                <MenuIcon style={{ color: light }} />
+                <img
+                  className={classes.avatar}
+                  src={`http://localhost:8000${avatar}`}
+                  alt="profile"
+                />
+                <Typography>{username}</Typography>
               </Button>
             ) : (
               <Link to="/login">
@@ -68,11 +83,15 @@ const Navbar = (props) => {
 Navbar.propTypes = {
   isLoggedIn: PropTypes.string.isRequired,
   toggleDrawer: PropTypes.func.isRequired,
+  username: PropTypes.string.isRequired,
+  avatar: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (state) => {
   return {
     isLoggedIn: state.isLoggedIn,
+    username: state.username,
+    avatar: state.avatar,
   };
 };
 

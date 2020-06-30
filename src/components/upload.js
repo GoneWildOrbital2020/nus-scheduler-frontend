@@ -112,21 +112,32 @@ const Upload = (props) => {
     Promise.all([fetchFile, fetchImage]).then((values) => {
       const file = values[0];
       const image = values[1];
+      console.log(file);
       const newTableData = [];
       file.forEach((element) => {
         const obj = {};
+        const currFile = element.fields.file;
+        const date = element.fields.created_date;
         obj.name = element.fields.name;
-        obj.date = '2020/06/17';
-        obj.fileType = '.pdf';
-        obj.download = `http://localhost:8000/media/${element.fields.file}`;
+        obj.date = `${date.substring(0, 10)} ${date.substring(11, 19)}`;
+        obj.fileType = currFile.substring(
+          currFile.lastIndexOf('.') + 1,
+          currFile.length,
+        );
+        obj.download = `http://localhost:8000/media/${currFile}`;
         newTableData.push(obj);
       });
       image.forEach((element) => {
         const obj = {};
+        const currImage = element.fields.image;
+        const date = element.fields.created_date;
         obj.name = element.fields.name;
-        obj.date = '2020/06/17';
-        obj.fileType = '.jpeg';
-        obj.download = `http://localhost:8000/media/${element.fields.image}`;
+        obj.date = `${date.substring(0, 10)} ${date.substring(11, 19)}`;
+        obj.fileType = currImage.substring(
+          currImage.lastIndexOf('.') + 1,
+          currImage.length,
+        );
+        obj.download = `http://localhost:8000/media/${currImage}`;
         newTableData.push(obj);
       });
       setTableData(newTableData);
