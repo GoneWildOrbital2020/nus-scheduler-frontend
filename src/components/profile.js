@@ -53,7 +53,8 @@ const useStyles = makeStyles(() => ({
 }));
 
 const Profile = (props) => {
-  const { username, token, email, avatar: url } = props;
+  const { username, token, email, avatar: avatarProps } = props;
+  const [url, setUrl] = useState(`http://localhost:8000${avatarProps}`);
   const [password, setPassword] = useState('');
   const [newUsername, setNewUsername] = useState(username);
   const [retype, setRetype] = useState('');
@@ -78,6 +79,7 @@ const Profile = (props) => {
   const handleUploadAvatar = (event) => {
     event.preventDefault();
     setAvatar(event.target.files[0]);
+    setUrl(URL.createObjectURL(event.target.files[0]));
   };
 
   const check = () => {
@@ -104,11 +106,7 @@ const Profile = (props) => {
     <Paper className={classes.root}>
       <Typography className={classes.title}>Edit Profile</Typography>
       <Typography className={classes.typography2}>Change Avatar</Typography>
-      <img
-        className={classes.avatar}
-        src={`http://localhost:8000${url}`}
-        alt="profile"
-      />
+      <img className={classes.avatar} src={url} alt="profile" />
       <label htmlFor="avatar-upload">
         <input
           className={classes.input}
