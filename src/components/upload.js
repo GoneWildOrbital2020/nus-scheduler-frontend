@@ -20,6 +20,7 @@ import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import { accent, light } from '../colors';
+import Notification from './notification';
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -86,6 +87,10 @@ const Upload = (props) => {
   const classes = useStyles();
   const [name, setName] = useState('');
   const [tableData, setTableData] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [message, setMessage] = useState('');
+  const [severity, setSeverity] = useState('success');
+
   useEffect(() => {
     const fetchFile = fetch(
       `http://localhost:8000/upload/get/file/${username}/${groupName}`,
@@ -109,43 +114,51 @@ const Upload = (props) => {
     ).then((res) => {
       return res.json();
     });
-    Promise.all([fetchFile, fetchImage]).then((values) => {
-      const file = values[0];
-      const image = values[1];
-      console.log(file);
-      const newTableData = [];
-      file.forEach((element) => {
-        const obj = {};
-        const currFile = element.fields.file;
-        const date = element.fields.created_date;
-        obj.name = element.fields.name;
-        obj.date = `${date.substring(0, 10)} ${date.substring(11, 19)}`;
-        obj.fileType = currFile.substring(
-          currFile.lastIndexOf('.') + 1,
-          currFile.length,
-        );
-        obj.download = `http://localhost:8000/media/${currFile}`;
-        newTableData.push(obj);
+    Promise.all([fetchFile, fetchImage])
+      .then((values) => {
+        const file = values[0];
+        const image = values[1];
+        console.log(file);
+        const newTableData = [];
+        file.forEach((element) => {
+          const obj = {};
+          const currFile = element.fields.file;
+          const date = element.fields.created_date;
+          obj.name = element.fields.name;
+          obj.date = `${date.substring(0, 10)} ${date.substring(11, 19)}`;
+          obj.fileType = currFile.substring(
+            currFile.lastIndexOf('.') + 1,
+            currFile.length,
+          );
+          obj.download = `http://localhost:8000/media/${currFile}`;
+          newTableData.push(obj);
+        });
+        image.forEach((element) => {
+          const obj = {};
+          const currImage = element.fields.image;
+          const date = element.fields.created_date;
+          obj.name = element.fields.name;
+          obj.date = `${date.substring(0, 10)} ${date.substring(11, 19)}`;
+          obj.fileType = currImage.substring(
+            currImage.lastIndexOf('.') + 1,
+            currImage.length,
+          );
+          obj.download = `http://localhost:8000/media/${currImage}`;
+          newTableData.push(obj);
+        });
+        setTableData(newTableData);
+      })
+      .catch(() => {
+        setSeverity('error');
+        setOpen(true);
+        setMessage('Failed to get files and images, please reload the page!');
       });
-      image.forEach((element) => {
-        const obj = {};
-        const currImage = element.fields.image;
-        const date = element.fields.created_date;
-        obj.name = element.fields.name;
-        obj.date = `${date.substring(0, 10)} ${date.substring(11, 19)}`;
-        obj.fileType = currImage.substring(
-          currImage.lastIndexOf('.') + 1,
-          currImage.length,
-        );
-        obj.download = `http://localhost:8000/media/${currImage}`;
-        newTableData.push(obj);
-      });
-      setTableData(newTableData);
-    });
   }, []);
+
   const handleChangeName = (event) => {
     setName(event.target.value);
   };
+
   const handleUploadImage = (event) => {
     event.preventDefault();
     const data = new FormData();
@@ -159,12 +172,22 @@ const Upload = (props) => {
       body: data,
     })
       .then((res) => {
-        window.location.reload();
+        if (res.status !== 201) {
+          throw new Error('Upload image failed, please try again!');
+        } else {
+          setSeverity('success');
+          setOpen(true);
+          setMessage('Upload image successful!');
+          window.location.reload();
+        }
       })
-      .catch((error) => {
-        console.log(error);
+      .catch((err) => {
+        setSeverity('error');
+        setOpen(true);
+        setMessage(err.message);
       });
   };
+
   const handleUploadFile = (event) => {
     event.preventDefault();
     const data = new FormData();
@@ -178,12 +201,29 @@ const Upload = (props) => {
       body: data,
     })
       .then((res) => {
-        window.location.reload();
+        if (res.status !== 201) {
+          throw new Error('Upload file failed, please try again!');
+        } else {
+          setSeverity('success');
+          setOpen(true);
+          setMessage('Upload file successful!');
+          window.location.reload();
+        }
       })
-      .catch((error) => {
-        console.log(error);
+      .catch((err) => {
+        setSeverity('error');
+        setOpen(true);
+        setMessage(err.message);
       });
   };
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpen(false);
+  };
+
   return (
     <div className={classes.root}>
       <div className={classes.table}>
@@ -289,6 +329,12 @@ const Upload = (props) => {
               Upload File
             </Button>
           </label>
+          <Notification
+            open={open}
+            handleClose={handleClose}
+            severity={severity}
+            message={message}
+          />
         </div>
       </Paper>
     </div>

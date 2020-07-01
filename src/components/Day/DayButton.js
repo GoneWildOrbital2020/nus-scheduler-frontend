@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Paper, Button, Typography } from '@material-ui/core';
+import { Button, Typography } from '@material-ui/core';
 import { LabelImportant } from '@material-ui/icons';
 import { light } from '../../colors';
 import './DayButton.css';

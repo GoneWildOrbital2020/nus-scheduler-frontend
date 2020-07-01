@@ -9,6 +9,7 @@ import {
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { accent, light, dark } from '../colors';
+import Notification from './notification';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -59,6 +60,9 @@ const Profile = (props) => {
   const [newUsername, setNewUsername] = useState(username);
   const [retype, setRetype] = useState('');
   const [avatar, setAvatar] = useState('');
+  const [open, setOpen] = useState(false);
+  const [message, setMessage] = useState('');
+  const [severity, setSeverity] = useState('success');
   const classes = useStyles();
 
   const handleChangeUsername = (event) => {
@@ -99,7 +103,28 @@ const Profile = (props) => {
         Authorization: `Bearer ${token}`,
       },
       body: data,
-    }).then((res) => console.log(res));
+    })
+      .then((res) => {
+        if (res.status !== 200) {
+          throw new Error('Update failed, please try again!');
+        } else {
+          setSeverity('success');
+          setOpen(true);
+          setMessage('Update successful!');
+        }
+      })
+      .catch((err) => {
+        setSeverity('error');
+        setOpen(true);
+        setMessage(err.message);
+      });
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpen(false);
   };
 
   return (
@@ -158,6 +183,12 @@ const Profile = (props) => {
       >
         Save Changes
       </Button>
+      <Notification
+        open={open}
+        handleClose={handleClose}
+        severity={severity}
+        message={message}
+      />
     </Paper>
   );
 };

@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Notes from './notes';
 import { accent, light } from '../colors';
+import Notification from './notification';
 
 const useStyles = makeStyles(() => ({
   container: {
@@ -37,6 +38,9 @@ const NotesGrid = (props) => {
   const [count, setCount] = useState(0);
   const [notes, setNotes] = useState([]);
   const [rows, setRows] = useState([0]);
+  const [open, setOpen] = useState(false);
+  const [message, setMessage] = useState('');
+  const [severity, setSeverity] = useState('success');
   const classes = useStyles();
 
   const generateRows = (x) => {
@@ -66,13 +70,25 @@ const NotesGrid = (props) => {
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(data),
-    }).then((res) => {
-      console.log(res);
-      const newNotes = [...notes];
-      newNotes.push(data);
-      setCount(count + 1);
-      setNotes(newNotes);
-    });
+    })
+      .then((res) => {
+        if (res.status !== 201) {
+          throw new Error('Failed to add notes, please try again!');
+        } else {
+          const newNotes = [...notes];
+          newNotes.push(data);
+          setCount(count + 1);
+          setNotes(newNotes);
+          setSeverity('success');
+          setOpen(true);
+          setMessage('Add notes successful!');
+        }
+      })
+      .catch((err) => {
+        setSeverity('error');
+        setOpen(true);
+        setMessage(err.message);
+      });
   };
 
   const editNote = (identifier, title, text) => {
@@ -88,26 +104,45 @@ const NotesGrid = (props) => {
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(data),
-    }).then((res) => {
-      console.log(res);
-      setNotes(
-        notes.map((element) => {
-          if (element.identifier === identifier) {
-            return {
-              identifier,
-              title,
-              text,
-            };
-          }
-          return element;
-        }),
-      );
-    });
+    })
+      .then((res) => {
+        if (res.status !== 201) {
+          throw new Error('Failed to save changes, please try again!');
+        } else {
+          setNotes(
+            notes.map((element) => {
+              if (element.identifier === identifier) {
+                return {
+                  identifier,
+                  title,
+                  text,
+                };
+              }
+              return element;
+            }),
+          );
+          setSeverity('success');
+          setOpen(true);
+          setMessage('Save changes successful!');
+        }
+      })
+      .catch((err) => {
+        setSeverity('error');
+        setOpen(true);
+        setMessage(err.message);
+      });
   };
 
   const handleAddNote = (event) => {
     event.preventDefault();
     uploadNoteToDB(count + 1, 'New Note', '');
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpen(false);
   };
 
   useEffect(() => {
@@ -134,6 +169,11 @@ const NotesGrid = (props) => {
         newNotes.sort((a, b) => a.identifier - b.identifier);
         setNotes(newNotes);
         setCount(newCount);
+      })
+      .catch(() => {
+        setSeverity('error');
+        setOpen(true);
+        setMessage('Failed to fetch notes, please reload the page!');
       });
   }, []);
 
@@ -175,6 +215,12 @@ const NotesGrid = (props) => {
           );
         })}
       </Grid>
+      <Notification
+        open={open}
+        handleClose={handleClose}
+        severity={severity}
+        message={message}
+      />
     </div>
   );
 };

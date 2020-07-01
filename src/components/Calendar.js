@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Typography } from '@material-ui/core';
@@ -10,21 +10,9 @@ import { changeActiveMonth, addNumOfEvents } from '../redux/actions';
 import { monthProperties, url } from './constant';
 import Month from './Month';
 import { light } from '../colors';
+import Notification from './notification';
 
 import './Calendar.css';
-
-const fetchNumOfEvents = async (token, username) => {
-  const response = await fetch(`${url}/calendars/${username}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
-  });
-  if (!response.ok) throw new Error("Can't fetch data");
-  const json = await response.json();
-  return json.count;
-};
 
 const Calendar = ({
   activeMonth,
@@ -34,15 +22,47 @@ const Calendar = ({
   token,
   isLoggedIn,
 }) => {
+  const [open, setOpen] = useState(false);
+  const [message, setMessage] = useState('');
+  const [severity, setSeverity] = useState('success');
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpen(false);
+  };
+
+  const fetchNumOfEvents = async () => {
+    const response = await fetch(`${url}/calendars/${username}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (!response.ok)
+      throw new Error('Failed to fetch event count, please reload the page!');
+    const json = await response.json();
+    return json.count;
+  };
+
+  useEffect(() => {
+    fetchNumOfEvents()
+      .then((data) => dispatch(addNumOfEvents(data - numOfEvents)))
+      .catch((err) => {
+        setSeverity('error');
+        setOpen(true);
+        setMessage(err.message);
+      });
+  }, []);
+
   if (!JSON.parse(isLoggedIn)) {
     return <Redirect to="/login" />;
   }
+
   const clickLeft = () => dispatch(changeActiveMonth(-1));
   const clickRight = () => dispatch(changeActiveMonth(1));
-
-  fetchNumOfEvents(token, username).then((data) =>
-    dispatch(addNumOfEvents(data - numOfEvents)),
-  );
 
   return (
     <div className="calendarContainer">
@@ -60,6 +80,12 @@ const Calendar = ({
         </IconButton>
       </div>
       <Month />
+      <Notification
+        open={open}
+        handleClose={handleClose}
+        severity={severity}
+        message={message}
+      />
     </div>
   );
 };
