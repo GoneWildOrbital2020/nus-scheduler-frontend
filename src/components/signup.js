@@ -3,6 +3,7 @@ import { TextField, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import '../css/signup.css';
 import { dark, light, accent } from '../colors';
+import Notification from './notification';
 
 const useStyles = makeStyles({
   root: {
@@ -21,15 +22,22 @@ const Signup = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [open, setOpen] = useState(false);
+  const [message, setMessage] = useState('');
+  const [severity, setSeverity] = useState('success');
+
   const handleChangeUsername = (event) => {
     setUsername(event.target.value);
   };
+
   const handleChangeEmail = (event) => {
     setEmail(event.target.value);
   };
+
   const handleChangePassword = (event) => {
     setPassword(event.target.value);
   };
+
   const handleSubmit = (event) => {
     // TODO: validate data
     event.preventDefault();
@@ -46,18 +54,31 @@ const Signup = () => {
       body: JSON.stringify(data),
     })
       .then((res) => {
-        if (res.status === 400) {
-          throw new Error('bad request!');
+        if (res.status === 400 || res.status === 500) {
+          throw new Error('Signup failed, please try again!');
         }
         return res.json();
       })
       .then(() => {
+        setSeverity('success');
+        setOpen(true);
+        setMessage('Signup successful!');
         window.location.replace('/login');
       })
       .catch((err) => {
-        console.log(err);
+        setSeverity('error');
+        setOpen(true);
+        setMessage(err.message);
       });
   };
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpen(false);
+  };
+
   return (
     <div className="signup">
       <div className="form" style={{ backgroundColor: light }}>
@@ -95,6 +116,12 @@ const Signup = () => {
         <Button className={classes.button} onClick={handleSubmit}>
           Signup
         </Button>
+        <Notification
+          open={open}
+          handleClose={handleClose}
+          severity={severity}
+          message={message}
+        />
       </div>
     </div>
   );

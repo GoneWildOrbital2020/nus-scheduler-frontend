@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { toggleLogin } from '../redux/actions';
 import { dark, light, accent } from '../colors';
+import Notification from './notification';
 
 const useStyles = makeStyles({
   root: {
@@ -24,12 +25,18 @@ const Login = (props) => {
   const classes = useStyles();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [open, setOpen] = useState(false);
+  const [message, setMessage] = useState('');
+  const [severity, setSeverity] = useState('success');
+
   const handleChangeEmail = (event) => {
     setEmail(event.target.value);
   };
+
   const handleChangePassword = (event) => {
     setPassword(event.target.value);
   };
+
   const handleSubmit = (event) => {
     // TODO: validate data
     event.preventDefault();
@@ -45,8 +52,8 @@ const Login = (props) => {
       body: JSON.stringify(data),
     })
       .then((res) => {
-        if (res.status === 400) {
-          throw new Error('bad request!');
+        if (res.status === 500 || res.status === 400) {
+          throw new Error('Login failed, please try again!');
         }
         return res.json();
       })
@@ -57,13 +64,25 @@ const Login = (props) => {
         window.localStorage.setItem('username', json.username);
         window.localStorage.setItem('avatar', json.avatar);
         window.localStorage.setItem('isLoggedIn', true);
+        setSeverity('success');
+        setOpen(true);
+        setMessage('Login successful!');
         window.location.replace('/');
       })
       .catch((err) => {
-        console.log(err);
-        console.log('error login, try again!');
+        setSeverity('error');
+        setOpen(true);
+        setMessage(err.message);
       });
   };
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpen(false);
+  };
+
   return (
     <div className="login">
       <div className="form" style={{ backgroundColor: light }}>
@@ -92,6 +111,12 @@ const Login = (props) => {
         <Button className={classes.button} onClick={handleSubmit}>
           Login
         </Button>
+        <Notification
+          message={message}
+          handleClose={handleClose}
+          open={open}
+          severity={severity}
+        />
         <h5 style={{ color: dark, marginTop: '1rem', marginBottom: '0.25rem' }}>
           Not a user ?
         </h5>
