@@ -1,45 +1,72 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import DayButton from './DayButton';
 import DayDialog from './TABDayDialog';
 import { url } from '../constant';
-
-const fetchEvents = async (token, username, month, day) => {
-  const response = await fetch(`${url}/calendars/${username}/${month}/${day}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
-  });
-  if (!response.ok) throw new Error("Can't fetch data");
-  const json = await response.json();
-  return json.map((data) => data.fields);
-};
-
-const saveEventsToDB = (token, username, month, day, events) => {
-  const options = {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify({ events }),
-  };
-  fetch(`${url}/calendars/${username}/${month}/${day}`, options);
-};
+import Notification from '../notification';
 
 const DayTile = ({ index, username, activeMonth, token }) => {
-  const [events, setEvents] = React.useState([]);
-  const [open, setOpen] = React.useState(false);
+  const [currEvents, setCurrEvents] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [openAlert, setOpenAlert] = useState(false);
+  const [message, setMessage] = useState('');
+  const [severity, setSeverity] = useState('success');
+
+  const fetchEvents = async (month, day) => {
+    const response = await fetch(
+      `${url}/calendars/${username}/${month}/${day}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+    if (!response.ok)
+      throw new Error('Failed to fetch events, please reload the page!');
+    const json = await response.json();
+    return json.map((data) => data.fields);
+  };
+
+  const saveEventsToDB = (month, day, events) => {
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ events }),
+    };
+    fetch(`${url}/calendars/${username}/${month}/${day}`, options)
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error('Failed to save changes, please try again!');
+        } else {
+          setSeverity('success');
+          setOpenAlert(true);
+          setMessage('Save changes successful!');
+        }
+      })
+      .catch((err) => {
+        setSeverity('error');
+        setOpenAlert(true);
+        setMessage(err.message);
+      });
+  };
 
   React.useEffect(() => {
     const getEvents = () => {
-      fetchEvents(token, username, activeMonth, index)
-        .then((data) => setEvents(data))
-        .catch(() => {
-          setEvents([]);
+      fetchEvents(activeMonth, index)
+        .then((data) => {
+          setCurrEvents(data);
+        })
+        .catch((err) => {
+          setCurrEvents([]);
+          setSeverity('error');
+          setOpen(true);
+          setMessage(err.message);
         });
     };
     getEvents();
@@ -53,18 +80,31 @@ const DayTile = ({ index, username, activeMonth, token }) => {
     setOpen(false);
   };
 
+  const handleCloseAlert = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenAlert(false);
+  };
+
   const saveEvents = (e) => {
-    saveEventsToDB(token, username, activeMonth, index, e);
-    setEvents(e);
+    saveEventsToDB(activeMonth, index, e);
+    setCurrEvents(e);
   };
   return (
     <>
-      <DayButton index={index} events={events} handleOpen={handleOpen} />
+      <DayButton index={index} events={currEvents} handleOpen={handleOpen} />
       <DayDialog
-        events={events}
+        events={currEvents}
         saveEvents={saveEvents}
         handleClose={handleClose}
         open={open}
+      />
+      <Notification
+        open={openAlert}
+        handleClose={handleCloseAlert}
+        severity={severity}
+        message={message}
       />
     </>
   );
