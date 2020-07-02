@@ -1,6 +1,14 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { useState, forwardRef, useEffect } from 'react';
-import { makeStyles, Button, TextField, Paper } from '@material-ui/core';
+import {
+  makeStyles,
+  Button,
+  TextField,
+  Paper,
+  IconButton,
+} from '@material-ui/core';
+import GetAppIcon from '@material-ui/icons/GetApp';
+import DeleteIcon from '@material-ui/icons/Delete';
 import MaterialTable from 'material-table';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -118,7 +126,6 @@ const Upload = (props) => {
       .then((values) => {
         const file = values[0];
         const image = values[1];
-        console.log(file);
         const newTableData = [];
         file.forEach((element) => {
           const obj = {};
@@ -217,6 +224,46 @@ const Upload = (props) => {
       });
   };
 
+  const handleDelete = (rowData) => {
+    const data = {
+      name: rowData.name,
+    };
+    fetch(
+      `http://localhost:8000/upload/delete/files/${username}/${groupName}`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(data),
+      },
+    )
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error('Delete files failed, please try again!');
+        } else {
+          const newTableData = [...tableData];
+          const index = newTableData.findIndex(
+            (element) => element.name === rowData.name,
+          );
+          if (index === -1) {
+            throw new Error('File not found, please try again!');
+          }
+          newTableData.splice(index, 1);
+          setTableData(newTableData);
+          setSeverity('success');
+          setOpen(true);
+          setMessage('Delete files successful!');
+        }
+      })
+      .catch((err) => {
+        setSeverity('error');
+        setOpen(true);
+        setMessage(err.message);
+      });
+  };
+
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
@@ -271,14 +318,18 @@ const Upload = (props) => {
                   window.open(rowData.download);
                 };
                 return (
-                  <Button
-                    onClick={handleRedirect}
-                    component="span"
-                    variant="contained"
-                    style={{ backgroundColor: `${accent}`, color: `${light}` }}
-                  >
-                    Download
-                  </Button>
+                  <>
+                    <IconButton onClick={handleRedirect}>
+                      <GetAppIcon />
+                    </IconButton>
+                    <IconButton
+                      onClick={() => {
+                        handleDelete(rowData);
+                      }}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </>
                 );
               },
             },

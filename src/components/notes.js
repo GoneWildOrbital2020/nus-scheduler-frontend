@@ -4,7 +4,7 @@ import NotesTile from './notesTile';
 import NotesDialog from './notesDialog';
 
 const Notes = (props) => {
-  const { index, title, text, identifier, upload } = props;
+  const { index, title, text, identifier, upload, deleteNote } = props;
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => {
@@ -30,6 +30,7 @@ const Notes = (props) => {
         title={title}
         text={text}
         upload={upload}
+        deleteNote={deleteNote}
       />
     </>
   );
@@ -41,6 +42,7 @@ Notes.propTypes = {
   text: PropTypes.string.isRequired,
   identifier: PropTypes.number.isRequired,
   upload: PropTypes.func.isRequired,
+  deleteNote: PropTypes.func.isRequired,
 };
 
 export default Notes;

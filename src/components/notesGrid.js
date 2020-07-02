@@ -36,6 +36,7 @@ const useStyles = makeStyles(() => ({
 const NotesGrid = (props) => {
   const { token, username, name } = props;
   const [count, setCount] = useState(0);
+  const [total, setTotal] = useState(0);
   const [notes, setNotes] = useState([]);
   const [rows, setRows] = useState([0]);
   const [open, setOpen] = useState(false);
@@ -60,6 +61,7 @@ const NotesGrid = (props) => {
   const uploadNoteToDB = (identifier, title, text) => {
     const data = {
       identifier,
+      total,
       title,
       text,
     };
@@ -76,7 +78,12 @@ const NotesGrid = (props) => {
           throw new Error('Failed to add notes, please try again!');
         } else {
           const newNotes = [...notes];
-          newNotes.push(data);
+          newNotes.push({
+            identifier,
+            title,
+            text,
+          });
+          setTotal(total + 1);
           setCount(count + 1);
           setNotes(newNotes);
           setSeverity('success');
@@ -94,6 +101,7 @@ const NotesGrid = (props) => {
   const editNote = (identifier, title, text) => {
     const data = {
       identifier,
+      total,
       title,
       text,
     };
@@ -106,7 +114,7 @@ const NotesGrid = (props) => {
       body: JSON.stringify(data),
     })
       .then((res) => {
-        if (res.status !== 201) {
+        if (res.status !== 200) {
           throw new Error('Failed to save changes, please try again!');
         } else {
           setNotes(
@@ -135,7 +143,7 @@ const NotesGrid = (props) => {
 
   const handleAddNote = (event) => {
     event.preventDefault();
-    uploadNoteToDB(count + 1, 'New Note', '');
+    uploadNoteToDB(total + 1, 'New Note', '');
   };
 
   const handleClose = (event, reason) => {
@@ -145,35 +153,93 @@ const NotesGrid = (props) => {
     setOpen(false);
   };
 
-  useEffect(() => {
-    fetch(`http://localhost:8000/upload/get/note/${username}/${name}`, {
-      method: 'GET',
+  const deleteNote = (identifier) => {
+    const data = {
+      identifier,
+    };
+    fetch(`http://localhost:8000/upload/delete/note/${username}/${name}`, {
+      method: 'POST',
       headers: {
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
+      body: JSON.stringify(data),
     })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error('Delete note failed, please try again!');
+        } else {
+          const newNotes = [...notes];
+          const index = newNotes.findIndex(
+            (element) => element.identifier === identifier,
+          );
+          if (index === -1) {
+            throw new Error('Note not found!');
+          }
+          newNotes.splice(index, 1);
+          setNotes(newNotes);
+          setCount(count - 1);
+          setSeverity('success');
+          setOpen(true);
+          setMessage('Delete note successful!');
+        }
+      })
+      .catch((err) => {
+        setSeverity('error');
+        setOpen(true);
+        setMessage(err.message);
+      });
+  };
+
+  useEffect(() => {
+    const getNotes = fetch(
+      `http://localhost:8000/upload/get/note/${username}/${name}`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    )
       .then((res) => {
         return res.json();
       })
       .then((json) => {
         const newNotes = [];
-        let newCount = 0;
         json.forEach((element) => {
           const details = {};
           details.title = element.fields.title;
           details.text = element.fields.text;
           details.identifier = element.fields.identifier;
           newNotes.push(details);
-          newCount += 1;
         });
         newNotes.sort((a, b) => a.identifier - b.identifier);
-        setNotes(newNotes);
-        setCount(newCount);
+        return newNotes;
+      });
+
+    const getTotal = fetch(
+      `http://localhost:8000/upload/get/totalnotes/${username}`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    ).then((res) => res.json());
+
+    Promise.all([getNotes, getTotal])
+      .then((values) => {
+        setCount(values[0].length);
+        setTotal(values[1].total);
+        setNotes(values[0]);
+        setSeverity('success');
+        setOpen(true);
+        setMessage('Fetch notes successful!');
       })
       .catch(() => {
         setSeverity('error');
         setOpen(true);
-        setMessage('Failed to fetch notes, please reload the page!');
+        setMessage('Fetch notes failed!');
       });
   }, []);
 
@@ -208,6 +274,7 @@ const NotesGrid = (props) => {
                     title={obj.title}
                     text={obj.text}
                     upload={editNote}
+                    deleteNote={deleteNote}
                   />
                 );
               })}
