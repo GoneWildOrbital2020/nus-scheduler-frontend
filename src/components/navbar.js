@@ -16,8 +16,9 @@ import '../css/navbar.css';
 const useStyles = makeStyles({
   root: {
     backgroundColor: dark,
-    position: 'relative',
+    position: 'fixed',
     zIndex: 1400,
+    height: '75px',
   },
   menuButton: {
     marginRight: 0,

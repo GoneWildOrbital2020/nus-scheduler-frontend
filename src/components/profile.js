@@ -172,6 +172,7 @@ const Profile = (props) => {
       <TextField
         className={classes.textField}
         variant="outlined"
+        type="password"
         rowsMax={1}
         defaultValue={password}
         onChange={handleChangePassword}
@@ -182,6 +183,7 @@ const Profile = (props) => {
       <TextField
         className={classes.textField}
         variant="outlined"
+        type="password"
         rowsMax={1}
         defaultValue={retype}
         onChange={handleRetype}
