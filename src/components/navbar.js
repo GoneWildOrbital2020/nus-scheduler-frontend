@@ -5,7 +5,6 @@ import {
   makeStyles,
   Typography,
 } from '@material-ui/core';
-import MenuIcon from '@material-ui/icons/Menu';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';

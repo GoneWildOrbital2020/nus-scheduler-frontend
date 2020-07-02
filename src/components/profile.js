@@ -10,6 +10,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { accent, light, dark } from '../colors';
 import Notification from './notification';
+import { toggleLogin } from '../redux/actions';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -48,13 +49,16 @@ const useStyles = makeStyles(() => ({
     display: 'none',
   },
   avatar: {
-    width: '100%',
-    maxHeight: 'max-content',
+    display: 'block',
+    maxWidth: '100%',
+    maxHeight: '500px',
+    width: 'auto',
+    height: 'auto',
   },
 }));
 
 const Profile = (props) => {
-  const { username, token, email, avatar: avatarProps } = props;
+  const { username, token, email, avatar: avatarProps, dispatch } = props;
   const [url, setUrl] = useState(`http://localhost:8000${avatarProps}`);
   const [password, setPassword] = useState('');
   const [newUsername, setNewUsername] = useState(username);
@@ -108,10 +112,17 @@ const Profile = (props) => {
         if (res.status !== 200) {
           throw new Error('Update failed, please try again!');
         } else {
-          setSeverity('success');
-          setOpen(true);
-          setMessage('Update successful!');
+          return res.json();
         }
+      })
+      .then((json) => {
+        window.localStorage.setItem('username', json.username);
+        window.localStorage.setItem('avatar', json.avatar);
+        dispatch(toggleLogin(email, token, json.username, json.avatar));
+        setSeverity('success');
+        setOpen(true);
+        setMessage('Update successful!');
+        window.location.replace(`/profile/${json.username}`);
       })
       .catch((err) => {
         setSeverity('error');
@@ -198,6 +209,7 @@ Profile.propTypes = {
   token: PropTypes.string.isRequired,
   email: PropTypes.string.isRequired,
   avatar: PropTypes.string.isRequired,
+  dispatch: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => {
