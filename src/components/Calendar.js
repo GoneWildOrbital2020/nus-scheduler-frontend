@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { Typography } from '@material-ui/core';
+import { Typography, makeStyles } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import ArrowLeftIcon from '@material-ui/icons/ArrowLeft';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
@@ -12,7 +12,17 @@ import Month from './Month';
 import { light } from '../colors';
 import Notification from './notification';
 
-import './Calendar.css';
+const useStyles = makeStyles(() => ({
+  headContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+  },
+  calendarContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+}));
 
 const Calendar = ({
   activeMonth,
@@ -25,6 +35,7 @@ const Calendar = ({
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState('');
   const [severity, setSeverity] = useState('success');
+  const classes = useStyles();
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -65,8 +76,8 @@ const Calendar = ({
   const clickRight = () => dispatch(changeActiveMonth(1));
 
   return (
-    <div className="calendarContainer">
-      <div className="headContainer">
+    <div className={classes.calendarContainer}>
+      <div className={classes.headContainer}>
         <IconButton onClick={clickLeft}>
           <ArrowLeftIcon fontSize="large" style={{ color: light }} />
         </IconButton>
