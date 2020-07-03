@@ -1,6 +1,14 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { useState, forwardRef, useEffect } from 'react';
-import { makeStyles, Button, TextField, Paper } from '@material-ui/core';
+import {
+  makeStyles,
+  Button,
+  TextField,
+  Paper,
+  IconButton,
+} from '@material-ui/core';
+import GetAppIcon from '@material-ui/icons/GetApp';
+import DeleteIcon from '@material-ui/icons/Delete';
 import MaterialTable from 'material-table';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -87,6 +95,7 @@ const Upload = (props) => {
   const classes = useStyles();
   const [name, setName] = useState('');
   const [tableData, setTableData] = useState([]);
+  const [total, setTotal] = useState(0);
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState('');
   const [severity, setSeverity] = useState('success');
@@ -103,6 +112,7 @@ const Upload = (props) => {
     ).then((res) => {
       return res.json();
     });
+
     const fetchImage = fetch(
       `http://localhost:8000/upload/get/image/${username}/${groupName}`,
       {
@@ -114,16 +124,26 @@ const Upload = (props) => {
     ).then((res) => {
       return res.json();
     });
-    Promise.all([fetchFile, fetchImage])
+
+    const fetchTotal = fetch(
+      `http://localhost:8000/upload/get/totalfiles/${username}`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    ).then((res) => res.json());
+
+    Promise.all([fetchFile, fetchImage, fetchTotal])
       .then((values) => {
         const file = values[0];
         const image = values[1];
-        console.log(file);
         const newTableData = [];
         file.forEach((element) => {
           const obj = {};
           const currFile = element.fields.file;
           const date = element.fields.created_date;
+          obj.identifier = element.fields.identifier;
           obj.name = element.fields.name;
           obj.date = `${date.substring(0, 10)} ${date.substring(11, 19)}`;
           obj.fileType = currFile.substring(
@@ -137,6 +157,7 @@ const Upload = (props) => {
           const obj = {};
           const currImage = element.fields.image;
           const date = element.fields.created_date;
+          obj.identifier = element.fields.identifier;
           obj.name = element.fields.name;
           obj.date = `${date.substring(0, 10)} ${date.substring(11, 19)}`;
           obj.fileType = currImage.substring(
@@ -147,6 +168,10 @@ const Upload = (props) => {
           newTableData.push(obj);
         });
         setTableData(newTableData);
+        setTotal(values[2].total);
+        setSeverity('success');
+        setOpen(true);
+        setMessage('Fetch files successful!');
       })
       .catch(() => {
         setSeverity('error');
@@ -162,6 +187,7 @@ const Upload = (props) => {
   const handleUploadImage = (event) => {
     event.preventDefault();
     const data = new FormData();
+    data.append('identifier', total + 1);
     data.append('name', name);
     data.append('image', event.target.files[0]);
     fetch(`http://localhost:8000/upload/image/${username}/${groupName}`, {
@@ -175,6 +201,7 @@ const Upload = (props) => {
         if (res.status !== 201) {
           throw new Error('Upload image failed, please try again!');
         } else {
+          setTotal(total + 1);
           setSeverity('success');
           setOpen(true);
           setMessage('Upload image successful!');
@@ -191,6 +218,7 @@ const Upload = (props) => {
   const handleUploadFile = (event) => {
     event.preventDefault();
     const data = new FormData();
+    data.append('identifier', total + 1);
     data.append('name', name);
     data.append('file', event.target.files[0]);
     fetch(`http://localhost:8000/upload/file/${username}/${groupName}`, {
@@ -204,10 +232,51 @@ const Upload = (props) => {
         if (res.status !== 201) {
           throw new Error('Upload file failed, please try again!');
         } else {
+          setTotal(total + 1);
           setSeverity('success');
           setOpen(true);
           setMessage('Upload file successful!');
           window.location.reload();
+        }
+      })
+      .catch((err) => {
+        setSeverity('error');
+        setOpen(true);
+        setMessage(err.message);
+      });
+  };
+
+  const handleDelete = (rowData) => {
+    const data = {
+      identifier: rowData.identifier,
+    };
+    fetch(
+      `http://localhost:8000/upload/delete/files/${username}/${groupName}`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(data),
+      },
+    )
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error('Delete files failed, please try again!');
+        } else {
+          const newTableData = [...tableData];
+          const index = newTableData.findIndex(
+            (element) => element.name === rowData.name,
+          );
+          if (index === -1) {
+            throw new Error('File not found, please try again!');
+          }
+          newTableData.splice(index, 1);
+          setTableData(newTableData);
+          setSeverity('success');
+          setOpen(true);
+          setMessage('Delete files successful!');
         }
       })
       .catch((err) => {
@@ -232,7 +301,7 @@ const Upload = (props) => {
             backgroundColor: `${light}`,
           }}
           icons={tableIcons}
-          title="CS1101S Files"
+          title="Files & Images"
           columns={[
             {
               title: 'Name',
@@ -271,14 +340,18 @@ const Upload = (props) => {
                   window.open(rowData.download);
                 };
                 return (
-                  <Button
-                    onClick={handleRedirect}
-                    component="span"
-                    variant="contained"
-                    style={{ backgroundColor: `${accent}`, color: `${light}` }}
-                  >
-                    Download
-                  </Button>
+                  <>
+                    <IconButton onClick={handleRedirect}>
+                      <GetAppIcon />
+                    </IconButton>
+                    <IconButton
+                      onClick={() => {
+                        handleDelete(rowData);
+                      }}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </>
                 );
               },
             },

@@ -6,7 +6,9 @@ import {
   makeStyles,
   TextField,
   Button,
+  IconButton,
 } from '@material-ui/core';
+import CloseIcon from '@material-ui/icons/Close';
 import PropTypes from 'prop-types';
 import { light, medium, accent } from '../colors';
 
@@ -28,13 +30,28 @@ const useStyles = makeStyles(() => ({
   typography: {
     fontWeight: 'bold',
   },
+  buttons: {
+    display: 'flex',
+  },
   button: {
     color: light,
+  },
+  closeButton: {
+    float: 'right',
+    padding: '6px',
   },
 }));
 
 const NotesDialog = (props) => {
-  const { open, handleClose, text, title, identifier, upload } = props;
+  const {
+    open,
+    handleClose,
+    text,
+    title,
+    identifier,
+    upload,
+    deleteNote,
+  } = props;
   const [newTitle, setNewTitle] = useState(title);
   const [newText, setNewText] = useState(text);
   const classes = useStyles();
@@ -52,11 +69,22 @@ const NotesDialog = (props) => {
   const handleSave = (event) => {
     event.preventDefault();
     upload(identifier, newTitle, newText);
+    handleClose();
+  };
+
+  const handleDelete = (event) => {
+    event.preventDefault();
+    deleteNote(identifier);
   };
 
   return (
     <Dialog onClose={handleClose} open={open} fullWidth maxWidth="lg">
-      <DialogTitle className={classes.title}>{newTitle}</DialogTitle>
+      <DialogTitle className={classes.title}>
+        {newTitle}
+        <IconButton className={classes.closeButton} onClick={handleClose}>
+          <CloseIcon />
+        </IconButton>
+      </DialogTitle>
       <div className={classes.inside}>
         <Typography className={classes.typography}>Title</Typography>
         <TextField
@@ -75,14 +103,24 @@ const NotesDialog = (props) => {
           className={classes.textField}
           onChange={handleChangeText}
         />
-        <Button
-          className={classes.button}
-          variant="contained"
-          style={{ backgroundColor: accent }}
-          onClick={handleSave}
-        >
-          Save changes
-        </Button>
+        <div className={classes.buttons}>
+          <Button
+            className={classes.button}
+            variant="contained"
+            style={{ backgroundColor: accent, marginRight: '10px' }}
+            onClick={handleDelete}
+          >
+            Delete Note
+          </Button>
+          <Button
+            className={classes.button}
+            variant="contained"
+            style={{ backgroundColor: accent }}
+            onClick={handleSave}
+          >
+            Save changes
+          </Button>
+        </div>
       </div>
     </Dialog>
   );
@@ -95,6 +133,7 @@ NotesDialog.propTypes = {
   text: PropTypes.string.isRequired,
   identifier: PropTypes.number.isRequired,
   upload: PropTypes.func.isRequired,
+  deleteNote: PropTypes.func.isRequired,
 };
 
 export default NotesDialog;

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { TextField, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import '../css/login.css';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -10,14 +9,30 @@ import { dark, light, accent } from '../colors';
 import Notification from './notification';
 
 const useStyles = makeStyles({
-  root: {
+  login: {
     width: '100%',
-    position: 'relative',
+    textAlign: 'center',
   },
   button: {
     color: light,
     backgroundColor: accent,
     width: '100%',
+  },
+  form: {
+    boxSizing: 'border-box',
+    width: '300px',
+    marginTop: '2em',
+    display: 'inline-block',
+    border: 'solid gray 1px',
+    borderRadius: '10px',
+    padding: '1em',
+    backgroundColor: light,
+  },
+  input: {
+    margin: '1rem 0',
+  },
+  link: {
+    textDecoration: 'none',
   },
 });
 
@@ -84,11 +99,11 @@ const Login = (props) => {
   };
 
   return (
-    <div className="login">
-      <div className="form" style={{ backgroundColor: light }}>
+    <div className={classes.login}>
+      <div className={classes.form}>
         <h1 style={{ color: dark }}>WELCOME</h1>
-        <form className={classes.root}>
-          <div className="input">
+        <form>
+          <div className={classes.input}>
             <TextField
               fullWidth
               label="email"
@@ -97,7 +112,7 @@ const Login = (props) => {
               onChange={handleChangeEmail}
             />
           </div>
-          <div className="input">
+          <div className={classes.input}>
             <TextField
               fullWidth
               label="password"
@@ -120,7 +135,7 @@ const Login = (props) => {
         <h5 style={{ color: dark, marginTop: '1rem', marginBottom: '0.25rem' }}>
           Not a user ?
         </h5>
-        <Link to="/signup" style={{ color: 'black' }}>
+        <Link className={classes.link} to="/signup">
           <Button className={classes.button}>SignUp</Button>
         </Link>
       </div>
