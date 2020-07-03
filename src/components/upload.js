@@ -95,6 +95,7 @@ const Upload = (props) => {
   const classes = useStyles();
   const [name, setName] = useState('');
   const [tableData, setTableData] = useState([]);
+  const [total, setTotal] = useState(0);
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState('');
   const [severity, setSeverity] = useState('success');
@@ -111,6 +112,7 @@ const Upload = (props) => {
     ).then((res) => {
       return res.json();
     });
+
     const fetchImage = fetch(
       `http://localhost:8000/upload/get/image/${username}/${groupName}`,
       {
@@ -122,7 +124,17 @@ const Upload = (props) => {
     ).then((res) => {
       return res.json();
     });
-    Promise.all([fetchFile, fetchImage])
+
+    const fetchTotal = fetch(
+      `http://localhost:8000/upload/get/totalfiles/${username}`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    ).then((res) => res.json());
+
+    Promise.all([fetchFile, fetchImage, fetchTotal])
       .then((values) => {
         const file = values[0];
         const image = values[1];
@@ -131,6 +143,7 @@ const Upload = (props) => {
           const obj = {};
           const currFile = element.fields.file;
           const date = element.fields.created_date;
+          obj.identifier = element.fields.identifier;
           obj.name = element.fields.name;
           obj.date = `${date.substring(0, 10)} ${date.substring(11, 19)}`;
           obj.fileType = currFile.substring(
@@ -144,6 +157,7 @@ const Upload = (props) => {
           const obj = {};
           const currImage = element.fields.image;
           const date = element.fields.created_date;
+          obj.identifier = element.fields.identifier;
           obj.name = element.fields.name;
           obj.date = `${date.substring(0, 10)} ${date.substring(11, 19)}`;
           obj.fileType = currImage.substring(
@@ -154,6 +168,10 @@ const Upload = (props) => {
           newTableData.push(obj);
         });
         setTableData(newTableData);
+        setTotal(values[2].total);
+        setSeverity('success');
+        setOpen(true);
+        setMessage('Fetch files successful!');
       })
       .catch(() => {
         setSeverity('error');
@@ -169,6 +187,7 @@ const Upload = (props) => {
   const handleUploadImage = (event) => {
     event.preventDefault();
     const data = new FormData();
+    data.append('identifier', total + 1);
     data.append('name', name);
     data.append('image', event.target.files[0]);
     fetch(`http://localhost:8000/upload/image/${username}/${groupName}`, {
@@ -182,6 +201,7 @@ const Upload = (props) => {
         if (res.status !== 201) {
           throw new Error('Upload image failed, please try again!');
         } else {
+          setTotal(total + 1);
           setSeverity('success');
           setOpen(true);
           setMessage('Upload image successful!');
@@ -198,6 +218,7 @@ const Upload = (props) => {
   const handleUploadFile = (event) => {
     event.preventDefault();
     const data = new FormData();
+    data.append('identifier', total + 1);
     data.append('name', name);
     data.append('file', event.target.files[0]);
     fetch(`http://localhost:8000/upload/file/${username}/${groupName}`, {
@@ -211,6 +232,7 @@ const Upload = (props) => {
         if (res.status !== 201) {
           throw new Error('Upload file failed, please try again!');
         } else {
+          setTotal(total + 1);
           setSeverity('success');
           setOpen(true);
           setMessage('Upload file successful!');
@@ -226,7 +248,7 @@ const Upload = (props) => {
 
   const handleDelete = (rowData) => {
     const data = {
-      name: rowData.name,
+      identifier: rowData.identifier,
     };
     fetch(
       `http://localhost:8000/upload/delete/files/${username}/${groupName}`,
@@ -279,7 +301,7 @@ const Upload = (props) => {
             backgroundColor: `${light}`,
           }}
           icons={tableIcons}
-          title="CS1101S Files"
+          title="Files & Images"
           columns={[
             {
               title: 'Name',
