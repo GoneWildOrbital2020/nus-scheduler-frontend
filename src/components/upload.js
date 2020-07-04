@@ -6,6 +6,7 @@ import {
   TextField,
   Paper,
   IconButton,
+  Typography,
 } from '@material-ui/core';
 import GetAppIcon from '@material-ui/icons/GetApp';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -27,7 +28,7 @@ import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
-import { accent, light } from '../colors';
+import { accent, light, dark } from '../colors';
 import Notification from './notification';
 
 const tableIcons = {
@@ -88,6 +89,11 @@ const useStyles = makeStyles(() => ({
     width: '50%',
     margin: '0 auto',
   },
+  typography: {
+    fontWeight: 'bold',
+    fontSize: '2rem',
+    color: dark,
+  },
 }));
 
 const Upload = (props) => {
@@ -126,7 +132,8 @@ const Upload = (props) => {
     });
 
     const fetchTotal = fetch(
-      `http://localhost:8000/upload/get/totalfiles/${username}`, {
+      `http://localhost:8000/upload/get/totalfiles/${username}`,
+      {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -301,7 +308,11 @@ const Upload = (props) => {
             backgroundColor: `${light}`,
           }}
           icons={tableIcons}
-          title="Files & Images"
+          title={(
+            <Typography className={classes.typography}>
+              Files & Images
+            </Typography>
+          )}
           columns={[
             {
               title: 'Name',
@@ -360,7 +371,9 @@ const Upload = (props) => {
         />
       </div>
       <Paper className={classes.paper}>
-        <h1>Upload Files & Images</h1>
+        <Typography className={classes.typography}>
+          Upload Files & Images
+        </Typography>
         <TextField
           label="name"
           variant="outlined"

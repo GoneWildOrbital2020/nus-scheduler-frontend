@@ -28,3 +28,13 @@ Footer {
 ::-webkit-scrollbar {
   display: none;
 }
+
+a {
+  color: white;
+  text-decoration: none;
+}
+
+Link {
+  text-decoration: none;
+  color: white;
+}

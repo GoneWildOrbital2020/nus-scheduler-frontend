@@ -72,7 +72,7 @@ const DrawerList = ({ dispatch, token, username }) => {
 
   return (
     <List style={{ backgroundColor: light }}>
-      <Link to={`/profile/${username}`} style={{ textDecoration: 'none' }}>
+      <Link to={`/profile/${username}`}>
         <ListItem button divider>
           <ListItemIcon>
             <AccountCircle style={{ color: dark }} />
