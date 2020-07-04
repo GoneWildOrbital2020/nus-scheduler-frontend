@@ -9,7 +9,7 @@ export const monthProperties = [
   { len: 31, name: 'August' },
   { len: 30, name: 'September' },
   { len: 31, name: 'October' },
-  { len: 30, name: 'Novemeber' },
+  { len: 30, name: 'November' },
   { len: 31, name: 'December' },
 ];
 
@@ -24,7 +24,7 @@ export const monthPropertiesLeap = [
   { len: 31, name: 'August' },
   { len: 30, name: 'September' },
   { len: 31, name: 'October' },
-  { len: 30, name: 'Novemeber' },
+  { len: 30, name: 'November' },
   { len: 31, name: 'December' },
 ];
 

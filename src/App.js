@@ -30,11 +30,6 @@ function App() {
           <NavbarDrawer />
           <div className="content" style={{ marginTop: '75px' }}>
             <Switch>
-              <Route
-                path="/"
-                exact
-                component={() => <Calendar monthIdx={0} />}
-              />
               <Route path="/login" exact component={Login} />
               <Route path="/signup" exact component={Signup} />
               <Route
@@ -49,6 +44,11 @@ function App() {
                 path={`/profile/${store.getState().username}`}
                 exact
                 render={() => <Profile />}
+              />
+              <Route
+                path="/:year"
+                exact
+                render={({ match }) => <Calendar year={match.params.year} />}
               />
             </Switch>
           </div>

@@ -26,7 +26,7 @@ const useStyles = makeStyles(() => ({
 
 const Calendar = ({
   activeMonth,
-  activeYear,
+  year,
   numOfEvents,
   username,
   dispatch,
@@ -46,7 +46,7 @@ const Calendar = ({
   };
 
   const fetchNumOfEvents = async () => {
-    const response = await fetch(`${url}/calendars/${username}/${activeYear}`, {
+    const response = await fetch(`${url}/calendars/${username}/${year}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -67,7 +67,7 @@ const Calendar = ({
         setOpen(true);
         setMessage(err.message);
       });
-  }, []);
+  }, [year]);
 
   if (!JSON.parse(isLoggedIn)) {
     return <Redirect to="/login" />;
@@ -91,7 +91,7 @@ const Calendar = ({
           <ArrowRightIcon fontSize="large" />
         </IconButton>
       </div>
-      <Month />
+      <Month year={year} />
       <Notification
         open={open}
         handleClose={handleClose}
@@ -109,7 +109,7 @@ Calendar.propTypes = {
   dispatch: PropTypes.func.isRequired,
   token: PropTypes.string.isRequired,
   isLoggedIn: PropTypes.string.isRequired,
-  activeYear: PropTypes.number.isRequired,
+  year: PropTypes.number.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -118,7 +118,6 @@ const mapStateToProps = (state) => ({
   username: state.username,
   token: state.token,
   isLoggedIn: state.isLoggedIn,
-  activeYear: state.activeYear,
 });
 
 export default connect(mapStateToProps)(Calendar);

@@ -19,6 +19,7 @@ import {
   ExpandMore,
   Event,
 } from '@material-ui/icons';
+import AddIcon from '@material-ui/icons/Add';
 import { Link } from 'react-router-dom';
 import { toggleLogout } from '../redux/actions';
 import { dark, light } from '../colors';
@@ -54,8 +55,10 @@ const DrawerList = ({ dispatch, token, username }) => {
   };
 
   const [open, setOpen] = React.useState(false);
-
+  const [openYear, setOpenYear] = React.useState(false);
   const [titles, setTitles] = React.useState([]);
+  const [years, setYears] = React.useState([]);
+
   const fetchTitles = fetch(`${url}/events/${username}`, {
     method: 'GET',
     headers: {
@@ -68,6 +71,30 @@ const DrawerList = ({ dispatch, token, username }) => {
     fetchTitles
       .then((response) => response.json())
       .then((data) => setTitles(data.map((x) => x.fields.name)));
+    fetch(`${url}/calendars/getyear/${username}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error('Failed to fetch years');
+        }
+        return res.json();
+      })
+      .then((json) => {
+        const newYears = [];
+        json.forEach((element) => {
+          newYears.push(element.fields.index);
+        });
+        newYears.sort((a, b) => a - b);
+        setYears(newYears);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, []);
 
   return (
@@ -100,6 +127,35 @@ const DrawerList = ({ dispatch, token, username }) => {
             </Link>
           </List>
         ))}
+      </Collapse>
+      <ListItem onClick={() => setOpenYear((state) => !state)} button>
+        <ListItemIcon>
+          <Event style={{ color: dark }} />
+        </ListItemIcon>
+        <ListItemText primary="Year" style={{ color: dark }} />
+        {openYear ? <ExpandLess /> : <ExpandMore />}
+      </ListItem>
+      <Collapse in={openYear} timeout="auto" unmountOnExit>
+        {years.map((year) => (
+          <List component="div" disablePadding>
+            <Link to={`/${year}`}>
+              <ListItem button style={{ paddingLeft: '2rem' }}>
+                <ListItemIcon>
+                  <Label style={{ color: dark }} />
+                </ListItemIcon>
+                <ListItemText primary={year} style={{ color: dark }} />
+              </ListItem>
+            </Link>
+          </List>
+        ))}
+        <List component="div" disablePadding>
+          <ListItem button style={{ paddingLeft: '2rem' }}>
+            <ListItemIcon>
+              <AddIcon style={{ color: dark }} />
+            </ListItemIcon>
+            <ListItemText primary="Add Year" style={{ color: dark }} />
+          </ListItem>
+        </List>
       </Collapse>
       <Divider />
       <ListItem button divider component="label">

@@ -5,12 +5,12 @@ import { connect } from 'react-redux';
 import DayTile from './Day/DayTile';
 import { monthProperties, monthPropertiesLeap, url } from './constant';
 
-const Month = ({ activeMonth, activeYear, token }) => {
+const Month = ({ activeMonth, year, token }) => {
   const [isLeap, setIsLeap] = useState(false);
   const rows = [0, 1, 2, 3, 4];
 
   useEffect(() => {
-    fetch(`${url}/calendars/checkleap/${activeYear}`, {
+    fetch(`${url}/calendars/checkleap/${year}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -26,7 +26,7 @@ const Month = ({ activeMonth, activeYear, token }) => {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [year]);
 
   return (
     <Grid container direction="column" style={{ width: 'max-content' }}>
@@ -42,7 +42,7 @@ const Month = ({ activeMonth, activeYear, token }) => {
         return (
           <Grid container item style={{ width: 'max-content' }}>
             {cols.map((col) => (
-              <DayTile index={col} key={col} />
+              <DayTile index={col} key={col} currYear={year} />
             ))}
           </Grid>
         );
@@ -53,13 +53,12 @@ const Month = ({ activeMonth, activeYear, token }) => {
 
 Month.propTypes = {
   activeMonth: PropTypes.number.isRequired,
-  activeYear: PropTypes.number.isRequired,
+  year: PropTypes.number.isRequired,
   token: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   activeMonth: state.activeMonth,
-  activeYear: state.activeYear,
   token: state.token,
 });
 

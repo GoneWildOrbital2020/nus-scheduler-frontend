@@ -6,7 +6,7 @@ import DayDialog from './TABDayDialog';
 import { url } from '../constant';
 import Notification from '../notification';
 
-const DayTile = ({ index, username, activeMonth, activeYear, token }) => {
+const DayTile = ({ index, username, activeMonth, currYear, token }) => {
   const [currEvents, setCurrEvents] = useState([]);
   const [open, setOpen] = useState(false);
   const [openAlert, setOpenAlert] = useState(false);
@@ -58,7 +58,7 @@ const DayTile = ({ index, username, activeMonth, activeYear, token }) => {
 
   React.useEffect(() => {
     const getEvents = () => {
-      fetchEvents(activeYear, activeMonth, index)
+      fetchEvents(currYear, activeMonth, index)
         .then((data) => {
           setCurrEvents(data);
         })
@@ -70,7 +70,7 @@ const DayTile = ({ index, username, activeMonth, activeYear, token }) => {
         });
     };
     getEvents();
-  }, [activeMonth]);
+  }, [activeMonth, currYear]);
 
   const handleOpen = () => {
     setOpen(true);
@@ -88,7 +88,7 @@ const DayTile = ({ index, username, activeMonth, activeYear, token }) => {
   };
 
   const saveEvents = (e) => {
-    saveEventsToDB(activeYear, activeMonth, index, e);
+    saveEventsToDB(currYear, activeMonth, index, e);
     setCurrEvents(e);
   };
   return (
@@ -115,14 +115,13 @@ DayTile.propTypes = {
   username: PropTypes.string.isRequired,
   activeMonth: PropTypes.number.isRequired,
   token: PropTypes.string.isRequired,
-  activeYear: PropTypes.number.isRequired,
+  currYear: PropTypes.number.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   activeMonth: state.activeMonth,
   username: state.username,
   token: state.token,
-  activeYear: state.activeYear,
 });
 
 export default connect(mapStateToProps)(DayTile);
