@@ -7,14 +7,14 @@ const useStyles = makeStyles(() => ({
   button: {
     border: 0,
     padding: 0,
-    margin: '0.5rem',
+    margin: '1rem',
   },
   buttonInside: {
     display: 'flex',
     flexDirection: 'column',
     maxHeight: '20rem',
     height: '20rem',
-    width: '20vw',
+    width: 'calc((85vw - 10rem) / 4)',
   },
   buttonTitle: {
     fontWeight: 'bold',

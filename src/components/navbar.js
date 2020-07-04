@@ -5,20 +5,20 @@ import {
   makeStyles,
   Typography,
 } from '@material-ui/core';
-import MenuIcon from '@material-ui/icons/Menu';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Logo from '../images/logov2light.png';
 import { light, dark } from '../colors';
-import '../css/navbar.css';
 
 const useStyles = makeStyles({
   root: {
     backgroundColor: dark,
-    position: 'relative',
+    position: 'fixed',
     zIndex: 1400,
+    height: '75px',
   },
   menuButton: {
     marginRight: 0,
@@ -35,6 +35,25 @@ const useStyles = makeStyles({
     borderRadius: '50%',
     width: '3rem',
     height: '3rem',
+    marginRight: '1rem',
+  },
+  right: {
+    width: '85%',
+    display: 'flex',
+    justifyContent: 'flex-end',
+  },
+  left: {
+    width: '15%',
+    textAlign: 'left',
+  },
+  image: {
+    maxWidth: '148px',
+    maxHeight: '64px',
+    width: 'auto',
+    height: 'auto',
+  },
+  link: {
+    textDecoration: 'none',
   },
 });
 
@@ -45,29 +64,33 @@ const Navbar = (props) => {
     <div>
       <AppBar position="static" className={classes.root}>
         <Toolbar>
-          <div className="left">
-            <Link to="/">
+          <div className={classes.left}>
+            <Link to="/" className={classes.link}>
               <Button color="inherit" className={classes.button}>
-                <img src={Logo} alt="logo" />
+                <img className={classes.image} src={Logo} alt="logo" />
               </Button>
             </Link>
           </div>
-          <div className="right">
+          <div className={classes.right}>
             {JSON.parse(isLoggedIn) ? (
               <Button
                 color="inherit"
                 className={classes.button}
                 onClick={toggleDrawer}
               >
-                <img
-                  className={classes.avatar}
-                  src={`http://localhost:8000${avatar}`}
-                  alt="profile"
-                />
+                {avatar === '' ? (
+                  <AccountCircleIcon className={classes.avatar} />
+                ) : (
+                  <img
+                    className={classes.avatar}
+                    src={`http://localhost:8000${avatar}`}
+                    alt="profile"
+                  />
+                )}
                 <Typography>{username}</Typography>
               </Button>
             ) : (
-              <Link to="/login">
+              <Link to="/login" className={classes.link}>
                 <Button color="inherit" className={classes.button}>
                   Login
                 </Button>

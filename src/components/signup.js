@@ -1,19 +1,30 @@
 import React, { useState } from 'react';
 import { TextField, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import '../css/signup.css';
 import { dark, light, accent } from '../colors';
 import Notification from './notification';
 
 const useStyles = makeStyles({
-  root: {
+  signup: {
     width: '100%',
-    position: 'relative',
+    textAlign: 'center',
   },
   button: {
     color: light,
     width: '100%',
     backgroundColor: accent,
+  },
+  form: {
+    boxSizing: 'border-box',
+    width: '300px',
+    marginTop: '2em',
+    display: 'inline-block',
+    border: 'solid gray 1px',
+    borderRadius: '10px',
+    padding: '1em',
+  },
+  input: {
+    margin: '1rem 0',
   },
 });
 
@@ -80,11 +91,11 @@ const Signup = () => {
   };
 
   return (
-    <div className="signup">
-      <div className="form" style={{ backgroundColor: light }}>
+    <div className={classes.signup}>
+      <div className={classes.form} style={{ backgroundColor: light }}>
         <h1 style={{ color: dark }}>JOIN NOW</h1>
-        <form className={classes.root}>
-          <div className="input">
+        <form>
+          <div className={classes.input}>
             <TextField
               fullWidth
               label="email"
@@ -93,7 +104,7 @@ const Signup = () => {
               onChange={handleChangeEmail}
             />
           </div>
-          <div className="input">
+          <div className={classes.input}>
             <TextField
               fullWidth
               label="username"
@@ -102,7 +113,7 @@ const Signup = () => {
               onChange={handleChangeUsername}
             />
           </div>
-          <div className="input">
+          <div className={classes.input}>
             <TextField
               fullWidth
               label="password"

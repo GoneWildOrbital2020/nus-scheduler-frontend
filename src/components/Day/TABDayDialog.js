@@ -9,15 +9,47 @@ import {
   Tabs,
   TextField,
   Typography,
+  makeStyles,
 } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import { TwitterPicker } from 'react-color';
-import './TABDayDialog.css';
 import { connect } from 'react-redux';
 import { addNumOfEvents } from '../../redux/actions';
 import { dark, light, accent, medium } from '../../colors';
 import { colors } from '../constant';
+
+const useStyles = makeStyles(() => ({
+  closeButton: {
+    float: 'right',
+    paddingTop: '0',
+  },
+  dialogItem: {
+    flex: '1',
+    padding: '0rem 2rem',
+    overflow: 'scroll',
+  },
+  dialogTitle: {
+    display: 'flex',
+    padding: '2rem',
+    paddingBottom: '1rem',
+    justifyContent: 'space-between',
+  },
+  buttonContainer2: {
+    padding: '2rem',
+  },
+  panelSummary: {
+    fontSize: '1.5rem',
+    fontWeight: 'bold',
+    minHeight: '0',
+    height: '3rem',
+  },
+  container: {
+    padding: '1rem',
+    display: 'flex',
+    flexDirection: 'column',
+  },
+}));
 
 const DayDialog = ({
   events,
@@ -27,6 +59,8 @@ const DayDialog = ({
   numOfEvents,
   dispatch,
 }) => {
+  const classes = useStyles();
+
   const [newEvents, setNewEvents] = React.useState(
     events.map((x) => ({ ...x })),
   );
@@ -111,7 +145,7 @@ const DayDialog = ({
       maxWidth="lg"
       style={{ zIndex: 1401 }}
     >
-      <div className="dialogTitle" style={{ backgroundColor: medium }}>
+      <div className={classes.dialogTitle} style={{ backgroundColor: medium }}>
         <Typography
           style={{
             fontWeight: 'bold',
@@ -121,11 +155,15 @@ const DayDialog = ({
         >
           Events
         </Typography>
-        <IconButton onClick={shouldSave(false)} className="closeButton">
+        <IconButton onClick={shouldSave(false)} className={classes.closeButton}>
           <CloseIcon />
         </IconButton>
       </div>
-      <div className="dialogItem" style={{ backgroundColor: medium }} ref={ref}>
+      <div
+        className={classes.dialogItem}
+        style={{ backgroundColor: medium }}
+        ref={ref}
+      >
         <AppBar position="sticky" color="default">
           <Tabs
             value={value}
@@ -148,7 +186,7 @@ const DayDialog = ({
             value === index && (
               <Box
                 boxShadow={2}
-                className="container"
+                className={classes.container}
                 style={{ backgroundColor: light }}
               >
                 <Typography style={{ fontWeight: 'bold', color: dark }}>
@@ -246,7 +284,10 @@ const DayDialog = ({
             ),
         )}
       </div>
-      <div className="buttonContainer2" style={{ backgroundColor: medium }}>
+      <div
+        className={classes.buttonContainer2}
+        style={{ backgroundColor: medium }}
+      >
         <Button
           autoFocus
           variant="contained"

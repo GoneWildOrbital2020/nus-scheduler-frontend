@@ -21,13 +21,14 @@ const store = createStore(
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
 );
 /* eslint-enable */
+
 function App() {
   return (
     <Provider store={store}>
       <Router>
         <div className="App">
-          <div className="content">
-            <NavbarDrawer />
+          <NavbarDrawer />
+          <div className="content" style={{ marginTop: '75px' }}>
             <Switch>
               <Route
                 path="/"
