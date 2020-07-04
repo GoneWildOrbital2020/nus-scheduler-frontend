@@ -23,7 +23,7 @@ const useStyles = makeStyles(() => ({
   },
   grid: {
     width: 'max-content',
-    margin: '0 1rem',
+    margin: '0 0.5rem',
   },
   button: {
     position: 'absolute',
