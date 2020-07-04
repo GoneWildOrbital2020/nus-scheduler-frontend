@@ -5,6 +5,7 @@ import {
   makeStyles,
   Typography,
 } from '@material-ui/core';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
@@ -34,6 +35,7 @@ const useStyles = makeStyles({
     borderRadius: '50%',
     width: '3rem',
     height: '3rem',
+    marginRight: '1rem',
   },
   right: {
     width: '85%',
@@ -76,11 +78,15 @@ const Navbar = (props) => {
                 className={classes.button}
                 onClick={toggleDrawer}
               >
-                <img
-                  className={classes.avatar}
-                  src={`http://localhost:8000${avatar}`}
-                  alt="profile"
-                />
+                {avatar === '' ? (
+                  <AccountCircleIcon className={classes.avatar} />
+                ) : (
+                  <img
+                    className={classes.avatar}
+                    src={`http://localhost:8000${avatar}`}
+                    alt="profile"
+                  />
+                )}
                 <Typography>{username}</Typography>
               </Button>
             ) : (

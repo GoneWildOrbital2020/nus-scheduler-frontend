@@ -12,24 +12,26 @@ const useStyles = makeStyles(() => ({
     float: 'right',
   },
   top: {
-    height: '6rem',
+    height: '4rem',
     maxHeight: '6rem',
   },
   title: {
     display: 'inline-block',
     color: light,
-    fontSize: '3rem',
+    fontSize: '2rem',
     fontWeight: 'bold',
   },
   grid: {
     width: 'max-content',
+    margin: '0 1rem',
   },
   button: {
     position: 'absolute',
     right: 0,
     display: 'inline-block',
-    fontSize: '2rem',
+    fontSize: '1rem',
     color: light,
+    marginRight: '2rem',
   },
 }));
 

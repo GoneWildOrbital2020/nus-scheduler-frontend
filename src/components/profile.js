@@ -15,43 +15,41 @@ import { toggleLogin } from '../redux/actions';
 const useStyles = makeStyles(() => ({
   root: {
     backgroundColor: light,
-    margin: '1rem auto',
-    width: '75%',
-    textAlign: 'left',
+    margin: '2rem auto',
+    width: '300px',
+    textAlign: 'center',
     padding: '2rem',
+    display: 'inline-block',
   },
   title: {
     color: dark,
-    fontSize: '3rem',
+    fontSize: '2rem',
     fontWeight: 'bold',
-    marginBottom: '2rem',
   },
   typography: {
     color: dark,
     fontWeight: 'bold',
-    fontSize: '1rem',
-  },
-  typography2: {
-    color: dark,
-    fontWeight: 'bold',
-    fontSize: '2rem',
+    fontSize: '1.5rem',
+    marginTop: '2rem',
   },
   button: {
+    width: '100%',
     backgroundColor: accent,
     color: light,
-    margin: '1rem 0',
+    margin: '0.5rem 0',
   },
   textField: {
     width: '100%',
-    margin: '1rem 0',
+    margin: '0.5rem 0',
   },
   input: {
     display: 'none',
   },
   avatar: {
     display: 'block',
+    margin: '1rem auto',
     maxWidth: '100%',
-    maxHeight: '500px',
+    maxHeight: '10rem',
     width: 'auto',
     height: 'auto',
   },
@@ -141,8 +139,14 @@ const Profile = (props) => {
   return (
     <Paper className={classes.root}>
       <Typography className={classes.title}>Edit Profile</Typography>
-      <Typography className={classes.typography2}>Change Avatar</Typography>
-      <img className={classes.avatar} src={url} alt="profile" />
+      <Typography className={classes.typography} style={{ marginTop: '1rem' }}>
+        Change Avatar
+      </Typography>
+      {avatarProps !== '' ? (
+        <img className={classes.avatar} src={url} alt="profile" />
+      ) : (
+        <div />
+      )}
       <label htmlFor="avatar-upload">
         <input
           className={classes.input}
@@ -154,34 +158,27 @@ const Profile = (props) => {
           Upload Image
         </Button>
       </label>
-      <Typography className={classes.typography2}>Change Username</Typography>
+      <Typography className={classes.typography}>Change Credentials</Typography>
       <TextField
         className={classes.textField}
+        label="Username"
         variant="outlined"
         rowsMax={1}
         defaultValue={newUsername}
         onChange={handleChangeUsername}
       />
-      <Typography
-        className={classes.typography2}
-        style={{ marginBottom: '1rem' }}
-      >
-        Change Password
-      </Typography>
-      <Typography className={classes.typography}>New Password</Typography>
       <TextField
         className={classes.textField}
+        label="New Password"
         variant="outlined"
         type="password"
         rowsMax={1}
         defaultValue={password}
         onChange={handleChangePassword}
       />
-      <Typography className={classes.typography}>
-        Retype New Password
-      </Typography>
       <TextField
         className={classes.textField}
+        label="Retype New Password"
         variant="outlined"
         type="password"
         rowsMax={1}
