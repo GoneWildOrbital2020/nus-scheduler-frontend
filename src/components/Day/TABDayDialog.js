@@ -17,17 +17,7 @@ import './TABDayDialog.css';
 import { connect } from 'react-redux';
 import { addNumOfEvents } from '../../redux/actions';
 import { dark, light, accent, medium } from '../../colors';
-
-const colors = [
-  '#EFBC9B',
-  '#896978',
-  '#C6C5B9',
-  '#62929E',
-  '#546A7B',
-  '#667761',
-  '#96897B',
-  '#DFD5A5',
-];
+import { colors } from '../constant';
 
 const DayDialog = ({
   events,
@@ -47,8 +37,10 @@ const DayDialog = ({
 
   const [value, setValue] = React.useState(0);
 
+  const [tab, setTab] = React.useState(true);
+
   const ref = React.useCallback((node) => {
-    if (node) {
+    if (node && tab) {
       // eslint-disable-next-line no-param-reassign
       node.scrollTop = 0;
     }
@@ -60,6 +52,7 @@ const DayDialog = ({
       // eslint-disable-next-line no-param-reassign
       if (event.index === index) event[type] = e.target.value;
     });
+    setTab(false);
     setNewEvents(tmp);
   };
 
@@ -69,6 +62,7 @@ const DayDialog = ({
       // eslint-disable-next-line no-param-reassign
       if (event.index === index) event.color = e.hex;
     });
+    setTab(false);
     setNewEvents(tmp);
   };
 
@@ -98,6 +92,7 @@ const DayDialog = ({
 
   const handleValueChange = (event, newValue) => {
     setValue(newValue);
+    setTab(true);
   };
 
   if (!newEvents.length) addEvent();

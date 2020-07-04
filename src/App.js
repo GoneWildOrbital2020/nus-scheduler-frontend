@@ -37,7 +37,7 @@ function App() {
               <Route path="/login" exact component={Login} />
               <Route path="/signup" exact component={Signup} />
               <Route
-                path="/event-group/:name"
+                path="/events-group/:name"
                 render={({ match }) => (
                   <EventGroup name={match.params.name} path={match.path} />
                 )}

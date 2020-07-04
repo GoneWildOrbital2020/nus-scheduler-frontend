@@ -3,6 +3,8 @@ import {
   ADD_NUM_OF_EVENTS,
   TOGGLE_LOGIN,
   TOGGLE_LOGOUT,
+  IS_LOADING_TRUE,
+  IS_LOADING_FALSE,
 } from './actions';
 
 const initalState = {
@@ -13,6 +15,7 @@ const initalState = {
   token: window.localStorage.getItem('token'),
   email: window.localStorage.getItem('email'),
   avatar: window.localStorage.getItem('avatar'),
+  isLoading: 0,
 };
 
 const reducer = (state = initalState, action) => {
@@ -44,6 +47,16 @@ const reducer = (state = initalState, action) => {
         username: '',
         email: '',
         avatar: '',
+      };
+    case IS_LOADING_TRUE:
+      return {
+        ...state,
+        isLoading: state.isLoading + 1,
+      };
+    case IS_LOADING_FALSE:
+      return {
+        ...state,
+        isLoading: state.isLoading - 1,
       };
     default:
       return state;

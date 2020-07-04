@@ -22,7 +22,7 @@ const EventGroup = ({ name, path }) => {
       <Drawer variant="permanent" anchor="left">
         <Toolbar />
         <List>
-          <Link to={`/event-group/${name}/customize`}>
+          <Link to={`/events-group/${name}/customize`}>
             <ListItem button divider>
               <ListItemIcon>
                 <Edit style={{ color: dark }} />
@@ -30,7 +30,7 @@ const EventGroup = ({ name, path }) => {
               <ListItemText primary="Customize" style={{ color: dark }} />
             </ListItem>
           </Link>
-          <Link to={`/event-group/${name}/uploads`}>
+          <Link to={`/events-group/${name}/uploads`}>
             <ListItem button divider>
               <ListItemIcon>
                 <Folder style={{ color: dark }} />
@@ -41,7 +41,7 @@ const EventGroup = ({ name, path }) => {
               />
             </ListItem>
           </Link>
-          <Link to={`/event-group/${name}/notes`}>
+          <Link to={`/events-group/${name}/notes`}>
             <ListItem button divider>
               <ListItemIcon>
                 <Note style={{ color: dark }} />

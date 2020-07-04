@@ -1,6 +1,12 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { useState, forwardRef, useEffect } from 'react';
-import { makeStyles, Button, TextField, Paper } from '@material-ui/core';
+import {
+  makeStyles,
+  Button,
+  TextField,
+  Paper,
+  Typography,
+} from '@material-ui/core';
 import MaterialTable from 'material-table';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -59,27 +65,24 @@ const useStyles = makeStyles(() => ({
     display: 'none',
   },
   paper: {
-    height: '300px',
     backgroundColor: `${light}`,
-    margin: '2rem auto',
+    margin: '2rem',
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'space-around',
-    width: '50%',
+    padding: '2rem',
+    width: 'max-content',
   },
   buttons: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-around',
+    alignItems: 'center',
   },
   button: {
     backgroundColor: `${accent}`,
     color: `${light}`,
   },
-  textField: {
-    width: '50%',
-    margin: '0 auto',
-  },
+  textField: {},
 }));
 
 const Upload = (props) => {
@@ -287,16 +290,24 @@ const Upload = (props) => {
         />
       </div>
       <Paper className={classes.paper}>
-        <h1>Upload Files & Images</h1>
-        <TextField
-          label="name"
-          variant="outlined"
-          required
-          value={name}
-          onChange={handleChangeName}
-          className={classes.textField}
-        />
+        <Typography
+          style={{
+            fontSize: '2rem',
+            fontWeight: 'bold',
+            marginBottom: '1rem',
+            alignSelf: 'flex-start',
+          }}
+        >
+          Upload Files & Images
+        </Typography>
         <div className={classes.buttons}>
+          <TextField
+            label="name"
+            required
+            value={name}
+            onChange={handleChangeName}
+            className={classes.textField}
+          />
           <label htmlFor="image-upload">
             <input
               className={classes.input}
@@ -309,6 +320,7 @@ const Upload = (props) => {
               className={classes.button}
               component="span"
               disabled={!name}
+              style={{ margin: '0 1rem' }}
             >
               Upload Image
             </Button>

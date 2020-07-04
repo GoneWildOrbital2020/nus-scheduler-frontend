@@ -11,7 +11,7 @@ const NavbarDrawer = () => {
       <Navbar toggleDrawer={toggleDrawer} />
       <Drawer open={drawerOpen} anchor="right" onClose={toggleDrawer}>
         <Toolbar />
-        <DrawerList />
+        <DrawerList toggleDrawer={toggleDrawer} />
       </Drawer>
     </>
   );

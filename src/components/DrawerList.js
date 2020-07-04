@@ -24,7 +24,7 @@ import { toggleLogout } from '../redux/actions';
 import { dark, light } from '../colors';
 import { url } from './constant';
 
-const DrawerList = ({ dispatch, token, username }) => {
+const DrawerList = ({ dispatch, token, username, toggleDrawer }) => {
   const handleLogout = (event) => {
     event.preventDefault();
     window.localStorage.setItem('token', null);
@@ -84,13 +84,16 @@ const DrawerList = ({ dispatch, token, username }) => {
         <ListItemIcon>
           <Event style={{ color: dark }} />
         </ListItemIcon>
-        <ListItemText primary="Event Groups" style={{ color: dark }} />
+        <ListItemText primary="Events Groups" style={{ color: dark }} />
         {open ? <ExpandLess /> : <ExpandMore />}
       </ListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
         {titles.map((title) => (
           <List component="div" disablePadding>
-            <Link to={`/event-group/${title}/customize`}>
+            <Link
+              to={`/events-group/${title}/customize`}
+              onClick={toggleDrawer}
+            >
               <ListItem button style={{ paddingLeft: '2rem' }}>
                 <ListItemIcon>
                   <Label style={{ color: dark }} />
@@ -140,6 +143,7 @@ const DrawerList = ({ dispatch, token, username }) => {
 DrawerList.propTypes = {
   dispatch: PropTypes.func.isRequired,
   token: PropTypes.string.isRequired,
+  toggleDrawer: PropTypes.func.isRequired,
   username: PropTypes.string.isRequired,
 };
 
