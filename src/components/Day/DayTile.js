@@ -6,16 +6,16 @@ import DayDialog from './TABDayDialog';
 import { url } from '../constant';
 import Notification from '../notification';
 
-const DayTile = ({ index, username, activeMonth, token }) => {
+const DayTile = ({ index, username, activeMonth, activeYear, token }) => {
   const [currEvents, setCurrEvents] = useState([]);
   const [open, setOpen] = useState(false);
   const [openAlert, setOpenAlert] = useState(false);
   const [message, setMessage] = useState('');
   const [severity, setSeverity] = useState('success');
 
-  const fetchEvents = async (month, day) => {
+  const fetchEvents = async (year, month, day) => {
     const response = await fetch(
-      `${url}/calendars/${username}/${month}/${day}`,
+      `${url}/calendars/${username}/${year}/${month}/${day}`,
       {
         method: 'GET',
         headers: {
@@ -30,7 +30,7 @@ const DayTile = ({ index, username, activeMonth, token }) => {
     return json.map((data) => data.fields);
   };
 
-  const saveEventsToDB = (month, day, events) => {
+  const saveEventsToDB = (year, month, day, events) => {
     const options = {
       method: 'POST',
       headers: {
@@ -39,7 +39,7 @@ const DayTile = ({ index, username, activeMonth, token }) => {
       },
       body: JSON.stringify({ events }),
     };
-    fetch(`${url}/calendars/${username}/${month}/${day}`, options)
+    fetch(`${url}/calendars/${username}/${year}/${month}/${day}`, options)
       .then((res) => {
         if (!res.ok) {
           throw new Error('Failed to save changes, please try again!');
@@ -58,7 +58,7 @@ const DayTile = ({ index, username, activeMonth, token }) => {
 
   React.useEffect(() => {
     const getEvents = () => {
-      fetchEvents(activeMonth, index)
+      fetchEvents(activeYear, activeMonth, index)
         .then((data) => {
           setCurrEvents(data);
         })
@@ -88,7 +88,7 @@ const DayTile = ({ index, username, activeMonth, token }) => {
   };
 
   const saveEvents = (e) => {
-    saveEventsToDB(activeMonth, index, e);
+    saveEventsToDB(activeYear, activeMonth, index, e);
     setCurrEvents(e);
   };
   return (
@@ -115,12 +115,14 @@ DayTile.propTypes = {
   username: PropTypes.string.isRequired,
   activeMonth: PropTypes.number.isRequired,
   token: PropTypes.string.isRequired,
+  activeYear: PropTypes.number.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   activeMonth: state.activeMonth,
   username: state.username,
   token: state.token,
+  activeYear: state.activeYear,
 });
 
 export default connect(mapStateToProps)(DayTile);
