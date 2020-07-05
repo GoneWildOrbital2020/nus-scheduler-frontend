@@ -79,13 +79,18 @@ const useStyles = makeStyles(() => ({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-around',
-    alignItems: 'center',
+    alignItems: 'flex-end',
   },
   button: {
     backgroundColor: `${accent}`,
     color: `${light}`,
   },
   textField: {},
+  typography: {
+    fontSize: '1.5rem',
+    fontWeight: 'bold',
+    color: dark,
+  },
 }));
 
 const Upload = (props) => {
@@ -298,10 +303,10 @@ const Upload = (props) => {
         <MaterialTable
           style={{
             backgroundColor: `${light}`,
+            padding:'2rem 1rem',
           }}
           icons={tableIcons}
-          title={(
-            <Typography className={classes.typography}>
+          title={(            <Typography className={classes.typography}>
               Files & Images
             </Typography>
           )}
@@ -365,7 +370,7 @@ const Upload = (props) => {
       <Paper className={classes.paper}>
         <Typography
           style={{
-            fontSize: '2rem',
+            fontSize: '1.5rem',
             fontWeight: 'bold',
             marginBottom: '1rem',
             alignSelf: 'flex-start',

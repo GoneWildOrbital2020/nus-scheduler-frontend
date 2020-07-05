@@ -9,27 +9,37 @@ import {
   Dialog,
   DialogContent,
   DialogActions,
-  DialogTitle,
   TextField,
+  makeStyles,
+  IconButton,
 } from '@material-ui/core';
 import { KeyboardDatePicker } from '@material-ui/pickers';
-import { groupBy, chunk, isEmpty } from 'lodash';
+import { chunk } from 'lodash';
 import { TwitterPicker } from 'react-color';
 import Loader from 'react-loader-spinner';
+import { Close } from '@material-ui/icons';
 import { url, monthIdx, colors } from './constant';
-import { dark, light, accent, medium } from '../colors';
+import { dark, light, accent } from '../colors';
 import { addNumOfEvents } from '../redux/actions';
 import './Customize.css';
 
+const useStyles = makeStyles(() => ({
+  button: {
+    color: light,
+    backgroundColor: accent,
+    marginLeft: '1rem',
+  },
+}));
+
 const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
+  const classes = useStyles();
   const styles = {
     card: {
       backgroundColor: `${light} !important`,
     },
   };
 
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [events, setEvents] = React.useState({});
+  const [events, setEvents] = React.useState({ empty: true });
   const fetchEvents = () =>
     fetch(`${url}/events/${username}/${name}`, {
       method: 'GET',
@@ -40,26 +50,12 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
     });
 
   React.useEffect(() => {
-    setIsLoading(true);
+    fetchEvents()
+      .then((response) => response.json())
+      .then((data) => {
+        setEvents(data.rep.sort((a, b) => a.id - b.id));
+      });
   }, [name]);
-
-  React.useEffect(() => {
-    if (isLoading) {
-      fetchEvents()
-        .then((response) => response.json())
-        .then((data) =>
-          setEvents(
-            groupBy(data.events, (event) =>
-              event.repeated_event ? event.repeated_event.id : 0,
-            ),
-          ),
-        );
-    }
-  }, [isLoading]);
-
-  React.useEffect(() => {
-    if (!isEmpty(events)) setIsLoading(false);
-  }, [events]);
 
   const [open, setOpen] = React.useState(false);
   const [cur, setCur] = React.useState({});
@@ -74,12 +70,18 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
   };
 
   const handleSave = () => {
-    setEvents((state) => ({
-      ...state,
-      [cur.key]: state[cur.key].map((event) =>
-        event.id === cur.id ? cur : event,
+    setEvents((state) =>
+      state.map((rep) =>
+        rep.id === cur.key
+          ? {
+              ...rep,
+              events: rep.events.map((event) =>
+                event.id === cur.id ? cur : event,
+              ),
+            }
+          : rep,
       ),
-    }));
+    );
     const options = {
       method: 'PUT',
       headers: {
@@ -102,10 +104,13 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
   };
 
   const handleDelete = (id, repId) => () => {
-    setEvents((state) => ({
-      ...state,
-      [repId]: state[repId].filter((event) => event.id !== id),
-    }));
+    setEvents((state) =>
+      state.map((rep) =>
+        rep.id === repId
+          ? { ...rep, events: rep.events.filter((event) => event.id !== id) }
+          : rep,
+      ),
+    );
     const options = {
       method: 'DELETE',
       headers: {
@@ -120,18 +125,24 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
   const [openEdit, setOpenEdit] = React.useState(false);
 
   const handleSaveAll = () => {
-    setEvents((state) => ({
-      ...state,
-      [cur.key]: state[cur.key].map((event) => ({
-        ...event,
-        title: cur.title,
-        description: cur.description,
-        start: cur.start,
-        end: cur.end,
-        location: cur.location,
-        color: cur.color,
-      })),
-    }));
+    setEvents((state) =>
+      state.map((rep) =>
+        rep.id === cur.key
+          ? {
+              ...rep,
+              events: rep.events.map((event) => ({
+                ...event,
+                title: cur.title,
+                description: cur.description,
+                start: cur.start,
+                end: cur.end,
+                location: cur.location,
+                color: cur.color,
+              })),
+            }
+          : rep,
+      ),
+    );
     const options = {
       method: 'PUT',
       headers: {
@@ -154,11 +165,9 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
   };
 
   const handleDeleteAll = (key) => () => {
-    setEvents((state) => {
-      const newState = { ...state };
-      delete newState[key];
-      return newState;
-    });
+    setEvents((state) =>
+      state.map((rep) => (rep.id === key ? { ...rep, events: [] } : rep)),
+    );
     const options = {
       method: 'DELETE',
       headers: {
@@ -169,11 +178,25 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
     fetch(`${url}/events/${username}/${name}/${key}`, options);
   };
 
+  const handleDeleteActivity = (key) => () => {
+    console.log(key);
+    setEvents((state) => state.filter((rep) => rep.id !== key));
+    const options = {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    fetch(`${url}/events/${username}/${name}/${key}/all`, options);
+  };
+
   const [date, setDate] = React.useState(new Date());
 
   const handleDateChange = (value) => setDate(value);
 
   const handleAddDate = (add) => () => {
+    console.log(add);
     const options = {
       method: 'POST',
       headers: {
@@ -191,25 +214,53 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
           location: add.location,
           color: add.color,
         },
-        day: date.getUTCDate() + 1,
+        day: date.getUTCDate(),
         month: date.getUTCMonth(),
       }),
     };
     fetch(`${url}/events/${username}/${name}/${add.key}`, options)
       .then((response) => response.json())
       .then((data) => {
-        setEvents((state) => ({
-          ...state,
-          [add.key]: state[add.key].concat(data),
-        }));
+        setEvents((state) =>
+          state.map((rep) =>
+            rep.id === add.key
+              ? { ...rep, events: rep.events.concat([data]) }
+              : rep,
+          ),
+        );
       });
     dispatch(addNumOfEvents(1));
   };
+
+  const [repName, setRepName] = React.useState('');
+  const handleRepName = () => {
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        name: repName,
+      }),
+    };
+    fetch(`${url}/events/rep/${username}/${name}`, options)
+      .then((response) => response.json())
+      .then(({ id }) =>
+        setEvents((state) => {
+          const newRep = { id, name: repName, events: [] };
+          return state.concat([newRep]);
+        }),
+      )
+      .then(console.log(events));
+    setRepName('');
+  };
+
   return (
     <>
-      {!isLoading ? (
+      {!events.empty ? (
         <>
-          {Object.entries(events).map(([key, value]) => (
+          {events.map((value) => (
             <Paper
               style={{
                 backgroundColor: light,
@@ -221,14 +272,14 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
             >
               <Typography
                 align="left"
-                style={{ fontSize: '2rem', color: dark, fontWeight: 'bold' }}
+                style={{ fontSize: '1.5rem', color: dark, fontWeight: 'bold' }}
               >
-                {value[0].repeated_event.name}
+                {value.name}
               </Typography>
 
               <Grid container direction="column" style={{ margin: '1rem 0' }}>
                 {chunk(
-                  value.sort((a, b) =>
+                  value.events.sort((a, b) =>
                     monthIdx[a.day.month.month_name] !==
                     monthIdx[b.day.month.month_name]
                       ? monthIdx[a.day.month.month_name] -
@@ -249,7 +300,7 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
                         }}
                         onClick={() => {
                           setOpen(true);
-                          setCur({ key, ...event });
+                          setCur({ key: value.id, ...event });
                         }}
                       >
                         {`${event.day.index} ${event.day.month.month_name} 2020`}
@@ -268,7 +319,7 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
                   style={{ alignSelf: 'center' }}
                 />
                 <Button
-                  onClick={handleAddDate({ key, ...value[0] })}
+                  onClick={handleAddDate({ key: value.id, ...value.events[0] })}
                   style={{
                     color: light,
                     backgroundColor: accent,
@@ -280,20 +331,31 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
                 </Button>
                 <Button
                   onClick={() => {
-                    setCur({ key, ...value[0] });
+                    setCur({ key: value.id, ...value.events[0] });
                     setOpenEdit(true);
                   }}
+                  className={classes.button}
                   style={{
-                    color: light,
-                    backgroundColor: accent,
                     margin: '1rem',
                   }}
+                  disabled={value.events.length === 0}
                   variant="contained"
                 >
                   Edit All
                 </Button>
                 <Button
-                  onClick={handleDeleteAll(key)}
+                  onClick={handleDeleteAll(value.id)}
+                  className={classes.button}
+                  style={{
+                    margin: '1rem',
+                  }}
+                  disabled={value.events.length === 0}
+                  variant="contained"
+                >
+                  Delete All
+                </Button>
+                <Button
+                  onClick={handleDeleteActivity(value.id)}
                   style={{
                     color: light,
                     backgroundColor: accent,
@@ -301,7 +363,7 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
                   }}
                   variant="contained"
                 >
-                  Delete All
+                  Delete Activity
                 </Button>
               </div>
             </Paper>
@@ -328,7 +390,7 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
               <Typography
                 style={{ fontSize: '1.5rem', color: dark, fontWeight: 'bold' }}
               >
-                Add Recurring Events
+                Add Activity
               </Typography>
               <div
                 style={{
@@ -337,13 +399,16 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
                   marginTop: '1rem',
                 }}
               >
-                <TextField />
+                <TextField
+                  required
+                  onChange={(e) => setRepName(e.target.value)}
+                  value={repName}
+                />
                 <Button
-                  style={{
-                    color: light,
-                    backgroundColor: accent,
-                    marginLeft: '1rem',
-                  }}
+                  className={classes.button}
+                  onClick={handleRepName}
+                  variant="contained"
+                  disabled={repName === ''}
                 >
                   Add
                 </Button>
@@ -355,9 +420,27 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
             onClose={() => setOpen(false)}
             style={{ zIndex: 1401 }}
           >
-            <DialogTitle style={{ backgroundColor: light }}>
-              Edit Event
-            </DialogTitle>
+            <div
+              style={{
+                backgroundColor: light,
+                color: dark,
+                display: 'flex',
+                justifyContent: 'space-between',
+                padding: '2rem 1.5rem 0.5rem 1.5rem',
+              }}
+            >
+              <Typography
+                style={{ fontSize: '1.5rem', color: dark, fontWeight: 'bold' }}
+              >
+                Edit Event
+              </Typography>
+              <IconButton
+                onClick={() => setOpen(false)}
+                style={{ paddingTop: 0, paddingRight: 0 }}
+              >
+                <Close />
+              </IconButton>
+            </div>
             <DialogContent style={{ backgroundColor: light }}>
               <Typography style={{ fontWeight: 'bold', color: dark }}>
                 Title:
@@ -462,9 +545,27 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
             onClose={() => setOpenEdit(false)}
             style={{ zIndex: 1401 }}
           >
-            <DialogTitle style={{ backgroundColor: light }}>
-              Edit All Events
-            </DialogTitle>
+            <div
+              style={{
+                backgroundColor: light,
+                color: dark,
+                display: 'flex',
+                justifyContent: 'space-between',
+                padding: '2rem 1.5rem 0.5rem 1.5rem',
+              }}
+            >
+              <Typography
+                style={{ fontSize: '1.5rem', color: dark, fontWeight: 'bold' }}
+              >
+                Edit All Events
+              </Typography>
+              <IconButton
+                onClick={() => setOpenEdit(false)}
+                style={{ paddingTop: 0, paddingRight: 0 }}
+              >
+                <Close />
+              </IconButton>
+            </div>
             <DialogContent style={{ backgroundColor: light }}>
               <Typography style={{ fontWeight: 'bold', color: dark }}>
                 Title:
