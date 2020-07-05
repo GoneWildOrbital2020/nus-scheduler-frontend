@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Link, Switch, Route } from 'react-router-dom';
+import { Link, Switch, Route, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
   Drawer,
@@ -10,27 +10,41 @@ import {
   Typography,
   Toolbar,
 } from '@material-ui/core';
-import { Edit, Folder, Note } from '@material-ui/icons';
+import { Folder, Note, Delete, EventNote } from '@material-ui/icons';
+import { connect } from 'react-redux';
 import { dark, light } from '../colors';
 import Customize from './Customize';
 import Upload from './upload';
 import NotesGrid from './notesGrid';
+import { url } from './constant';
 
-const EventGroup = ({ name, path }) => {
+const EventGroup = ({ name, path, username, token, ...routerProps }) => {
+  const { history } = routerProps;
+  const handleDeleteGroup = () => {
+    const options = {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    fetch(`${url}/events/${username}/${name}`, options);
+    history.replace('/');
+  };
   return (
     <>
       <Drawer variant="permanent" anchor="left">
         <Toolbar />
         <List>
-          <Link to={`/event-group/${name}/customize`}>
+          <Link to={`/events-group/${name}/customize`}>
             <ListItem button divider>
               <ListItemIcon>
-                <Edit style={{ color: dark }} />
+                <EventNote style={{ color: dark }} />
               </ListItemIcon>
-              <ListItemText primary="Customize" style={{ color: dark }} />
+              <ListItemText primary="Activities" style={{ color: dark }} />
             </ListItem>
           </Link>
-          <Link to={`/event-group/${name}/uploads`}>
+          <Link to={`/events-group/${name}/uploads`}>
             <ListItem button divider>
               <ListItemIcon>
                 <Folder style={{ color: dark }} />
@@ -41,7 +55,7 @@ const EventGroup = ({ name, path }) => {
               />
             </ListItem>
           </Link>
-          <Link to={`/event-group/${name}/notes`}>
+          <Link to={`/events-group/${name}/notes`}>
             <ListItem button divider>
               <ListItemIcon>
                 <Note style={{ color: dark }} />
@@ -49,6 +63,15 @@ const EventGroup = ({ name, path }) => {
               <ListItemText primary="Notes" style={{ color: dark }} />
             </ListItem>
           </Link>
+          <ListItem button divider onClick={handleDeleteGroup}>
+            <ListItemIcon>
+              <Delete style={{ color: dark }} />
+            </ListItemIcon>
+            <ListItemText
+              primary="Delete Event Group"
+              style={{ color: dark }}
+            />
+          </ListItem>
         </List>
       </Drawer>
       <Typography
@@ -79,7 +102,14 @@ const EventGroup = ({ name, path }) => {
 
 EventGroup.propTypes = {
   name: PropTypes.string.isRequired,
+  username: PropTypes.string.isRequired,
+  token: PropTypes.string.isRequired,
   path: PropTypes.string.isRequired,
 };
 
-export default EventGroup;
+const mapStateToProps = (state) => ({
+  username: state.username,
+  token: state.token,
+});
+
+export default withRouter(connect(mapStateToProps)(EventGroup));

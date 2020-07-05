@@ -38,3 +38,16 @@ Link {
   text-decoration: none;
   color: white;
 }
+
+.MTableToolbar-root-171 {
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
+}
+
+.MuiInput-underline::after {
+  border-bottom: 2px solid #c95d63 !important;
+}
+
+.MuiFormLabel-root.Mui-focused {
+  color: #c95d63 !important;
+}

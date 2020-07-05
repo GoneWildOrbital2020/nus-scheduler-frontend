@@ -68,30 +68,27 @@ const useStyles = makeStyles(() => ({
     display: 'none',
   },
   paper: {
-    height: '300px',
     backgroundColor: `${light}`,
-    margin: '2rem auto',
+    margin: '2rem',
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'space-around',
-    width: '50%',
+    padding: '2rem',
+    width: 'max-content',
   },
   buttons: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-around',
+    alignItems: 'flex-end',
   },
   button: {
     backgroundColor: `${accent}`,
     color: `${light}`,
   },
-  textField: {
-    width: '50%',
-    margin: '0 auto',
-  },
+  textField: {},
   typography: {
+    fontSize: '1.5rem',
     fontWeight: 'bold',
-    fontSize: '2rem',
     color: dark,
   },
 }));
@@ -306,10 +303,10 @@ const Upload = (props) => {
         <MaterialTable
           style={{
             backgroundColor: `${light}`,
+            padding:'2rem 1rem',
           }}
           icons={tableIcons}
-          title={(
-            <Typography className={classes.typography}>
+          title={(            <Typography className={classes.typography}>
               Files & Images
             </Typography>
           )}
@@ -371,18 +368,24 @@ const Upload = (props) => {
         />
       </div>
       <Paper className={classes.paper}>
-        <Typography className={classes.typography}>
+        <Typography
+          style={{
+            fontSize: '1.5rem',
+            fontWeight: 'bold',
+            marginBottom: '1rem',
+            alignSelf: 'flex-start',
+          }}
+        >
           Upload Files & Images
         </Typography>
-        <TextField
-          label="name"
-          variant="outlined"
-          required
-          value={name}
-          onChange={handleChangeName}
-          className={classes.textField}
-        />
         <div className={classes.buttons}>
+          <TextField
+            label="name"
+            required
+            value={name}
+            onChange={handleChangeName}
+            className={classes.textField}
+          />
           <label htmlFor="image-upload">
             <input
               className={classes.input}
@@ -395,6 +398,7 @@ const Upload = (props) => {
               className={classes.button}
               component="span"
               disabled={!name}
+              style={{ margin: '0 1rem' }}
             >
               Upload Image
             </Button>
