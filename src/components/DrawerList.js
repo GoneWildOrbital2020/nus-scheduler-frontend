@@ -2,12 +2,21 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
+  Button,
   List,
   ListItem,
   ListItemIcon,
+  ListItemSecondaryAction,
   ListItemText,
   Collapse,
   Divider,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  IconButton,
+  makeStyles,
+  TextField,
+  Typography,
 } from '@material-ui/core';
 import {
   AccountCircle,
@@ -20,10 +29,41 @@ import {
   Event,
 } from '@material-ui/icons';
 import AddIcon from '@material-ui/icons/Add';
+import CloseIcon from '@material-ui/icons/Close';
+import DeleteIcon from '@material-ui/icons/Delete';
 import { Link } from 'react-router-dom';
 import { toggleLogout } from '../redux/actions';
-import { dark, light } from '../colors';
-import { url } from './constant';
+import { dark, light, accent } from '../colors';
+import { url, defaultYear } from './constant';
+
+const useStyles = makeStyles(() => ({
+  content: {
+    backgroundColor: light,
+    padding: '2rem',
+  },
+  dialogTitle: {
+    display: 'flex',
+    justifyContent: 'space-between',
+  },
+  closeButton: {
+    paddingTop: '0',
+    paddingRight: '0',
+  },
+  typography: {
+    fontWeight: 'bold',
+    fontSize: '1.5rem',
+    color: dark,
+    marginRight: '2rem',
+  },
+  textField: {
+    width: '100%',
+    margin: '1rem 0',
+  },
+  button: {
+    backgroundColor: accent,
+    color: light,
+  },
+}));
 
 const DrawerList = ({ dispatch, token, username }) => {
   const handleLogout = (event) => {
@@ -56,8 +96,73 @@ const DrawerList = ({ dispatch, token, username }) => {
 
   const [open, setOpen] = React.useState(false);
   const [openYear, setOpenYear] = React.useState(false);
+  const [openModal, setOpenModal] = React.useState(false);
+  const [inputYear, setInputYear] = React.useState('');
   const [titles, setTitles] = React.useState([]);
   const [years, setYears] = React.useState([]);
+  const classes = useStyles();
+
+  const handleClose = (event) => {
+    event.preventDefault();
+    setOpenModal(false);
+  };
+
+  const handleOpen = (event) => {
+    event.preventDefault();
+    setOpenModal(true);
+  };
+
+  const handleChange = (event) => {
+    event.preventDefault();
+    setInputYear(event.target.value);
+  };
+
+  const handleAddYear = (event) => {
+    event.preventDefault();
+    fetch(`${url}/calendars/addyear/${username}/${inputYear}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => {
+        if (res.ok) {
+          const newYears = [...years];
+          newYears.push(inputYear);
+          setYears(newYears);
+          setOpenModal(false);
+        } else {
+          throw new Error('Add year failed!');
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const handleDeleteYear = (year) => {
+    fetch(`${url}/calendars/deleteyear/${username}/${year}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => {
+        if (res.ok) {
+          const newYears = [...years];
+          const index = newYears.indexOf(year);
+          newYears.splice(index, 1);
+          setYears(newYears);
+        } else {
+          throw new Error('Delete year failed!');
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const fetchTitles = fetch(`${url}/events/${username}`, {
     method: 'GET',
@@ -146,16 +251,55 @@ const DrawerList = ({ dispatch, token, username }) => {
                 <ListItemText primary={year} style={{ color: dark }} />
               </ListItem>
             </Link>
+            <Link to={`/${defaultYear}`}>
+              <ListItemSecondaryAction>
+                <IconButton onClick={() => handleDeleteYear(year)}>
+                  <DeleteIcon style={{ color: dark }} />
+                </IconButton>
+              </ListItemSecondaryAction>
+            </Link>
           </List>
         ))}
         <List component="div" disablePadding>
-          <ListItem button style={{ paddingLeft: '2rem' }}>
+          <ListItem button style={{ paddingLeft: '2rem' }} onClick={handleOpen}>
             <ListItemIcon>
               <AddIcon style={{ color: dark }} />
             </ListItemIcon>
             <ListItemText primary="Add Year" style={{ color: dark }} />
           </ListItem>
         </List>
+        <Dialog
+          onClose={handleClose}
+          aria-labelledby="add-year"
+          open={openModal}
+        >
+          <div className={classes.content}>
+            <div className={classes.dialogTitle}>
+              <Typography className={classes.typography}>Add Year</Typography>
+              <IconButton className={classes.closeButton} onClick={handleClose}>
+                <CloseIcon />
+              </IconButton>
+            </div>
+            <DialogContent style={{ padding: 0 }}>
+              <TextField
+                onChange={handleChange}
+                className={classes.textField}
+                type="number"
+                fullWidth
+              />
+            </DialogContent>
+            <DialogActions style={{ padding: 0 }}>
+              <Button
+                className={classes.button}
+                variant="contained"
+                disabled={inputYear === ''}
+                onClick={handleAddYear}
+              >
+                Add Year
+              </Button>
+            </DialogActions>
+          </div>
+        </Dialog>
       </Collapse>
       <Divider />
       <ListItem button divider component="label">
