@@ -50,6 +50,7 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
     });
 
   React.useEffect(() => {
+    setEvents({ empty: true });
     fetchEvents()
       .then((response) => response.json())
       .then((data) => {
