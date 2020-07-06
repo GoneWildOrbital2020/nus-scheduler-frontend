@@ -7,9 +7,17 @@ export const changeActiveMonth = (diff) => ({
 
 export const CHANGE_ACTIVE_YEAR = 'CHANGE_ACTIVE_YEAR';
 
-export const changeActiveYear = (diff) => ({
+export const changeActiveYear = (year) => ({
   type: CHANGE_ACTIVE_YEAR,
-  diff,
+  year,
+});
+
+export const CHANGE_ACTIVE_DATE = 'CHANGE_ACTIVE_DATE';
+
+export const changeActiveDate = (year, month) => ({
+  type: CHANGE_ACTIVE_DATE,
+  year,
+  month,
 });
 
 export const ADD_NUM_OF_EVENTS = 'ADD_NUM_OF_EVENTS';

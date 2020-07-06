@@ -4,6 +4,8 @@ import { createStore } from 'redux';
 import './App.css';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import DateFnsUtils from '@date-io/date-fns';
 import Calendar from './components/Calendar';
 import reducer from './redux/reducers';
 import Login from './components/login';
@@ -24,38 +26,36 @@ const store = createStore(
 
 function App() {
   return (
-    <Provider store={store}>
-      <Router>
-        <div className="App">
-          <NavbarDrawer />
-          <div className="content" style={{ marginTop: '75px' }}>
-            <Switch>
-              <Route path="/login" exact component={Login} />
-              <Route path="/signup" exact component={Signup} />
-              <Route
-                path="/event-group/:name"
-                render={({ match }) => (
-                  <EventGroup name={match.params.name} path={match.path} />
-                )}
-              />
-              <Route path="/upload" exact component={Upload} />
-              <Route path="/upload/notes" exact component={NotesGrid} />
-              <Route
-                path={`/profile/${store.getState().username}`}
-                exact
-                render={() => <Profile />}
-              />
-              <Route
-                path="/:year"
-                exact
-                render={({ match }) => <Calendar year={match.params.year} />}
-              />
-            </Switch>
+    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+      <Provider store={store}>
+        <Router>
+          <div className="App">
+            <NavbarDrawer />
+            <div className="content" style={{ marginTop: '75px' }}>
+              <Switch>
+                <Route path="/" exact component={Calendar} />
+                <Route path="/login" exact component={Login} />
+                <Route path="/signup" exact component={Signup} />
+                <Route
+                  path="/event-group/:name"
+                  render={({ match }) => (
+                    <EventGroup name={match.params.name} path={match.path} />
+                  )}
+                />
+                <Route path="/upload" exact component={Upload} />
+                <Route path="/upload/notes" exact component={NotesGrid} />
+                <Route
+                  path={`/profile/${store.getState().username}`}
+                  exact
+                  render={() => <Profile />}
+                />
+              </Switch>
+            </div>
+            <Footer />
           </div>
-          <Footer />
-        </div>
-      </Router>
-    </Provider>
+        </Router>
+      </Provider>
+    </MuiPickersUtilsProvider>
   );
 }
 

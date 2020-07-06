@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { Typography, makeStyles } from '@material-ui/core';
-import IconButton from '@material-ui/core/IconButton';
+import { Button, Typography, makeStyles, IconButton } from '@material-ui/core';
+import { DatePicker } from '@material-ui/pickers';
 import ArrowLeftIcon from '@material-ui/icons/ArrowLeft';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import { connect } from 'react-redux';
-import { changeActiveMonth, addNumOfEvents } from '../redux/actions';
+import {
+  changeActiveMonth,
+  changeActiveDate,
+  changeActiveYear,
+  addNumOfEvents,
+} from '../redux/actions';
 import { monthProperties, url } from './constant';
 import Month from './Month';
 import { light } from '../colors';
@@ -22,11 +27,16 @@ const useStyles = makeStyles(() => ({
     flexDirection: 'column',
     alignItems: 'center',
   },
+  inside: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
 }));
 
 const Calendar = ({
   activeMonth,
-  year,
+  activeYear,
   numOfEvents,
   username,
   dispatch,
@@ -36,6 +46,8 @@ const Calendar = ({
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState('');
   const [severity, setSeverity] = useState('success');
+  const [openDialog, setOpenDialog] = useState(false);
+  const [date, setDate] = useState(new Date());
   const classes = useStyles();
 
   const handleClose = (event, reason) => {
@@ -45,16 +57,30 @@ const Calendar = ({
     setOpen(false);
   };
 
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
+
+  const handleOpenDialog = (event) => {
+    event.preventDefault();
+    setOpenDialog(true);
+  };
+
+  const handleChangeDate = (currDate) => {
+    const month = currDate.getUTCMonth();
+    const year = currDate.getUTCFullYear();
+    dispatch(changeActiveDate(year, month));
+  };
+
   const fetchNumOfEvents = async () => {
-    const response = await fetch(`${url}/calendars/${username}/${year}`, {
+    const response = await fetch(`${url}/calendars/${username}/${activeYear}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
     });
-    if (!response.ok)
-      throw new Error('Failed to fetch event count, please reload the page!');
+    if (!response.ok) throw new Error('Failed to fetch event count!');
     const json = await response.json();
     return json.count;
   };
@@ -67,31 +93,73 @@ const Calendar = ({
         setOpen(true);
         setMessage(err.message);
       });
-  }, [year]);
+  }, [activeYear]);
 
   if (!JSON.parse(isLoggedIn)) {
     return <Redirect to="/login" />;
   }
 
-  const clickLeft = () => dispatch(changeActiveMonth(-1));
-  const clickRight = () => dispatch(changeActiveMonth(1));
+  const clickLeft = () => {
+    if (activeMonth === 0) {
+      dispatch(changeActiveYear(activeYear - 1));
+    }
+    dispatch(changeActiveMonth(-1));
+  };
+
+  const clickRight = () => {
+    if (activeMonth === 11) {
+      dispatch(changeActiveYear(activeYear + 1));
+    }
+    dispatch(changeActiveMonth(1));
+  };
 
   return (
     <div className={classes.calendarContainer}>
       <div className={classes.headContainer}>
         <IconButton onClick={clickLeft}>
-          <ArrowLeftIcon fontSize="large" style={{ color: light }} />
+          <ArrowLeftIcon
+            fontSize="large"
+            style={{ color: light, paddingTop: '2rem' }}
+          />
         </IconButton>
-        <Typography
-          style={{ fontSize: '3rem', fontWeight: 'bold', color: light }}
-        >
-          {monthProperties[activeMonth].name}
-        </Typography>
-        <IconButton onClick={clickRight} style={{ color: light }}>
-          <ArrowRightIcon fontSize="large" />
+        <Button onClick={handleOpenDialog}>
+          <div className={classes.inside}>
+            <Typography
+              style={{
+                fontSize: '2rem',
+                fontWeight: 'bold',
+                color: light,
+                marginBottom: '-1rem',
+              }}
+            >
+              {activeYear}
+            </Typography>
+            <Typography
+              style={{ fontSize: '3rem', fontWeight: 'bold', color: light }}
+            >
+              {monthProperties[activeMonth].name}
+            </Typography>
+          </div>
+        </Button>
+        <DatePicker
+          views={['year', 'month']}
+          variant="dialog"
+          openTo="year"
+          value={date}
+          onChange={setDate}
+          onClose={handleCloseDialog}
+          onAccept={handleChangeDate}
+          open={openDialog}
+          TextFieldComponent={() => <></>}
+        />
+        <IconButton onClick={clickRight}>
+          <ArrowRightIcon
+            fontSize="large"
+            style={{ color: light, paddingTop: '2rem' }}
+          />
         </IconButton>
       </div>
-      <Month year={year} />
+      <Month />
       <Notification
         open={open}
         handleClose={handleClose}
@@ -109,11 +177,12 @@ Calendar.propTypes = {
   dispatch: PropTypes.func.isRequired,
   token: PropTypes.string.isRequired,
   isLoggedIn: PropTypes.string.isRequired,
-  year: PropTypes.number.isRequired,
+  activeYear: PropTypes.number.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   activeMonth: state.activeMonth,
+  activeYear: state.activeYear,
   numOfEvents: state.numOfEvents,
   username: state.username,
   token: state.token,

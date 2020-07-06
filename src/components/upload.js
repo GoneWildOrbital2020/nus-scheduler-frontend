@@ -30,6 +30,7 @@ import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import { accent, light, dark } from '../colors';
 import Notification from './notification';
+import { url } from './constant';
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -107,20 +108,17 @@ const Upload = (props) => {
   const [severity, setSeverity] = useState('success');
 
   useEffect(() => {
-    const fetchFile = fetch(
-      `http://localhost:8000/upload/get/file/${username}/${groupName}`,
-      {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+    const fetchFile = fetch(`${url}/upload/get/file/${username}/${groupName}`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
       },
-    ).then((res) => {
+    }).then((res) => {
       return res.json();
     });
 
     const fetchImage = fetch(
-      `http://localhost:8000/upload/get/image/${username}/${groupName}`,
+      `${url}/upload/get/image/${username}/${groupName}`,
       {
         method: 'GET',
         headers: {
@@ -131,15 +129,12 @@ const Upload = (props) => {
       return res.json();
     });
 
-    const fetchTotal = fetch(
-      `http://localhost:8000/upload/get/totalfiles/${username}`,
-      {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+    const fetchTotal = fetch(`${url}/upload/get/totalfiles/${username}`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
       },
-    ).then((res) => res.json());
+    }).then((res) => res.json());
 
     Promise.all([fetchFile, fetchImage, fetchTotal])
       .then((values) => {
@@ -157,7 +152,7 @@ const Upload = (props) => {
             currFile.lastIndexOf('.') + 1,
             currFile.length,
           );
-          obj.download = `http://localhost:8000/media/${currFile}`;
+          obj.download = `${url}/media/${currFile}`;
           newTableData.push(obj);
         });
         image.forEach((element) => {
@@ -171,19 +166,19 @@ const Upload = (props) => {
             currImage.lastIndexOf('.') + 1,
             currImage.length,
           );
-          obj.download = `http://localhost:8000/media/${currImage}`;
+          obj.download = `${url}/media/${currImage}`;
           newTableData.push(obj);
         });
         setTableData(newTableData);
         setTotal(values[2].total);
         setSeverity('success');
         setOpen(true);
-        setMessage('Fetch files successful!');
+        setMessage('Fetch files and images successful!');
       })
       .catch(() => {
         setSeverity('error');
         setOpen(true);
-        setMessage('Failed to get files and images, please reload the page!');
+        setMessage('Failed to fetch files and images!');
       });
   }, []);
 
@@ -197,7 +192,7 @@ const Upload = (props) => {
     data.append('identifier', total + 1);
     data.append('name', name);
     data.append('image', event.target.files[0]);
-    fetch(`http://localhost:8000/upload/image/${username}/${groupName}`, {
+    fetch(`${url}/upload/image/${username}/${groupName}`, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -206,7 +201,7 @@ const Upload = (props) => {
     })
       .then((res) => {
         if (res.status !== 201) {
-          throw new Error('Upload image failed, please try again!');
+          throw new Error('Upload image failed!');
         } else {
           setTotal(total + 1);
           setSeverity('success');
@@ -228,7 +223,7 @@ const Upload = (props) => {
     data.append('identifier', total + 1);
     data.append('name', name);
     data.append('file', event.target.files[0]);
-    fetch(`http://localhost:8000/upload/file/${username}/${groupName}`, {
+    fetch(`${url}/upload/file/${username}/${groupName}`, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -237,7 +232,7 @@ const Upload = (props) => {
     })
       .then((res) => {
         if (res.status !== 201) {
-          throw new Error('Upload file failed, please try again!');
+          throw new Error('Upload file failed!');
         } else {
           setTotal(total + 1);
           setSeverity('success');
@@ -257,27 +252,24 @@ const Upload = (props) => {
     const data = {
       identifier: rowData.identifier,
     };
-    fetch(
-      `http://localhost:8000/upload/delete/files/${username}/${groupName}`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(data),
+    fetch(`${url}/upload/delete/files/${username}/${groupName}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
       },
-    )
+      body: JSON.stringify(data),
+    })
       .then((res) => {
         if (!res.ok) {
-          throw new Error('Delete files failed, please try again!');
+          throw new Error('Delete files failed!');
         } else {
           const newTableData = [...tableData];
           const index = newTableData.findIndex(
             (element) => element.name === rowData.name,
           );
           if (index === -1) {
-            throw new Error('File not found, please try again!');
+            throw new Error('File not found!');
           }
           newTableData.splice(index, 1);
           setTableData(newTableData);

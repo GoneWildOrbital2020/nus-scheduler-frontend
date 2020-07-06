@@ -4,13 +4,24 @@ import { Grid } from '@material-ui/core';
 import { connect } from 'react-redux';
 import DayTile from './Day/DayTile';
 import { monthProperties, monthPropertiesLeap, url } from './constant';
+import Notification from './notification';
 
-const Month = ({ activeMonth, year, token }) => {
+const Month = ({ activeMonth, activeYear, token }) => {
   const [isLeap, setIsLeap] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [message, setMessage] = useState('');
+  const [severity, setSeverity] = useState('success');
   const rows = [0, 1, 2, 3, 4];
 
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpen(false);
+  };
+
   useEffect(() => {
-    fetch(`${url}/calendars/checkleap/${year}`, {
+    fetch(`${url}/calendars/checkleap/${activeYear}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -23,10 +34,12 @@ const Month = ({ activeMonth, year, token }) => {
       .then((json) => {
         setIsLeap(json.leap);
       })
-      .catch((err) => {
-        console.log(err);
+      .catch(() => {
+        setSeverity('error');
+        setOpen(true);
+        setMessage('Failed to check leap year!');
       });
-  }, [year]);
+  }, [activeYear]);
 
   return (
     <Grid container direction="column" style={{ width: 'max-content' }}>
@@ -42,23 +55,30 @@ const Month = ({ activeMonth, year, token }) => {
         return (
           <Grid container item style={{ width: 'max-content' }}>
             {cols.map((col) => (
-              <DayTile index={col} key={col} currYear={year} />
+              <DayTile index={col} key={col} />
             ))}
           </Grid>
         );
       })}
+      <Notification
+        open={open}
+        handleClose={handleClose}
+        severity={severity}
+        message={message}
+      />
     </Grid>
   );
 };
 
 Month.propTypes = {
   activeMonth: PropTypes.number.isRequired,
-  year: PropTypes.number.isRequired,
+  activeYear: PropTypes.number.isRequired,
   token: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   activeMonth: state.activeMonth,
+  activeYear: state.activeYear,
   token: state.token,
 });
 
