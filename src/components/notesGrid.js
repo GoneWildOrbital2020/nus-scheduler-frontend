@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import Notes from './notes';
 import { accent, light } from '../colors';
 import Notification from './notification';
+import { url } from './constant';
 
 const useStyles = makeStyles(() => ({
   container: {
@@ -67,7 +68,7 @@ const NotesGrid = (props) => {
       title,
       text,
     };
-    fetch(`http://localhost:8000/upload/note/${username}/${name}`, {
+    fetch(`${url}/upload/note/${username}/${name}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -77,7 +78,7 @@ const NotesGrid = (props) => {
     })
       .then((res) => {
         if (res.status !== 201) {
-          throw new Error('Failed to add notes, please try again!');
+          throw new Error('Failed to add notes!');
         } else {
           const newNotes = [...notes];
           newNotes.push({
@@ -107,7 +108,7 @@ const NotesGrid = (props) => {
       title,
       text,
     };
-    fetch(`http://localhost:8000/upload/note/${username}/${name}`, {
+    fetch(`${url}/upload/note/${username}/${name}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -117,7 +118,7 @@ const NotesGrid = (props) => {
     })
       .then((res) => {
         if (res.status !== 200) {
-          throw new Error('Failed to save changes, please try again!');
+          throw new Error('Failed to save changes!');
         } else {
           setNotes(
             notes.map((element) => {
@@ -159,7 +160,7 @@ const NotesGrid = (props) => {
     const data = {
       identifier,
     };
-    fetch(`http://localhost:8000/upload/delete/note/${username}/${name}`, {
+    fetch(`${url}/upload/delete/note/${username}/${name}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -169,7 +170,7 @@ const NotesGrid = (props) => {
     })
       .then((res) => {
         if (!res.ok) {
-          throw new Error('Delete note failed, please try again!');
+          throw new Error('Delete note failed!');
         } else {
           const newNotes = [...notes];
           const index = newNotes.findIndex(
@@ -194,15 +195,12 @@ const NotesGrid = (props) => {
   };
 
   useEffect(() => {
-    const getNotes = fetch(
-      `http://localhost:8000/upload/get/note/${username}/${name}`,
-      {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+    const getNotes = fetch(`${url}/upload/get/note/${username}/${name}`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
       },
-    )
+    })
       .then((res) => {
         return res.json();
       })
@@ -219,15 +217,12 @@ const NotesGrid = (props) => {
         return newNotes;
       });
 
-    const getTotal = fetch(
-      `http://localhost:8000/upload/get/totalnotes/${username}`,
-      {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+    const getTotal = fetch(`${url}/upload/get/totalnotes/${username}`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
       },
-    ).then((res) => res.json());
+    }).then((res) => res.json());
 
     Promise.all([getNotes, getTotal])
       .then((values) => {

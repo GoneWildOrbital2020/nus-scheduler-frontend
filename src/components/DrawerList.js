@@ -33,6 +33,8 @@ import { Link, withRouter } from 'react-router-dom';
 import { toggleLogout } from '../redux/actions';
 import { dark, light, accent } from '../colors';
 import { url } from './constant';
+import Notification from './notification';
+
 
 const useStyles = makeStyles(() => ({
   button: {
@@ -43,7 +45,21 @@ const useStyles = makeStyles(() => ({
 }));
 
 const DrawerList = ({ dispatch, token, username, ...routeProps }) => {
+  const [open, setOpen] = React.useState(false);
+  const [openModal, setOpenModal] = React.useState(false);
+  const [titles, setTitles] = React.useState([]);
+  const [openAlert, setOpenAlert] = React.useState(false);
+  const [message, setMessage] = React.useState('');
+  const [severity, setSeverity] = React.useState('success');
   const { history } = routeProps;
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenAlert(false);
+  };
+
   const handleLogout = (event) => {
     event.preventDefault();
     window.localStorage.setItem('token', null);
@@ -68,16 +84,16 @@ const DrawerList = ({ dispatch, token, username, ...routeProps }) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ ics: e.target.result }),
+      }).catch(() => {
+        setSeverity('error');
+        setOpenAlert(true);
+        setMessage('Failed to upload calendar!');
       });
       window.location.reload();
     };
     reader.readAsText(event.target.files[0]);
   };
 
-  const [open, setOpen] = React.useState(false);
-  const [openModal, setOpenModal] = React.useState(false);
-
-  const [titles, setTitles] = React.useState([]);
   const fetchTitles = fetch(`${url}/events/${username}`, {
     method: 'GET',
     headers: {
@@ -103,7 +119,12 @@ const DrawerList = ({ dispatch, token, username, ...routeProps }) => {
   React.useEffect(() => {
     fetchTitles
       .then((response) => response.json())
-      .then((data) => setTitles(data.map((x) => x.fields.name)));
+      .then((data) => setTitles(data.map((x) => x.fields.name)))
+      .catch(() => {
+        setSeverity('error');
+        setOpenAlert(true);
+        setMessage('Failed to fetch event groups!');
+      });
   }, []);
 
   return (
@@ -182,6 +203,12 @@ const DrawerList = ({ dispatch, token, username, ...routeProps }) => {
           </ListItemIcon>
           <ListItemText primary="Source" style={{ color: dark }} />
         </ListItem>
+        <Notification
+          open={openAlert}
+          handleClose={handleClose}
+          severity={severity}
+          message={message}
+        />
       </List>
       <Dialog
         open={openModal}

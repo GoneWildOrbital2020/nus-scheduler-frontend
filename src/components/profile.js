@@ -11,6 +11,7 @@ import PropTypes from 'prop-types';
 import { accent, light, dark } from '../colors';
 import Notification from './notification';
 import { toggleLogin } from '../redux/actions';
+import { url } from './constant';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -57,7 +58,7 @@ const useStyles = makeStyles(() => ({
 
 const Profile = (props) => {
   const { username, token, email, avatar: avatarProps, dispatch } = props;
-  const [url, setUrl] = useState(`http://localhost:8000${avatarProps}`);
+  const [imageUrl, setImageUrl] = useState(`${url}${avatarProps}`);
   const [password, setPassword] = useState('');
   const [newUsername, setNewUsername] = useState(username);
   const [retype, setRetype] = useState('');
@@ -85,7 +86,7 @@ const Profile = (props) => {
   const handleUploadAvatar = (event) => {
     event.preventDefault();
     setAvatar(event.target.files[0]);
-    setUrl(URL.createObjectURL(event.target.files[0]));
+    setImageUrl(URL.createObjectURL(event.target.files[0]));
   };
 
   const check = () => {
@@ -99,7 +100,7 @@ const Profile = (props) => {
     data.append('username', newUsername);
     data.append('password', password);
     data.append('avatar', avatar);
-    fetch('http://localhost:8000/users/update/', {
+    fetch(`${url}/users/update/`, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -143,7 +144,7 @@ const Profile = (props) => {
         Change Avatar
       </Typography>
       {avatarProps !== '' ? (
-        <img className={classes.avatar} src={url} alt="profile" />
+        <img className={classes.avatar} src={imageUrl} alt="profile" />
       ) : (
         <div />
       )}

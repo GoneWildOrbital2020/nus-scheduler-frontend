@@ -3,6 +3,7 @@ import { TextField, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { dark, light, accent } from '../colors';
 import Notification from './notification';
+import { url } from './constant';
 
 const useStyles = makeStyles({
   signup: {
@@ -57,7 +58,7 @@ const Signup = () => {
       username,
       password,
     };
-    fetch('http://localhost:8000/users/create/', {
+    fetch(`${url}/users/create/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

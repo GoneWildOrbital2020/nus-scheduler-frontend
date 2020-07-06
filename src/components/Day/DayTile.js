@@ -7,7 +7,14 @@ import DayDialog from './TABDayDialog';
 import { url } from '../constant';
 import Notification from '../notification';
 
-const DayTile = ({ index, username, token, propEvents, activeMonth }) => {
+const DayTile = ({
+  index,
+  username,
+  token,
+  propEvents,
+  activeMonth,
+  activeYear,
+}) => {
   const [open, setOpen] = React.useState(false);
   const [openAlert, setOpenAlert] = React.useState(false);
   const [message, setMessage] = React.useState('');
@@ -16,7 +23,7 @@ const DayTile = ({ index, username, token, propEvents, activeMonth }) => {
 
   React.useEffect(() => setCurrEvents(propEvents), [propEvents]);
 
-  const saveEventsToDB = (month, day, events) => {
+  const saveEventsToDB = (year, month, day, events) => {
     const options = {
       method: 'POST',
       headers: {
@@ -25,10 +32,10 @@ const DayTile = ({ index, username, token, propEvents, activeMonth }) => {
       },
       body: JSON.stringify({ events }),
     };
-    fetch(`${url}/calendars/${username}/${month}/${day}`, options)
+    fetch(`${url}/calendars/${username}/${year}/${month}/${day}`, options)
       .then((res) => {
         if (!res.ok) {
-          throw new Error('Failed to save changes, please try again!');
+          throw new Error('Failed to save changes!');
         } else {
           setSeverity('success');
           setOpenAlert(true);
@@ -58,7 +65,7 @@ const DayTile = ({ index, username, token, propEvents, activeMonth }) => {
   };
 
   const saveEvents = (e) => {
-    saveEventsToDB(activeMonth, index, e);
+    saveEventsToDB(activeYear, activeMonth, index, e);
     setCurrEvents(e);
   };
   return (
@@ -87,6 +94,7 @@ DayTile.propTypes = {
   username: PropTypes.string.isRequired,
   token: PropTypes.string.isRequired,
   activeMonth: PropTypes.number.isRequired,
+  activeYear: PropTypes.number.isRequired,
   propEvents: PropTypes.arrayOf(
     PropTypes.shape({
       index: PropTypes.int,
@@ -102,9 +110,9 @@ DayTile.propTypes = {
 
 const mapStateToProps = (state) => ({
   activeMonth: state.activeMonth,
+  activeYear: state.activeYear,
   username: state.username,
   token: state.token,
-  isLoading: state.isLoading,
 });
 
 export default connect(mapStateToProps)(DayTile);

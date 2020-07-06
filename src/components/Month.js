@@ -1,30 +1,24 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Grid } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { groupBy } from 'lodash';
 import Loader from 'react-loader-spinner';
 import DayTile from './Day/DayTile';
-import { monthProperties, url } from './constant';
+import { monthProperties, monthPropertiesLeap, url } from './constant';
 import Notification from './notification';
 import { light } from '../colors';
 
-const Month = ({ activeMonth, username, token }) => {
-  const [openAlert, setOpenAlert] = React.useState(false);
-  const [message, setMessage] = React.useState('');
-  const [severity, setSeverity] = React.useState('success');
-
-  const handleCloseAlert = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setOpenAlert(false);
-  };
-
+const Month = ({ activeMonth, activeYear, username, token }) => {
+  const [isLeap, setIsLeap] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [message, setMessage] = useState('');
+  const [severity, setSeverity] = useState('success');
   const [currEvents, setCurrEvents] = React.useState({ empty: true });
+
   const fetchEvents = async () => {
     const response = await fetch(
-      `${url}/calendars/${username}/${activeMonth}`,
+      `${url}/calendars/${username}/${activeYear}/${activeMonth}`,
       {
         method: 'GET',
         headers: {
@@ -33,8 +27,7 @@ const Month = ({ activeMonth, username, token }) => {
         },
       },
     );
-    if (!response.ok)
-      throw new Error('Failed to fetch events, please reload the page!');
+    if (!response.ok) throw new Error('Failed to fetch events!');
     const json = await response.json();
     return json;
   };
@@ -49,13 +42,42 @@ const Month = ({ activeMonth, username, token }) => {
         .catch((err) => {
           setCurrEvents([]);
           setSeverity('error');
-          setOpenAlert(true);
+          setOpen(true);
           setMessage(err.message);
         });
     };
     getEvents();
   }, [activeMonth]);
   const rows = [0, 1, 2, 3, 4];
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpen(false);
+  };
+
+  useEffect(() => {
+    fetch(`${url}/calendars/checkleap/${activeYear}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((json) => {
+        setIsLeap(json.leap);
+      })
+      .catch(() => {
+        setSeverity('error');
+        setOpen(true);
+        setMessage('Failed to check leap year!');
+      });
+  }, [activeYear]);
+
   return (
     <>
       {!currEvents.empty ? (
@@ -63,11 +85,11 @@ const Month = ({ activeMonth, username, token }) => {
           <Grid container direction="column" style={{ width: 'max-content' }}>
             {rows.map((row) => {
               const cols = [];
-              for (
-                let i = 1;
-                i <= 7 && row * 7 + i <= monthProperties[activeMonth].len;
-                i += 1
-              ) {
+              let upperBound = monthProperties[activeMonth].len;
+              if (isLeap) {
+                upperBound = monthPropertiesLeap[activeMonth].len;
+              }
+              for (let i = 1; i <= 7 && row * 7 + i <= upperBound; i += 1) {
                 cols.push(row * 7 + i);
               }
               return (
@@ -84,8 +106,8 @@ const Month = ({ activeMonth, username, token }) => {
             })}
           </Grid>
           <Notification
-            open={openAlert}
-            handleClose={handleCloseAlert}
+            open={open}
+            handleClose={handleClose}
             severity={severity}
             message={message}
           />
@@ -99,13 +121,14 @@ const Month = ({ activeMonth, username, token }) => {
 
 Month.propTypes = {
   activeMonth: PropTypes.number.isRequired,
-  username: PropTypes.string.isRequired,
+  activeYear: PropTypes.number.isRequired,
   token: PropTypes.string.isRequired,
-  dispatch: PropTypes.func.isRequired,
+  username: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   activeMonth: state.activeMonth,
+  activeYear: state.activeYear,
   username: state.username,
   token: state.token,
 });
