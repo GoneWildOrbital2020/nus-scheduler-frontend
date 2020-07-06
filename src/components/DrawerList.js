@@ -241,6 +241,7 @@ const DrawerList = ({ dispatch, token, username, ...routeProps }) => {
             onChange={(e) => setName(e.target.value)}
             required
             label="Name"
+            fullWidth
           />
         </DialogContent>
         <DialogActions style={{ backgroundColor: light, padding: '1.5rem' }}>
