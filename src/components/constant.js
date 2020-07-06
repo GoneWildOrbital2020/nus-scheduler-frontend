@@ -28,4 +28,30 @@ export const monthPropertiesLeap = [
   { len: 31, name: 'December' },
 ];
 
+export const monthIdx = {
+  JAN: 0,
+  FEB: 1,
+  MAR: 2,
+  APR: 3,
+  MAY: 4,
+  JUN: 5,
+  JUL: 6,
+  AUG: 7,
+  SEP: 8,
+  OCT: 9,
+  NOV: 10,
+  DEC: 11,
+};
+
 export const url = 'http://localhost:8000';
+
+export const colors = [
+  '#D5573B',
+  '#A23E48',
+  '#735290',
+  '#246EB9',
+  '#2D93AD',
+  '#4E878C',
+  '#5CAB7D',
+  '#6F7C12',
+];

@@ -3,6 +3,7 @@ import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import './App.css';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
@@ -16,6 +17,7 @@ import NotesGrid from './components/notesGrid';
 import NavbarDrawer from './components/NavbarDrawer';
 import EventGroup from './components/EventGroup';
 import Profile from './components/profile';
+import { accent } from './colors';
 
 /* eslint-disable no-underscore-dangle */
 const store = createStore(
@@ -24,37 +26,44 @@ const store = createStore(
 );
 /* eslint-enable */
 
+const theme = createMuiTheme({
+  palette: {
+    primary: { main: accent },
+  },
+});
 function App() {
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
-      <Provider store={store}>
-        <Router>
-          <div className="App">
-            <NavbarDrawer />
-            <div className="content" style={{ marginTop: '75px' }}>
-              <Switch>
-                <Route path="/" exact component={Calendar} />
-                <Route path="/login" exact component={Login} />
-                <Route path="/signup" exact component={Signup} />
-                <Route
-                  path="/event-group/:name"
-                  render={({ match }) => (
-                    <EventGroup name={match.params.name} path={match.path} />
-                  )}
-                />
-                <Route path="/upload" exact component={Upload} />
-                <Route path="/upload/notes" exact component={NotesGrid} />
-                <Route
-                  path={`/profile/${store.getState().username}`}
-                  exact
-                  render={() => <Profile />}
-                />
-              </Switch>
+      <ThemeProvider theme={theme}>
+        <Provider store={store}>
+          <Router>
+            <div className="App">
+              <NavbarDrawer />
+              <div className="content" style={{ marginTop: '75px' }}>
+                <Switch>
+                  <Route path="/" exact component={Calendar} />
+                  <Route path="/login" exact component={Login} />
+                  <Route path="/signup" exact component={Signup} />
+                  <Route
+                    path="/events-group/:name"
+                    render={({ match }) => (
+                      <EventGroup name={match.params.name} path={match.path} />
+                    )}
+                  />
+                  <Route path="/upload" exact component={Upload} />
+                  <Route path="/upload/notes" exact component={NotesGrid} />
+                  <Route
+                    path={`/profile/${store.getState().username}`}
+                    exact
+                    render={() => <Profile />}
+                  />
+                </Switch>
+              </div>
+              <Footer />
             </div>
-            <Footer />
-          </div>
-        </Router>
-      </Provider>
+          </Router>
+        </Provider>
+      </ThemeProvider>
     </MuiPickersUtilsProvider>
   );
 }

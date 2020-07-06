@@ -1,0 +1,16 @@
+.MuiPickersDatePickerRoot-toolbar{
+  background-color: #C95D63 !important;
+}
+
+.MuiPickersDay-current{
+  color: #C95D63 !important;
+}
+
+.MuiPickersDay-daySelected{
+  background-color: #C95D63 !important;
+  color: #ffffff !important;
+}
+
+.MuiButton-textPrimary{
+  color: #C95D63 !important;
+}

@@ -78,7 +78,13 @@ const NotesDialog = (props) => {
   };
 
   return (
-    <Dialog onClose={handleClose} open={open} fullWidth maxWidth="lg">
+    <Dialog
+      onClose={handleClose}
+      open={open}
+      fullWidth
+      maxWidth="lg"
+      style={{ zIndex: 1500 }}
+    >
       <DialogTitle className={classes.title}>
         {newTitle}
         <IconButton className={classes.closeButton} onClick={handleClose}>

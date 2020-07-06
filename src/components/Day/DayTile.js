@@ -1,17 +1,29 @@
-import React, { useState } from 'react';
+/* eslint-disable no-nested-ternary */
+import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import Loader from 'react-loader-spinner';
 import DayButton from './DayButton';
 import DayDialog from './TABDayDialog';
 import { url } from '../constant';
 import Notification from '../notification';
+import { isLoadingTrue, isLoadingFalse } from '../../redux/actions';
+import { light } from '../../colors';
 
-const DayTile = ({ index, username, activeMonth, activeYear, token }) => {
-  const [currEvents, setCurrEvents] = useState([]);
-  const [open, setOpen] = useState(false);
-  const [openAlert, setOpenAlert] = useState(false);
-  const [message, setMessage] = useState('');
-  const [severity, setSeverity] = useState('success');
+const DayTile = ({
+  index,
+  username,
+  activeMonth,
+  activeYear,
+  token,
+  dispatch,
+  isLoading,
+}) => {
+  const [currEvents, setCurrEvents] = React.useState([]);
+  const [open, setOpen] = React.useState(false);
+  const [openAlert, setOpenAlert] = React.useState(false);
+  const [message, setMessage] = React.useState('');
+  const [severity, setSeverity] = React.useState('success');
 
   const fetchEvents = async (year, month, day) => {
     const response = await fetch(
@@ -57,10 +69,12 @@ const DayTile = ({ index, username, activeMonth, activeYear, token }) => {
 
   React.useEffect(() => {
     const getEvents = () => {
+      dispatch(isLoadingTrue());
       fetchEvents(activeYear, activeMonth, index)
         .then((data) => {
           setCurrEvents(data);
         })
+        .then(() => dispatch(isLoadingFalse()))
         .catch((err) => {
           setCurrEvents([]);
           setSeverity('error');
@@ -92,19 +106,29 @@ const DayTile = ({ index, username, activeMonth, activeYear, token }) => {
   };
   return (
     <>
-      <DayButton index={index} events={currEvents} handleOpen={handleOpen} />
-      <DayDialog
-        events={currEvents}
-        saveEvents={saveEvents}
-        handleClose={handleClose}
-        open={open}
-      />
-      <Notification
-        open={openAlert}
-        handleClose={handleCloseAlert}
-        severity={severity}
-        message={message}
-      />
+      {isLoading === 0 ? (
+        <>
+          <DayButton
+            index={index}
+            events={currEvents}
+            handleOpen={handleOpen}
+          />
+          <DayDialog
+            events={currEvents}
+            saveEvents={saveEvents}
+            handleClose={handleClose}
+            open={open}
+          />
+          <Notification
+            open={openAlert}
+            handleClose={handleCloseAlert}
+            severity={severity}
+            message={message}
+          />
+        </>
+      ) : index === 11 ? (
+        <Loader type="ThreeDots" color={light} height={80} width={80} />
+      ) : null}
     </>
   );
 };
@@ -115,6 +139,8 @@ DayTile.propTypes = {
   activeMonth: PropTypes.number.isRequired,
   token: PropTypes.string.isRequired,
   activeYear: PropTypes.number.isRequired,
+  isLoading: PropTypes.number.isRequired,
+  dispatch: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -122,6 +148,7 @@ const mapStateToProps = (state) => ({
   activeYear: state.activeYear,
   username: state.username,
   token: state.token,
+  isLoading: state.isLoading,
 });
 
 export default connect(mapStateToProps)(DayTile);

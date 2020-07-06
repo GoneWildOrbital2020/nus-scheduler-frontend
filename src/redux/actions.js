@@ -42,3 +42,15 @@ export const TOGGLE_LOGOUT = 'TOGGLE_LOGOUT';
 export const toggleLogout = () => ({
   type: TOGGLE_LOGOUT,
 });
+
+export const IS_LOADING_TRUE = 'IS_LOADING_TRUE';
+
+export const isLoadingTrue = () => ({
+  type: IS_LOADING_TRUE,
+});
+
+export const IS_LOADING_FALSE = 'IS_LOADING_FALSE';
+
+export const isLoadingFalse = () => ({
+  type: IS_LOADING_FALSE,
+});

@@ -6,7 +6,7 @@ import { light } from '../colors';
 const useStyles = makeStyles(() => ({
   button: {
     border: 0,
-    padding: 0,
+    padding: '1rem',
     margin: '1rem',
   },
   buttonInside: {
@@ -14,7 +14,7 @@ const useStyles = makeStyles(() => ({
     flexDirection: 'column',
     maxHeight: '20rem',
     height: '20rem',
-    width: 'calc((85vw - 10rem) / 4)',
+    width: 'calc((85vw - 18rem) / 4)',
   },
   buttonTitle: {
     fontWeight: 'bold',
