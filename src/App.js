@@ -17,6 +17,7 @@ import NotesGrid from './components/notesGrid';
 import NavbarDrawer from './components/NavbarDrawer';
 import EventGroup from './components/EventGroup';
 import Profile from './components/profile';
+import AutomaticLogout from './components/AutomaticLogout';
 import { accent } from './colors';
 
 /* eslint-disable no-underscore-dangle */
@@ -61,6 +62,7 @@ function App() {
               </div>
               <Footer />
             </div>
+            <AutomaticLogout />
           </Router>
         </Provider>
       </ThemeProvider>
