@@ -217,6 +217,7 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
         },
         day: date.getUTCDate(),
         month: date.getUTCMonth(),
+        year: date.getUTCFullYear(),
       }),
     };
     fetch(`${url}/events/${username}/${name}/${add.key}`, options)
@@ -280,13 +281,21 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
 
               <Grid container direction="column" style={{ margin: '1rem 0' }}>
                 {chunk(
-                  value.events.sort((a, b) =>
-                    monthIdx[a.day.month.month_name] !==
-                    monthIdx[b.day.month.month_name]
-                      ? monthIdx[a.day.month.month_name] -
+                  value.events.sort((a, b) => {
+                    if (a.day.month.year.index === b.day.month.year.index) {
+                      if (
+                        monthIdx[a.day.month.month_name] !==
                         monthIdx[b.day.month.month_name]
-                      : a.day.index - b.day.index,
-                  ),
+                      ) {
+                        return (
+                          monthIdx[a.day.month.month_name] -
+                          monthIdx[b.day.month.month_name]
+                        );
+                      }
+                      return a.day.index - b.day.index;
+                    }
+                    return a.day.month.year.index - b.day.month.year.index;
+                  }),
                   8,
                 ).map((row) => (
                   <Grid container item style={{ margin: '0 -0.5rem' }}>
@@ -304,7 +313,7 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
                           setCur({ key: value.id, ...event });
                         }}
                       >
-                        {`${event.day.index} ${event.day.month.month_name} 2020`}
+                        {`${event.day.index} ${event.day.month.month_name} ${event.day.month.year.index}`}
                       </Button>
                     ))}
                   </Grid>

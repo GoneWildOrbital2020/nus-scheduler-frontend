@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import { toggleLogin } from '../redux/actions';
 import { dark, light, accent } from '../colors';
 import Notification from './notification';
+import { url } from './constant';
 
 const useStyles = makeStyles({
   login: {
@@ -59,7 +60,7 @@ const Login = (props) => {
       email,
       password,
     };
-    fetch('http://localhost:8000/users/login/', {
+    fetch(`${url}/users/login/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
