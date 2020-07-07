@@ -29,12 +29,13 @@ export const addNumOfEvents = (val) => ({
 
 export const TOGGLE_LOGIN = 'TOGGLE_LOGIN';
 
-export const toggleLogin = (email, token, username, avatar) => ({
+export const toggleLogin = (email, token, username, avatar, logoutTime) => ({
   type: TOGGLE_LOGIN,
   email,
   token,
   username,
   avatar,
+  logoutTime,
 });
 
 export const TOGGLE_LOGOUT = 'TOGGLE_LOGOUT';

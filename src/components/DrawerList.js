@@ -67,6 +67,7 @@ const DrawerList = ({ dispatch, token, username, ...routeProps }) => {
     window.localStorage.setItem('isLoggedIn', false);
     window.localStorage.setItem('email', null);
     window.localStorage.setItem('avatar', null);
+    window.localStorage.setItem('logoutTime', null);
     dispatch(toggleLogout());
     window.location.replace('/login');
   };

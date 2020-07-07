@@ -74,12 +74,19 @@ const Login = (props) => {
         return res.json();
       })
       .then((json) => {
-        props.ToggleLogin(json.email, json.token, json.username, json.avatar);
+        props.ToggleLogin(
+          json.email,
+          json.token,
+          json.username,
+          json.avatar,
+          Date.parse(json.logout_time),
+        );
         window.localStorage.setItem('email', json.email);
         window.localStorage.setItem('token', json.token);
         window.localStorage.setItem('username', json.username);
         window.localStorage.setItem('avatar', json.avatar);
         window.localStorage.setItem('isLoggedIn', true);
+        window.localStorage.setItem('logoutTime', Date.parse(json.logout_time));
         setSeverity('success');
         setOpen(true);
         setMessage('Login successful!');

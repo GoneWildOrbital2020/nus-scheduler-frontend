@@ -20,6 +20,7 @@ const initalState = {
   token: window.localStorage.getItem('token'),
   email: window.localStorage.getItem('email'),
   avatar: window.localStorage.getItem('avatar'),
+  logoutTime: window.localStorage.getItem('logoutTime'),
   isLoading: 0,
 };
 
@@ -54,6 +55,7 @@ const reducer = (state = initalState, action) => {
         token: action.token,
         username: action.username,
         avatar: action.avatar,
+        logoutTime: action.logoutTime,
       };
     case TOGGLE_LOGOUT:
       return {
@@ -63,6 +65,7 @@ const reducer = (state = initalState, action) => {
         username: '',
         email: '',
         avatar: '',
+        logoutTime: null,
       };
     case IS_LOADING_TRUE:
       return {
