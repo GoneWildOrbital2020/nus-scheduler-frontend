@@ -30,7 +30,7 @@ import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import { accent, light, dark } from '../colors';
 import Notification from './notification';
-import { url } from './constant';
+import { url, monthProperties } from './constant';
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -141,10 +141,15 @@ const Upload = (props) => {
         file.forEach((element) => {
           const obj = {};
           const currFile = element.fields.file;
-          const date = element.fields.created_date;
+          const time = Date.parse(element.fields.created_date);
+          const date = new Date(time);
+          const day = date.getUTCDate();
+          const month = monthProperties[date.getUTCMonth()].name;
+          const year = date.getUTCFullYear();
+          const hourMinuteSecond = date.toTimeString().substring(0, 8);
           obj.identifier = element.fields.identifier;
           obj.name = element.fields.name;
-          obj.date = `${date.substring(0, 10)} ${date.substring(11, 19)}`;
+          obj.date = `${day} ${month} ${year} ${hourMinuteSecond}`;
           obj.fileType = currFile.substring(
             currFile.lastIndexOf('.') + 1,
             currFile.length,
@@ -155,10 +160,15 @@ const Upload = (props) => {
         image.forEach((element) => {
           const obj = {};
           const currImage = element.fields.image;
-          const date = element.fields.created_date;
+          const time = Date.parse(element.fields.created_date);
+          const date = new Date(time);
+          const day = date.getUTCDate();
+          const month = monthProperties[date.getUTCMonth()].name;
+          const year = date.getUTCFullYear();
+          const hourMinuteSecond = date.toTimeString().substring(0, 8);
           obj.identifier = element.fields.identifier;
           obj.name = element.fields.name;
-          obj.date = `${date.substring(0, 10)} ${date.substring(11, 19)}`;
+          obj.date = `${day} ${month} ${year} ${hourMinuteSecond}`;
           obj.fileType = currImage.substring(
             currImage.lastIndexOf('.') + 1,
             currImage.length,
