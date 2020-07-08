@@ -23,11 +23,63 @@ import { dark, light, accent } from '../colors';
 import { addNumOfEvents } from '../redux/actions';
 import './Customize.css';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   button: {
     color: light,
     backgroundColor: accent,
     marginLeft: '1rem',
+  },
+  paper: {
+    backgroundColor: light,
+    width: 'calc(85% - 8rem)',
+    [theme.breakpoints.down('md')]: {
+      width: 'calc(75% - 8rem)',
+    },
+    float: 'right',
+    margin: '1rem 2rem',
+    padding: '2rem',
+  },
+  paperActivity: {
+    width: 'max-width',
+    display: 'flex',
+    float: 'left',
+    margin: '2rem',
+    marginLeft: 'calc(2rem + 15%)',
+    [theme.breakpoints.down('md')]: {
+      marginLeft: 'calc(2rem + 25%)',
+    },
+    padding: '2rem',
+    backgroundColor: light,
+  },
+  loader: {
+    width: '85%',
+    [theme.breakpoints.down('md')]: {
+      width: '75%',
+    },
+    float: 'right',
+    display: 'flex',
+    justifyContent: 'center',
+  },
+  eventButton: {
+    color: light,
+    width: 'calc((100% - 8rem) / 8)',
+    [theme.breakpoints.down('md')]: {
+      width: 'calc((100% - 4rem) / 4)',
+    },
+    margin: '0.5rem',
+  },
+  bottomButtons: {
+    [theme.breakpoints.up('lg')]: {
+      display: 'flex',
+      float: 'right',
+    },
+    marginTop: '1rem',
+  },
+  calendar: {
+    alignSelf: 'center',
+    [theme.breakpoints.down('md')]: {
+      display: 'block',
+    },
   },
 }));
 
@@ -253,8 +305,7 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
           const newRep = { id, name: repName, events: [] };
           return state.concat([newRep]);
         }),
-      )
-      .then(console.log(events));
+      );
     setRepName('');
   };
 
@@ -263,15 +314,7 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
       {!events.empty ? (
         <>
           {events.map((value) => (
-            <Paper
-              style={{
-                backgroundColor: light,
-                width: 'calc(85% - 8rem)',
-                float: 'right',
-                margin: '1rem 2rem',
-                padding: '2rem',
-              }}
-            >
+            <Paper className={classes.paper}>
               <Typography
                 align="left"
                 style={{ fontSize: '1.5rem', color: dark, fontWeight: 'bold' }}
@@ -302,12 +345,8 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
                     {row.map((event) => (
                       <Button
                         variant="contained"
-                        style={{
-                          color: light,
-                          backgroundColor: event.color,
-                          width: 'calc((100% - 8rem) / 8)',
-                          margin: '0.5rem',
-                        }}
+                        style={{ backgroundColor: event.color }}
+                        className={classes.eventButton}
                         onClick={() => {
                           setOpen(true);
                           setCur({ key: value.id, ...event });
@@ -319,14 +358,12 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
                   </Grid>
                 ))}
               </Grid>
-              <div
-                style={{ float: 'right', display: 'flex', marginTop: '1rem' }}
-              >
+              <div className={classes.bottomButtons}>
                 <KeyboardDatePicker
                   value={date}
                   onChange={handleDateChange}
                   format="d MMM yyyy"
-                  style={{ alignSelf: 'center' }}
+                  className={classes.calendar}
                 />
                 <Button
                   onClick={handleAddDate({ key: value.id, ...value.events[0] })}
@@ -378,17 +415,7 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
               </div>
             </Paper>
           ))}
-          <Paper
-            style={{
-              width: 'max-width',
-              display: 'flex',
-              float: 'left',
-              margin: '2rem',
-              marginLeft: 'calc(2rem + 15%)',
-              padding: '2rem',
-              backgroundColor: light,
-            }}
-          >
+          <Paper className={classes.paperActivity}>
             <div
               style={{
                 display: 'flex',
@@ -670,14 +697,7 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
           </Dialog>
         </>
       ) : (
-        <div
-          style={{
-            width: '85%',
-            float: 'right',
-            display: 'flex',
-            justifyContent: 'center',
-          }}
-        >
+        <div className={classes.loader}>
           <Loader type="ThreeDots" color={light} height={80} width={80} />
         </div>
       )}

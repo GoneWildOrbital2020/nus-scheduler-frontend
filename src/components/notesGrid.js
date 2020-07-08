@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Grid, makeStyles, Typography, Button } from '@material-ui/core';
+import {
+  Grid,
+  makeStyles,
+  Typography,
+  Button,
+  useMediaQuery,
+} from '@material-ui/core';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Notes from './notes';
@@ -7,9 +13,12 @@ import { accent, light } from '../colors';
 import Notification from './notification';
 import { url } from './constant';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   container: {
     width: '85%',
+    [theme.breakpoints.down('md')]: {
+      width: '75%',
+    },
     float: 'right',
   },
   top: {
@@ -33,6 +42,7 @@ const useStyles = makeStyles(() => ({
     fontSize: '1rem',
     color: light,
     marginRight: '2rem',
+    marginTop: '0.5rem',
   },
 }));
 
@@ -42,10 +52,12 @@ const NotesGrid = (props) => {
   const [total, setTotal] = useState(0);
   const [notes, setNotes] = useState([]);
   const [rows, setRows] = useState([0]);
+  const [itemsPerRow, setItemsPerRow] = useState(4);
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState('');
   const [severity, setSeverity] = useState('success');
   const classes = useStyles();
+  const medium = useMediaQuery((theme) => theme.breakpoints.down('md'));
 
   const generateRows = (x) => {
     let rowCount = 0;
@@ -59,6 +71,7 @@ const NotesGrid = (props) => {
       newRows.push(i);
     }
     setRows(newRows);
+    setItemsPerRow(x);
   };
 
   const uploadNoteToDB = (identifier, title, text) => {
@@ -241,8 +254,12 @@ const NotesGrid = (props) => {
   }, []);
 
   useEffect(() => {
-    generateRows(4);
-  }, [count]);
+    if (medium) {
+      generateRows(2);
+    } else {
+      generateRows(4);
+    }
+  }, [count, medium]);
 
   return (
     <div className={classes.container}>
@@ -259,7 +276,10 @@ const NotesGrid = (props) => {
       </div>
       <Grid container direction="column" className={classes.grid}>
         {rows.map((element) => {
-          const sliced = notes.slice(element * 4, (element + 1) * 4);
+          const sliced = notes.slice(
+            element * itemsPerRow,
+            (element + 1) * itemsPerRow,
+          );
           return (
             <Grid container item className={classes.grid}>
               {sliced.map((obj) => {

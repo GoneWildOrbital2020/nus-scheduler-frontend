@@ -56,9 +56,12 @@ const tableIcons = {
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
 };
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     width: '85%',
+    [theme.breakpoints.down('md')]: {
+      width: '75%',
+    },
     margin: '1em auto',
     float: 'right',
   },
@@ -71,16 +74,21 @@ const useStyles = makeStyles(() => ({
   paper: {
     backgroundColor: `${light}`,
     margin: '2rem',
-    display: 'flex',
-    flexDirection: 'column',
     padding: '2rem',
-    width: 'max-content',
+    textAlign: 'left',
+    [theme.breakpoints.up('lg')]: {
+      display: 'flex',
+      flexDirection: 'column',
+      width: 'max-content',
+    },
   },
   buttons: {
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'space-around',
     alignItems: 'flex-end',
+    [theme.breakpoints.up('lg')]: {
+      justifyContent: 'space-around',
+    },
   },
   button: {
     backgroundColor: `${accent}`,
@@ -308,7 +316,8 @@ const Upload = (props) => {
             padding:'2rem 1rem',
           }}
           icons={tableIcons}
-          title={(            <Typography className={classes.typography}>
+          title={(
+            <Typography className={classes.typography}>
               Files & Images
             </Typography>
           )}

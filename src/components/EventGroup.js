@@ -7,6 +7,7 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
+  makeStyles,
   Typography,
   Toolbar,
 } from '@material-ui/core';
@@ -18,8 +19,29 @@ import Upload from './upload';
 import NotesGrid from './notesGrid';
 import { url } from './constant';
 
+const useStyles = makeStyles((theme) => ({
+  paperAnchorLeft: {
+    backgroundColor: light,
+    width: '15%',
+    [theme.breakpoints.down('md')]: {
+      width: '25%',
+    },
+  },
+  typography: {
+    fontSize: '2rem',
+    color: light,
+    fontWeight: 'bold',
+    width: '85%',
+    [theme.breakpoints.down('md')]: {
+      width: '75%',
+    },
+    float: 'right',
+  },
+}));
+
 const EventGroup = ({ name, path, username, token, ...routerProps }) => {
   const { history } = routerProps;
+  const classes = useStyles();
   const handleDeleteGroup = () => {
     const options = {
       method: 'DELETE',
@@ -33,7 +55,11 @@ const EventGroup = ({ name, path, username, token, ...routerProps }) => {
   };
   return (
     <>
-      <Drawer variant="permanent" anchor="left">
+      <Drawer
+        variant="permanent"
+        anchor="left"
+        classes={{ paperAnchorLeft: classes.paperAnchorLeft }}
+      >
         <Toolbar />
         <List>
           <Link to={`/events-group/${name}/customize`}>
@@ -74,17 +100,7 @@ const EventGroup = ({ name, path, username, token, ...routerProps }) => {
           </ListItem>
         </List>
       </Drawer>
-      <Typography
-        style={{
-          fontSize: '2rem',
-          color: light,
-          fontWeight: 'bold',
-          width: '85%',
-          float: 'right',
-        }}
-      >
-        {name}
-      </Typography>
+      <Typography className={classes.typography}>{name}</Typography>
       <Switch>
         <Route
           path={`${path}/customize`}
