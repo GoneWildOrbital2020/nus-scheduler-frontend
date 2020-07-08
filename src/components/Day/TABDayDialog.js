@@ -10,6 +10,7 @@ import {
   TextField,
   Typography,
   makeStyles,
+  useMediaQuery,
 } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
@@ -19,7 +20,7 @@ import { addNumOfEvents } from '../../redux/actions';
 import { dark, light, accent, medium } from '../../colors';
 import { colors } from '../constant';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   closeButton: {
     float: 'right',
     paddingTop: '0',
@@ -37,6 +38,11 @@ const useStyles = makeStyles(() => ({
   },
   buttonContainer2: {
     padding: '2rem',
+    [theme.breakpoints.down('xs')]: {
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'space-between',
+    },
   },
   panelSummary: {
     fontSize: '1.5rem',
@@ -48,6 +54,35 @@ const useStyles = makeStyles(() => ({
     padding: '1rem',
     display: 'flex',
     flexDirection: 'column',
+  },
+  deleteEventButton: {
+    flex: '1',
+    alignSelf: 'flex-end',
+    [theme.breakpoints.down('xs')]: {
+      alignSelf: 'flex-start',
+      marginTop: '1rem',
+    },
+    color: light,
+  },
+  saveChangesButton: {
+    [theme.breakpoints.up('sm')]: {
+      float: 'right',
+      position: 'relative',
+      marginLeft: '2rem',
+    },
+    [theme.breakpoints.down('xs')]: {
+      margin: '0 1rem 1rem 1rem',
+    },
+    color: light,
+  },
+  addEventButton: {
+    [theme.breakpoints.up('sm')]: {
+      float: 'right',
+    },
+    [theme.breakpoints.down('xs')]: {
+      margin: '1rem 1rem 0 1rem',
+    },
+    color: light,
   },
 }));
 
@@ -72,6 +107,8 @@ const DayDialog = ({
   const [value, setValue] = React.useState(0);
 
   const [tab, setTab] = React.useState(true);
+
+  const extraSmall = useMediaQuery((theme) => theme.breakpoints.down('xs'));
 
   const ref = React.useCallback((node) => {
     if (node && tab) {
@@ -265,18 +302,15 @@ const DayDialog = ({
                   colors={colors}
                   onChange={handleColorChange(event.index)}
                   styles={styles}
+                  width={extraSmall ? '150px' : '276px'}
                 />
                 <Button
                   autoFocus
                   variant="contained"
                   onClick={deleteEvent(event.index)}
                   color="primary"
-                  style={{
-                    flex: '1',
-                    alignSelf: 'flex-end',
-                    backgroundColor: accent,
-                    color: light,
-                  }}
+                  className={classes.deleteEventButton}
+                  style={{ backgroundColor: accent }}
                 >
                   Delete Event
                 </Button>
@@ -293,13 +327,8 @@ const DayDialog = ({
           variant="contained"
           onClick={shouldSave(true)}
           color="primary"
-          style={{
-            float: 'right',
-            position: 'relative',
-            marginLeft: '2rem',
-            backgroundColor: accent,
-            color: light,
-          }}
+          style={{ backgroundColor: accent }}
+          className={classes.saveChangesButton}
         >
           Save Changes
         </Button>
@@ -308,7 +337,8 @@ const DayDialog = ({
           variant="contained"
           onClick={addEvent}
           color="primary"
-          style={{ float: 'right', backgroundColor: accent, color: light }}
+          style={{ backgroundColor: accent }}
+          className={classes.addEventButton}
         >
           Add Event
         </Button>

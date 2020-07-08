@@ -15,11 +15,6 @@ Footer {
   flex-shrink: 0;
 }
 
-.MuiDrawer-paperAnchorRight {
-  background-color: #e4dfda !important;
-  width: 20%;
-}
-
 .MuiDrawer-paperAnchorLeft {
   background-color: #e4dfda !important;
   width: 15%;
