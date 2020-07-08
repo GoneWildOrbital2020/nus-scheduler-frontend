@@ -4,10 +4,22 @@ import { Button, Typography, makeStyles } from '@material-ui/core';
 import { LabelImportant } from '@material-ui/icons';
 import { light } from '../../colors';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   buttonRoot: {
     height: '12rem',
-    width: '13vw',
+    width: 'calc((100vw - 10rem)/7)',
+    [theme.breakpoints.down('md')]: {
+      width: 'calc((100vw - 7rem)/4)',
+      height: '15rem',
+    },
+    [theme.breakpoints.down('sm')]: {
+      width: 'calc((100vw - 5rem)/2)',
+      height: '18rem',
+    },
+    [theme.breakpoints.down('xs')]: {
+      width: 'calc(100vw - 4rem)',
+      height: '21rem',
+    },
     padding: '0',
     margin: '0.5rem',
   },
@@ -17,6 +29,15 @@ const useStyles = makeStyles(() => ({
   },
   buttonContainer: {
     height: '12rem',
+    [theme.breakpoints.down('md')]: {
+      height: '15rem',
+    },
+    [theme.breakpoints.down('sm')]: {
+      height: '18rem',
+    },
+    [theme.breakpoints.down('xs')]: {
+      height: '21rem',
+    },
     display: 'flex',
     flexDirection: 'column',
   },
