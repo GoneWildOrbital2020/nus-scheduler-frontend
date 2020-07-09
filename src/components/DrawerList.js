@@ -35,7 +35,6 @@ import { dark, light, accent } from '../colors';
 import { url } from './constant';
 import Notification from './notification';
 
-
 const useStyles = makeStyles(() => ({
   button: {
     color: light,
@@ -243,6 +242,7 @@ const DrawerList = ({ dispatch, token, username, ...routeProps }) => {
             required
             label="Name"
             fullWidth
+            variant="outlined"
           />
         </DialogContent>
         <DialogActions style={{ backgroundColor: light, padding: '1.5rem' }}>

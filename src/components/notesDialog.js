@@ -16,6 +16,7 @@ const useStyles = makeStyles(() => ({
   title: {
     backgroundColor: medium,
     color: light,
+    padding: '1rem 2rem',
   },
   inside: {
     backgroundColor: light,
@@ -32,6 +33,7 @@ const useStyles = makeStyles(() => ({
   },
   buttons: {
     display: 'flex',
+    float: 'right',
   },
   button: {
     color: light,
@@ -92,7 +94,7 @@ const NotesDialog = (props) => {
         </IconButton>
       </DialogTitle>
       <div className={classes.inside}>
-        <Typography className={classes.typography}>Title</Typography>
+        <Typography className={classes.typography}>Title:</Typography>
         <TextField
           variant="outlined"
           defaultValue={newTitle}
@@ -100,7 +102,7 @@ const NotesDialog = (props) => {
           className={classes.textField}
           onChange={handleChangeTitle}
         />
-        <Typography className={classes.typography}>Text</Typography>
+        <Typography className={classes.typography}>Text:</Typography>
         <TextField
           variant="outlined"
           defaultValue={newText}
