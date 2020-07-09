@@ -374,6 +374,7 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
                   onChange={handleDateChange}
                   format="d MMM yyyy"
                   className={classes.calendar}
+                  inputVariant="outlined"
                 />
                 <Button
                   onClick={handleAddDate({ key: value.id, ...value.events[0] })}
@@ -496,6 +497,7 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
                 fullWidth
                 defaultValue={cur.title}
                 onChange={handleChange('title')}
+                variant="outlined"
               />
               <Typography
                 style={{
@@ -513,6 +515,7 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
                 rowsMax={5}
                 defaultValue={cur.description}
                 onChange={handleChange('description')}
+                variant="outlined"
               />
               <Typography
                 style={{
@@ -527,6 +530,7 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
                 fullWidth
                 defaultValue={cur.start}
                 onChange={handleChange('start')}
+                variant="outlined"
               />
               <Typography
                 style={{
@@ -541,6 +545,7 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
                 fullWidth
                 defaultValue={cur.end}
                 onChange={handleChange('end')}
+                variant="outlined"
               />
               <Typography
                 style={{
@@ -555,9 +560,10 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
                 fullWidth
                 defaultValue={cur.location}
                 onChange={handleChange('location')}
+                variant="outlined"
               />
               <Typography
-                style={{ fontWeight: 'bold', padding: '1rem 0', color: dark }}
+                style={{ fontWeight: 'bold', paddingTop: '1rem', color: dark }}
               >
                 Color:
               </Typography>
@@ -569,7 +575,10 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
               />
             </DialogContent>
             <DialogActions
-              style={{ backgroundColor: light, padding: '1.5rem' }}
+              style={{
+                backgroundColor: light,
+                padding: '0.5rem 1.5rem 2rem 1.5rem',
+              }}
             >
               <Button
                 onClick={handleSave}
@@ -621,6 +630,7 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
                 fullWidth
                 defaultValue={cur.title}
                 onChange={handleChange('title')}
+                variant="outlined"
               />
               <Typography
                 style={{
@@ -638,6 +648,7 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
                 rowsMax={5}
                 defaultValue={cur.description}
                 onChange={handleChange('description')}
+                variant="outlined"
               />
               <Typography
                 style={{
@@ -652,6 +663,7 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
                 fullWidth
                 defaultValue={cur.start}
                 onChange={handleChange('start')}
+                variant="outlined"
               />
               <Typography
                 style={{
@@ -666,6 +678,7 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
                 fullWidth
                 defaultValue={cur.end}
                 onChange={handleChange('end')}
+                variant="outlined"
               />
               <Typography
                 style={{
@@ -680,9 +693,10 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
                 fullWidth
                 defaultValue={cur.location}
                 onChange={handleChange('location')}
+                variant="outlined"
               />
               <Typography
-                style={{ fontWeight: 'bold', padding: '1rem 0', color: dark }}
+                style={{ fontWeight: 'bold', paddingTop: '1rem', color: dark }}
               >
                 Color:
               </Typography>
@@ -694,7 +708,10 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
               />
             </DialogContent>
             <DialogActions
-              style={{ backgroundColor: light, padding: '1.5rem' }}
+              style={{
+                backgroundColor: light,
+                padding: '0.5rem 1.5rem 2rem 1.5rem',
+              }}
             >
               <Button
                 onClick={handleSaveAll}

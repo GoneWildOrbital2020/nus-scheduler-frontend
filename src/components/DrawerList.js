@@ -243,6 +243,7 @@ const DrawerList = ({ dispatch, token, username, ...routeProps }) => {
             required
             label="Name"
             fullWidth
+            variant="outlined"
           />
         </DialogContent>
         <DialogActions style={{ backgroundColor: light, padding: '1.5rem' }}>

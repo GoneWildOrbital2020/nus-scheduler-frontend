@@ -12,13 +12,20 @@ import {
   Typography,
   Toolbar,
 } from '@material-ui/core';
-import { Folder, Note, Delete, EventNote } from '@material-ui/icons';
+import {
+  Folder,
+  Note,
+  Delete,
+  EventNote,
+  Assignment,
+} from '@material-ui/icons';
 import { connect } from 'react-redux';
 import { dark, light } from '../colors';
 import Customize from './Customize';
 import Upload from './upload';
 import NotesGrid from './notesGrid';
 import { url } from './constant';
+import Tasks from './Tasks';
 
 const useStyles = makeStyles((theme) => ({
   paperAnchorLeft: {
@@ -94,6 +101,14 @@ const EventGroup = ({ name, path, username, token, ...routerProps }) => {
               <ListItemText primary="Notes" style={{ color: dark }} />
             </ListItem>
           </Link>
+          <Link to={`/events-group/${name}/tasks`}>
+            <ListItem button divider>
+              <ListItemIcon>
+                <Assignment style={{ color: dark }} />
+              </ListItemIcon>
+              <ListItemText primary="Tasks" style={{ color: dark }} />
+            </ListItem>
+          </Link>
           <ListItem button divider onClick={handleDeleteGroup}>
             <ListItemIcon>
               <Delete style={{ color: dark }} />
@@ -131,6 +146,7 @@ const EventGroup = ({ name, path, username, token, ...routerProps }) => {
           path={`${path}/notes`}
           render={() => <NotesGrid name={name} />}
         />
+        <Route path={`${path}/tasks`} render={() => <Tasks name={name} />} />
       </Switch>
     </>
   );

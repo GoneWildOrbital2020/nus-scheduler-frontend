@@ -51,7 +51,8 @@ const useStyles = makeStyles((theme) => ({
     height: '3rem',
   },
   container: {
-    padding: '1rem',
+    padding: '2rem',
+    paddingTop: '1rem',
     display: 'flex',
     flexDirection: 'column',
   },
@@ -233,6 +234,7 @@ const DayDialog = ({
                   fullWidth
                   defaultValue={event.title}
                   onChange={handleChange(event.index, 'title')}
+                  variant="outlined"
                 />
                 <Typography
                   style={{
@@ -246,9 +248,10 @@ const DayDialog = ({
                 <TextField
                   fullWidth
                   multiline
-                  rows={2}
+                  rows={3}
                   defaultValue={event.description}
                   onChange={handleChange(event.index, 'description')}
+                  variant="outlined"
                 />
                 <Typography
                   style={{
@@ -263,6 +266,7 @@ const DayDialog = ({
                   fullWidth
                   defaultValue={event.start}
                   onChange={handleChange(event.index, 'start')}
+                  variant="outlined"
                 />
                 <Typography
                   style={{
@@ -277,6 +281,7 @@ const DayDialog = ({
                   fullWidth
                   defaultValue={event.end}
                   onChange={handleChange(event.index, 'end')}
+                  variant="outlined"
                 />
                 <Typography
                   style={{
@@ -291,9 +296,14 @@ const DayDialog = ({
                   fullWidth
                   defaultValue={event.location}
                   onChange={handleChange(event.index, 'location')}
+                  variant="outlined"
                 />
                 <Typography
-                  style={{ fontWeight: 'bold', padding: '1rem 0', color: dark }}
+                  style={{
+                    fontWeight: 'bold',
+                    paddingTop: '1rem',
+                    color: dark,
+                  }}
                 >
                   Color:
                 </Typography>
