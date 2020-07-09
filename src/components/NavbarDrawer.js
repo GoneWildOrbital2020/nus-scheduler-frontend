@@ -1,9 +1,10 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import { Drawer, Toolbar, makeStyles } from '@material-ui/core';
+import { Drawer, Toolbar, makeStyles, useMediaQuery } from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
 import Navbar from './navbar';
 import DrawerList from './DrawerList';
+import DrawerMobile from './DrawerMobile';
 import { light } from '../colors';
 
 const useStyles = makeStyles((theme) => ({
@@ -24,6 +25,7 @@ const useStyles = makeStyles((theme) => ({
 
 const NavbarDrawer = ({ location }) => {
   const classes = useStyles();
+  const extraSmall = useMediaQuery((theme) => theme.breakpoints.down('xs'));
   const [drawerOpen, setDrawerOpen] = React.useState(false);
   const toggleDrawer = () => setDrawerOpen((state) => !state);
 
@@ -38,7 +40,11 @@ const NavbarDrawer = ({ location }) => {
         classes={{ paperAnchorRight: classes.paperAnchorRight }}
       >
         <Toolbar style={{ minHeight: '75px' }} />
-        <DrawerList />
+        {extraSmall ? (
+          <DrawerMobile moduleName={location.pathname.split('/')[2]} />
+        ) : (
+          <DrawerList />
+        )}
       </Drawer>
     </>
   );

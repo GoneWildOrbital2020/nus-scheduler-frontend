@@ -8,6 +8,7 @@ import {
   ListItemIcon,
   ListItemText,
   makeStyles,
+  useMediaQuery,
   Typography,
   Toolbar,
 } from '@material-ui/core';
@@ -35,6 +36,9 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('md')]: {
       width: '75%',
     },
+    [theme.breakpoints.down('xs')]: {
+      width: '100%',
+    },
     float: 'right',
   },
 }));
@@ -42,6 +46,7 @@ const useStyles = makeStyles((theme) => ({
 const EventGroup = ({ name, path, username, token, ...routerProps }) => {
   const { history } = routerProps;
   const classes = useStyles();
+  const extraSmall = useMediaQuery((theme) => theme.breakpoints.down('xs'));
   const handleDeleteGroup = () => {
     const options = {
       method: 'DELETE',
@@ -53,7 +58,7 @@ const EventGroup = ({ name, path, username, token, ...routerProps }) => {
     fetch(`${url}/events/${username}/${name}`, options);
     history.replace('/');
   };
-  return (
+  return !extraSmall ? (
     <>
       <Drawer
         variant="permanent"
@@ -100,6 +105,21 @@ const EventGroup = ({ name, path, username, token, ...routerProps }) => {
           </ListItem>
         </List>
       </Drawer>
+      <Typography className={classes.typography}>{name}</Typography>
+      <Switch>
+        <Route
+          path={`${path}/customize`}
+          render={() => <Customize name={name} />}
+        />
+        <Route path={`${path}/uploads`} render={() => <Upload name={name} />} />
+        <Route
+          path={`${path}/notes`}
+          render={() => <NotesGrid name={name} />}
+        />
+      </Switch>
+    </>
+  ) : (
+    <>
       <Typography className={classes.typography}>{name}</Typography>
       <Switch>
         <Route

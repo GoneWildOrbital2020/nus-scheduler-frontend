@@ -18,6 +18,9 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('md')]: {
       width: 'calc((75vw - 10rem) / 2)',
     },
+    [theme.breakpoints.down('xs')]: {
+      width: 'calc(100vw - 6rem)',
+    },
   },
   buttonTitle: {
     fontWeight: 'bold',

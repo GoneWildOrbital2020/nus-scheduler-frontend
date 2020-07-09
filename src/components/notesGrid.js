@@ -19,11 +19,20 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('md')]: {
       width: '75%',
     },
+    [theme.breakpoints.down('xs')]: {
+      width: '100%',
+    },
     float: 'right',
   },
   top: {
     height: '4rem',
     maxHeight: '6rem',
+    [theme.breakpoints.down('xs')]: {
+      display: 'flex',
+      flexDirection: 'column',
+      maxHeight: '8rem',
+      height: '6.5rem',
+    },
   },
   title: {
     display: 'inline-block',
@@ -36,13 +45,17 @@ const useStyles = makeStyles((theme) => ({
     margin: '0 0.5rem',
   },
   button: {
-    position: 'absolute',
-    right: 0,
-    display: 'inline-block',
-    fontSize: '1rem',
     color: light,
-    marginRight: '2rem',
-    marginTop: '0.5rem',
+    width: '50%',
+    margin: '0.5rem auto',
+    [theme.breakpoints.up('sm')]: {
+      position: 'absolute',
+      right: 0,
+      display: 'inline-block',
+      fontSize: '1rem',
+      marginRight: '2rem',
+      marginTop: '0.5rem',
+    },
   },
 }));
 
@@ -58,6 +71,7 @@ const NotesGrid = (props) => {
   const [severity, setSeverity] = useState('success');
   const classes = useStyles();
   const medium = useMediaQuery((theme) => theme.breakpoints.down('md'));
+  const extraSmall = useMediaQuery((theme) => theme.breakpoints.down('xs'));
 
   const generateRows = (x) => {
     let rowCount = 0;
@@ -254,12 +268,14 @@ const NotesGrid = (props) => {
   }, []);
 
   useEffect(() => {
-    if (medium) {
+    if (extraSmall) {
+      generateRows(1);
+    } else if (!extraSmall && medium) {
       generateRows(2);
     } else {
       generateRows(4);
     }
-  }, [count, medium]);
+  }, [count, medium, extraSmall]);
 
   return (
     <div className={classes.container}>

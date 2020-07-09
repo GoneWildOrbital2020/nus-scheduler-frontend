@@ -15,11 +15,6 @@ Footer {
   flex-shrink: 0;
 }
 
-/* .MuiDrawer-paperAnchorLeft {
-  background-color: #e4dfda !important;
-  width: 15%;
-} */
-
 ::-webkit-scrollbar {
   display: none;
 }
@@ -32,11 +27,6 @@ a {
 Link {
   text-decoration: none;
   color: white;
-}
-
-.MTableToolbar-root-171 {
-  padding-left: 1rem !important;
-  padding-right: 1rem !important;
 }
 
 .MuiInput-underline::after {

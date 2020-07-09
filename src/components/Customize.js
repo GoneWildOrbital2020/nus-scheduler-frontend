@@ -35,6 +35,9 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('md')]: {
       width: 'calc(75% - 8rem)',
     },
+    [theme.breakpoints.down('xs')]: {
+      width: 'calc(100% - 8rem)',
+    },
     float: 'right',
     margin: '1rem 2rem',
     padding: '2rem',
@@ -48,6 +51,9 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('md')]: {
       marginLeft: 'calc(2rem + 25%)',
     },
+    [theme.breakpoints.down('xs')]: {
+      marginLeft: '2rem',
+    },
     padding: '2rem',
     backgroundColor: light,
   },
@@ -55,6 +61,9 @@ const useStyles = makeStyles((theme) => ({
     width: '85%',
     [theme.breakpoints.down('md')]: {
       width: '75%',
+    },
+    [theme.breakpoints.down('xs')]: {
+      width: '100%',
     },
     float: 'right',
     display: 'flex',
@@ -65,6 +74,9 @@ const useStyles = makeStyles((theme) => ({
     width: 'calc((100% - 8rem) / 8)',
     [theme.breakpoints.down('md')]: {
       width: 'calc((100% - 4rem) / 4)',
+    },
+    [theme.breakpoints.down('xs')]: {
+      width: 'calc((100% - 2rem) / 2)',
     },
     margin: '0.5rem',
   },
@@ -232,7 +244,6 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
   };
 
   const handleDeleteActivity = (key) => () => {
-    console.log(key);
     setEvents((state) => state.filter((rep) => rep.id !== key));
     const options = {
       method: 'DELETE',
@@ -249,7 +260,6 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
   const handleDateChange = (value) => setDate(value);
 
   const handleAddDate = (add) => () => {
-    console.log(add);
     const options = {
       method: 'POST',
       headers: {
