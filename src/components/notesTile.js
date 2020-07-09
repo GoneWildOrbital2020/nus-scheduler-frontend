@@ -3,7 +3,7 @@ import { makeStyles, Button, Typography } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import { light } from '../colors';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   button: {
     border: 0,
     padding: '1rem',
@@ -15,6 +15,12 @@ const useStyles = makeStyles(() => ({
     maxHeight: '20rem',
     height: '20rem',
     width: 'calc((85vw - 18rem) / 4)',
+    [theme.breakpoints.down('md')]: {
+      width: 'calc((75vw - 10rem) / 2)',
+    },
+    [theme.breakpoints.down('xs')]: {
+      width: 'calc(100vw - 6rem)',
+    },
   },
   buttonTitle: {
     fontWeight: 'bold',

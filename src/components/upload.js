@@ -7,10 +7,11 @@ import {
   Paper,
   IconButton,
   Typography,
+  useMediaQuery,
 } from '@material-ui/core';
 import GetAppIcon from '@material-ui/icons/GetApp';
 import DeleteIcon from '@material-ui/icons/Delete';
-import MaterialTable from 'material-table';
+import MaterialTable, { MTableToolbar } from 'material-table';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import AddBox from '@material-ui/icons/AddBox';
@@ -56,9 +57,15 @@ const tableIcons = {
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
 };
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     width: '85%',
+    [theme.breakpoints.down('md')]: {
+      width: '75%',
+    },
+    [theme.breakpoints.down('xs')]: {
+      width: '100%',
+    },
     margin: '1em auto',
     float: 'right',
   },
@@ -71,32 +78,66 @@ const useStyles = makeStyles(() => ({
   paper: {
     backgroundColor: `${light}`,
     margin: '2rem',
-    display: 'flex',
-    flexDirection: 'column',
     padding: '2rem',
-    width: 'max-content',
+    textAlign: 'left',
+    [theme.breakpoints.up('lg')]: {
+      display: 'flex',
+      flexDirection: 'column',
+      width: 'max-content',
+    },
   },
   buttons: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'flex-end',
+    [theme.breakpoints.up('sm')]: {
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'flex-end',
+    },
+    [theme.breakpoints.up('lg')]: {
+      justifyContent: 'space-around',
+    },
   },
   button: {
     backgroundColor: `${accent}`,
     color: `${light}`,
   },
-  textField: {},
+  textField: {
+    [theme.breakpoints.down('xs')]: {
+      display: 'block',
+    },
+  },
   typography: {
     fontSize: '1.5rem',
+    [theme.breakpoints.down('xs')]: {
+      fontSize: '1rem',
+    },
     fontWeight: 'bold',
     color: dark,
+  },
+  typography2: {
+    fontSize: '1.5rem',
+    [theme.breakpoints.down('xs')]: {
+      fontSize: '1rem',
+    },
+    fontWeight: 'bold',
+    marginBottom: '1rem',
+    alignSelf: 'flex-start',
+  },
+  gutters: {
+    paddingLeft: '0',
+    paddingRight: '0',
+    [theme.breakpoints.up('md')]: {
+      paddingLeft: '1rem',
+    },
+  },
+  searchField: {
+    paddingLeft: '0',
   },
 }));
 
 const Upload = (props) => {
   const { token, username, name: groupName } = props;
   const classes = useStyles();
+  const extraSmall = useMediaQuery((theme) => theme.breakpoints.down('xs'));
   const [name, setName] = useState('');
   const [tableData, setTableData] = useState([]);
   const [total, setTotal] = useState(0);
@@ -305,79 +346,129 @@ const Upload = (props) => {
         <MaterialTable
           style={{
             backgroundColor: `${light}`,
-            padding:'2rem 1rem',
+            padding: '2rem 1rem',
           }}
           icons={tableIcons}
-          title={(            <Typography className={classes.typography}>
+          title={(
+            <Typography className={classes.typography}>
               Files & Images
             </Typography>
           )}
-          columns={[
-            {
-              title: 'Name',
-              field: 'name',
-              headerStyle: {
-                backgroundColor: `${light}`,
-                fontWeight: 'bold',
-              },
-            },
-            {
-              title: 'Date',
-              field: 'date',
-              headerStyle: {
-                backgroundColor: `${light}`,
-                fontWeight: 'bold',
-              },
-            },
-            {
-              title: 'File Type',
-              field: 'fileType',
-              headerStyle: {
-                backgroundColor: `${light}`,
-                fontWeight: 'bold',
-              },
-            },
-            {
-              title: 'Actions',
-              field: 'download',
-              headerStyle: {
-                backgroundColor: `${light}`,
-                fontWeight: 'bold',
-              },
-              render: (rowData) => {
-                const handleRedirect = (event) => {
-                  event.preventDefault();
-                  window.open(rowData.download);
-                };
-                return (
-                  <>
-                    <IconButton onClick={handleRedirect}>
-                      <GetAppIcon />
-                    </IconButton>
-                    <IconButton
-                      onClick={() => {
-                        handleDelete(rowData);
-                      }}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  </>
-                );
-              },
-            },
-          ]}
+          columns={
+            !extraSmall
+              ? [
+                  {
+                    title: 'Name',
+                    field: 'name',
+                    headerStyle: {
+                      backgroundColor: `${light}`,
+                      fontWeight: 'bold',
+                    },
+                  },
+                  {
+                    title: 'Date',
+                    field: 'date',
+                    headerStyle: {
+                      backgroundColor: `${light}`,
+                      fontWeight: 'bold',
+                    },
+                  },
+                  {
+                    title: 'File Type',
+                    field: 'fileType',
+                    headerStyle: {
+                      backgroundColor: `${light}`,
+                      fontWeight: 'bold',
+                    },
+                  },
+                  {
+                    title: 'Actions',
+                    field: 'download',
+                    headerStyle: {
+                      backgroundColor: `${light}`,
+                      fontWeight: 'bold',
+                    },
+                    render: (rowData) => {
+                      const handleRedirect = (event) => {
+                        event.preventDefault();
+                        window.open(rowData.download);
+                      };
+                      return (
+                        <>
+                          <IconButton onClick={handleRedirect}>
+                            <GetAppIcon />
+                          </IconButton>
+                          <IconButton
+                            onClick={() => {
+                              handleDelete(rowData);
+                            }}
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                        </>
+                      );
+                    },
+                  },
+                ]
+              : [
+                  {
+                    title: 'Name',
+                    field: 'name',
+                    headerStyle: {
+                      backgroundColor: `${light}`,
+                      fontWeight: 'bold',
+                    },
+                  },
+                  {
+                    title: 'Actions',
+                    field: 'download',
+                    headerStyle: {
+                      backgroundColor: `${light}`,
+                      fontWeight: 'bold',
+                    },
+                    render: (rowData) => {
+                      const handleRedirect = (event) => {
+                        event.preventDefault();
+                        window.open(rowData.download);
+                      };
+                      return (
+                        <>
+                          <IconButton
+                            onClick={handleRedirect}
+                            style={{ padding: '0.25rem' }}
+                          >
+                            <GetAppIcon />
+                          </IconButton>
+                          <IconButton
+                            onClick={() => {
+                              handleDelete(rowData);
+                            }}
+                            style={{ padding: '0.25rem' }}
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                        </>
+                      );
+                    },
+                  },
+                ]
+          }
+          components={{
+            Toolbar: (propsTable) => (
+              <MTableToolbar
+                classes={{
+                  root: classes.gutters,
+                  searchField: classes.searchField,
+                }}
+                {...propsTable}
+              />
+            ),
+          }}
           data={[...tableData]}
         />
       </div>
       <Paper className={classes.paper}>
-        <Typography
-          style={{
-            fontSize: '1.5rem',
-            fontWeight: 'bold',
-            marginBottom: '1rem',
-            alignSelf: 'flex-start',
-          }}
-        >
+        <Typography className={classes.typography2}>
           Upload Files & Images
         </Typography>
         <div className={classes.buttons}>
@@ -400,7 +491,16 @@ const Upload = (props) => {
               className={classes.button}
               component="span"
               disabled={!name}
-              style={{ margin: '0 1rem' }}
+              style={
+                extraSmall
+                  ? {
+                      margin: '1rem 0',
+                      display: 'block',
+                      width: '75%',
+                      textAlign: 'center',
+                    }
+                  : { margin: '0 1rem' }
+              }
             >
               Upload Image
             </Button>
@@ -417,6 +517,7 @@ const Upload = (props) => {
               className={classes.button}
               component="span"
               disabled={!name}
+              style={extraSmall ? { width: '75%', textAlign: 'center' } : {}}
             >
               Upload File
             </Button>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Grid } from '@material-ui/core';
+import { Grid, useMediaQuery } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { groupBy } from 'lodash';
 import Loader from 'react-loader-spinner';
@@ -10,11 +10,23 @@ import Notification from './notification';
 import { light } from '../colors';
 
 const Month = ({ activeMonth, activeYear, username, token }) => {
+  const generateRows = (num) => {
+    const rows = [];
+    for (let i = 0; i < num; i += 1) {
+      rows.push(i);
+    }
+    return rows;
+  };
+
   const [isLeap, setIsLeap] = useState(false);
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState('');
   const [severity, setSeverity] = useState('success');
-  const [currEvents, setCurrEvents] = React.useState({ empty: true });
+  const [currEvents, setCurrEvents] = useState({ empty: true });
+  const [itemsPerRow, setItemsPerRow] = useState(7);
+  const medium = useMediaQuery((theme) => theme.breakpoints.down('md'));
+  const small = useMediaQuery((theme) => theme.breakpoints.down('sm'));
+  const extraSmall = useMediaQuery((theme) => theme.breakpoints.down('xs'));
 
   const fetchEvents = async () => {
     const response = await fetch(
@@ -48,7 +60,6 @@ const Month = ({ activeMonth, activeYear, username, token }) => {
     };
     getEvents();
   }, [activeMonth]);
-  const rows = [0, 1, 2, 3, 4];
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -78,19 +89,39 @@ const Month = ({ activeMonth, activeYear, username, token }) => {
       });
   }, [activeYear]);
 
+  useEffect(() => {
+    if (extraSmall) {
+      setItemsPerRow(1);
+    } else if (!extraSmall && small) {
+      setItemsPerRow(2);
+    } else if (!small && medium) {
+      setItemsPerRow(4);
+    } else {
+      setItemsPerRow(7);
+    }
+  }, [medium, small, extraSmall]);
+
   return (
     <>
       {!currEvents.empty ? (
         <>
           <Grid container direction="column" style={{ width: 'max-content' }}>
-            {rows.map((row) => {
+            {generateRows(
+              isLeap
+                ? Math.ceil(monthPropertiesLeap[activeMonth].len / itemsPerRow)
+                : Math.ceil(monthProperties[activeMonth].len / itemsPerRow),
+            ).map((row) => {
               const cols = [];
               let upperBound = monthProperties[activeMonth].len;
               if (isLeap) {
                 upperBound = monthPropertiesLeap[activeMonth].len;
               }
-              for (let i = 1; i <= 7 && row * 7 + i <= upperBound; i += 1) {
-                cols.push(row * 7 + i);
+              for (
+                let i = 1;
+                i <= itemsPerRow && row * itemsPerRow + i <= upperBound;
+                i += 1
+              ) {
+                cols.push(row * itemsPerRow + i);
               }
               return (
                 <Grid container item style={{ width: 'max-content' }}>

@@ -7,6 +7,8 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
+  makeStyles,
+  useMediaQuery,
   Typography,
   Toolbar,
 } from '@material-ui/core';
@@ -25,8 +27,33 @@ import NotesGrid from './notesGrid';
 import { url } from './constant';
 import Tasks from './Tasks';
 
+const useStyles = makeStyles((theme) => ({
+  paperAnchorLeft: {
+    backgroundColor: light,
+    width: '15%',
+    [theme.breakpoints.down('md')]: {
+      width: '25%',
+    },
+  },
+  typography: {
+    fontSize: '2rem',
+    color: light,
+    fontWeight: 'bold',
+    width: '85%',
+    [theme.breakpoints.down('md')]: {
+      width: '75%',
+    },
+    [theme.breakpoints.down('xs')]: {
+      width: '100%',
+    },
+    float: 'right',
+  },
+}));
+
 const EventGroup = ({ name, path, username, token, ...routerProps }) => {
   const { history } = routerProps;
+  const classes = useStyles();
+  const extraSmall = useMediaQuery((theme) => theme.breakpoints.down('xs'));
   const handleDeleteGroup = () => {
     const options = {
       method: 'DELETE',
@@ -38,9 +65,13 @@ const EventGroup = ({ name, path, username, token, ...routerProps }) => {
     fetch(`${url}/events/${username}/${name}`, options);
     history.replace('/');
   };
-  return (
+  return !extraSmall ? (
     <>
-      <Drawer variant="permanent" anchor="left">
+      <Drawer
+        variant="permanent"
+        anchor="left"
+        classes={{ paperAnchorLeft: classes.paperAnchorLeft }}
+      >
         <Toolbar />
         <List>
           <Link to={`/events-group/${name}/customize`}>
@@ -89,17 +120,22 @@ const EventGroup = ({ name, path, username, token, ...routerProps }) => {
           </ListItem>
         </List>
       </Drawer>
-      <Typography
-        style={{
-          fontSize: '2rem',
-          color: light,
-          fontWeight: 'bold',
-          width: '85%',
-          float: 'right',
-        }}
-      >
-        {name}
-      </Typography>
+      <Typography className={classes.typography}>{name}</Typography>
+      <Switch>
+        <Route
+          path={`${path}/customize`}
+          render={() => <Customize name={name} />}
+        />
+        <Route path={`${path}/uploads`} render={() => <Upload name={name} />} />
+        <Route
+          path={`${path}/notes`}
+          render={() => <NotesGrid name={name} />}
+        />
+      </Switch>
+    </>
+  ) : (
+    <>
+      <Typography className={classes.typography}>{name}</Typography>
       <Switch>
         <Route
           path={`${path}/customize`}
