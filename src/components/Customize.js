@@ -13,7 +13,7 @@ import {
   makeStyles,
   IconButton,
 } from '@material-ui/core';
-import { KeyboardDatePicker } from '@material-ui/pickers';
+import { DatePicker, TimePicker } from '@material-ui/pickers';
 import { chunk } from 'lodash';
 import { TwitterPicker } from 'react-color';
 import Loader from 'react-loader-spinner';
@@ -57,12 +57,17 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
         setEvents(data.rep.sort((a, b) => a.id - b.id));
       });
   }, [name]);
-
+  console.log(events);
   const [open, setOpen] = React.useState(false);
   const [cur, setCur] = React.useState({});
 
   const handleChange = (type) => (e) => {
     const val = e.target.value;
+    setCur((state) => ({ ...state, [type]: val }));
+  };
+
+  const handleDateChange = (type) => (e) => {
+    const val = e;
     setCur((state) => ({ ...state, [type]: val }));
   };
 
@@ -194,7 +199,7 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
 
   const [date, setDate] = React.useState(new Date());
 
-  const handleDateChange = (value) => setDate(value);
+  const handleDate = (value) => setDate(value);
 
   const handleAddDate = (add) => () => {
     console.log(add);
@@ -215,9 +220,9 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
           location: add.location,
           color: add.color,
         },
-        day: date.getUTCDate(),
-        month: date.getUTCMonth(),
-        year: date.getUTCFullYear(),
+        day: date.getDate(),
+        month: date.getMonth(),
+        year: date.getFullYear(),
       }),
     };
     fetch(`${url}/events/${username}/${name}/${add.key}`, options)
@@ -271,6 +276,7 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
                 margin: '1rem 2rem',
                 padding: '2rem',
               }}
+              key={value.id}
             >
               <Typography
                 align="left"
@@ -282,19 +288,13 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
               <Grid container direction="column" style={{ margin: '1rem 0' }}>
                 {chunk(
                   value.events.sort((a, b) => {
-                    if (a.day.month.year.index === b.day.month.year.index) {
-                      if (
-                        monthIdx[a.day.month.month_name] !==
-                        monthIdx[b.day.month.month_name]
-                      ) {
-                        return (
-                          monthIdx[a.day.month.month_name] -
-                          monthIdx[b.day.month.month_name]
-                        );
+                    if (a.year === b.year) {
+                      if (monthIdx[a.month] !== monthIdx[b.month]) {
+                        return monthIdx[a.month] - monthIdx[b.month];
                       }
-                      return a.day.index - b.day.index;
+                      return a.day - b.day;
                     }
-                    return a.day.month.year.index - b.day.month.year.index;
+                    return a.year - b.year;
                   }),
                   8,
                 ).map((row) => (
@@ -312,8 +312,9 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
                           setOpen(true);
                           setCur({ key: value.id, ...event });
                         }}
+                        key={event.id}
                       >
-                        {`${event.day.index} ${event.day.month.month_name} ${event.day.month.year.index}`}
+                        {`${event.day} ${event.month} ${event.year}`}
                       </Button>
                     ))}
                   </Grid>
@@ -322,9 +323,9 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
               <div
                 style={{ float: 'right', display: 'flex', marginTop: '1rem' }}
               >
-                <KeyboardDatePicker
+                <DatePicker
                   value={date}
-                  onChange={handleDateChange}
+                  onChange={handleDate}
                   format="d MMM yyyy"
                   style={{ alignSelf: 'center' }}
                   inputVariant="outlined"
@@ -489,11 +490,12 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
               >
                 Start Time:
               </Typography>
-              <TextField
+              <TimePicker
                 fullWidth
-                defaultValue={cur.start}
-                onChange={handleChange('start')}
-                variant="outlined"
+                value={cur.start}
+                onChange={handleDateChange('start')}
+                inputVariant="outlined"
+                DialogProps={{ style: { zIndex: 1500 } }}
               />
               <Typography
                 style={{
@@ -504,11 +506,12 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
               >
                 End Time:
               </Typography>
-              <TextField
+              <TimePicker
                 fullWidth
-                defaultValue={cur.end}
-                onChange={handleChange('end')}
-                variant="outlined"
+                value={cur.end}
+                onChange={handleDateChange('end')}
+                inputVariant="outlined"
+                DialogProps={{ style: { zIndex: 1500 } }}
               />
               <Typography
                 style={{
@@ -622,11 +625,12 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
               >
                 Start Time:
               </Typography>
-              <TextField
+              <TimePicker
                 fullWidth
-                defaultValue={cur.start}
-                onChange={handleChange('start')}
-                variant="outlined"
+                value={cur.start}
+                onChange={handleDateChange('start')}
+                inputVariant="outlined"
+                DialogProps={{ style: { zIndex: 1500 } }}
               />
               <Typography
                 style={{
@@ -637,6 +641,13 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
               >
                 End Time:
               </Typography>
+              <TimePicker
+                fullWidth
+                value={cur.end}
+                onChange={handleDateChange('end')}
+                inputVariant="outlined"
+                DialogProps={{ style: { zIndex: 1500 } }}
+              />
               <TextField
                 fullWidth
                 defaultValue={cur.end}

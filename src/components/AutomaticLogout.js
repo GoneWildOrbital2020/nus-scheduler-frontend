@@ -19,7 +19,6 @@ const useStyles = makeStyles(() => ({
   },
   button: {
     color: light,
-    backgroundColor: accent,
   },
 }));
 
@@ -56,14 +55,15 @@ const AutomaticLogout = (props) => {
 
   return (
     <Dialog open={open} onClose={handleClose}>
-      <DialogContent className={classes.dialog} >
+      <DialogContent className={classes.dialog}>
         <Typography>Your session has expired, please login again!</Typography>
       </DialogContent>
       <DialogActions style={{ backgroundColor: light }}>
         <Button
           className={classes.button}
-          variant="outlined"
+          variant="contained"
           onClick={handleClose}
+          color="primary"
         >
           OK
         </Button>

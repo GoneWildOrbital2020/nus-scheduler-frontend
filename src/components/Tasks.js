@@ -15,8 +15,10 @@ import {
   DialogActions,
 } from '@material-ui/core';
 import { Alarm, Edit, Close } from '@material-ui/icons';
-import { KeyboardDatePicker } from '@material-ui/pickers';
+import { DatePicker } from '@material-ui/pickers';
+import { groupBy } from 'lodash';
 import { accent, light, dark, medium } from '../colors';
+import { url } from './constant';
 
 const useStyles = makeStyles(() => ({
   container: {
@@ -36,17 +38,18 @@ const useStyles = makeStyles(() => ({
     width: 'calc((100% - 4rem) / 4)',
     display: 'flex',
     flexDirection: 'column',
-    height: 'calc(100vh - 90px - 4rem)',
     backgroundColor: '#384241',
     paddingTop: '2rem',
+    height: 'fit-content',
+    maxHeight: '100vh',
   },
   drop: {
-    height: '100%',
     padding: '0rem 1rem',
     display: 'flex',
     flexDirection: 'column',
     transition: 'color 2s',
     overflowY: 'scroll',
+    minHeight: '2rem',
   },
   item: {
     margin: '0.5rem 0',
@@ -134,7 +137,7 @@ const cols = [
   { id: done, title: 'Done' },
 ];
 
-const Tasks = ({ name }) => {
+const Tasks = ({ name, username, token }) => {
   const classes = useStyles();
   const [items, setItems] = React.useState({
     [toDo]: [],
@@ -142,7 +145,50 @@ const Tasks = ({ name }) => {
     [inProgress]: [],
     [done]: [],
   });
+  const fetchTasks = () =>
+    fetch(`${url}/tasks/${username}/${name}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  React.useEffect(() => {
+    fetchTasks()
+      .then((response) => response.json())
+      .then((data) =>
+        setItems((state) => ({
+          ...state,
+          ...groupBy(
+            data
+              .map((task) => ({ ...task.fields, id: task.pk }))
+              .map((x) => ({
+                id: x.id.toString(),
+                title: x.title,
+                description: x.description,
+                date: x.due_date ? new Date(x.due_date) : null,
+                colId: x.column_id,
+                index: x.index,
+              })),
+            'colId',
+          ),
+        })),
+      );
+  }, [name]);
   const [curItem, setCurItem] = React.useState({});
+  console.log(items);
+  const updatePos = (item) => {
+    fetch(`${url}/tasks/${username}/${name}/${item.id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        data: { index: item.index, column_id: item.colId },
+      }),
+    });
+  };
   const handleDragEnd = (result) => {
     if (!result.destination) {
       return;
@@ -155,33 +201,78 @@ const Tasks = ({ name }) => {
     ) {
       return;
     }
-
-    const item = { ...items[source.droppableId][source.index] };
+    console.log(result);
+    const item = {
+      ...items[source.droppableId][source.index],
+      index: destination.index,
+      colId: destination.droppableId,
+    };
+    updatePos(item);
 
     if (source.droppableId === destination.droppableId) {
-      const newSource = [...items[source.droppableId]];
-      newSource[source.index] = newSource[destination.index];
-      newSource[destination.index] = item;
-      setItems((state) => ({
-        ...state,
-        [source.droppableId]: newSource,
-      }));
+      if (source.index < destination.index) {
+        const newSource = [
+          ...items[source.droppableId].slice(0, source.index),
+          ...items[source.droppableId]
+            .slice(source.index + 1, destination.index + 1)
+            .map((x) => {
+              const newItem = { ...x, index: x.index - 1 };
+              updatePos(newItem);
+              return newItem;
+            }),
+          item,
+          ...items[source.droppableId].slice(
+            destination.index + 1,
+            items[source.droppableId].length,
+          ),
+        ];
+        setItems((state) => ({
+          ...state,
+          [source.droppableId]: newSource,
+        }));
+      } else {
+        const newSource = [
+          ...items[source.droppableId].slice(0, destination.index),
+          item,
+          ...items[source.droppableId]
+            .slice(destination.index, source.index)
+            .map((x) => {
+              const newItem = { ...x, index: x.index + 1 };
+              updatePos(newItem);
+              return newItem;
+            }),
+          ...items[source.droppableId].slice(
+            source.index + 1,
+            items[source.droppableId].length,
+          ),
+        ];
+        setItems((state) => ({
+          ...state,
+          [source.droppableId]: newSource,
+        }));
+      }
       return;
     }
     const newSource = [
       ...items[source.droppableId].slice(0, source.index),
-      ...items[source.droppableId].slice(
-        source.index + 1,
-        items[source.droppableId].length,
-      ),
+      ...items[source.droppableId]
+        .slice(source.index + 1, items[source.droppableId].length)
+        .map((x) => {
+          const newItem = { ...x, index: x.index - 1 };
+          updatePos(newItem);
+          return newItem;
+        }),
     ];
     const newDest = [
       ...items[destination.droppableId].slice(0, destination.index),
       item,
-      ...items[destination.droppableId].slice(
-        destination.index,
-        items[destination.droppableId].length,
-      ),
+      ...items[destination.droppableId]
+        .slice(destination.index, items[destination.droppableId].length)
+        .map((x) => {
+          const newItem = { ...x, index: x.index + 1 };
+          updatePos(newItem);
+          return newItem;
+        }),
     ];
     setItems((state) => ({
       ...state,
@@ -191,11 +282,16 @@ const Tasks = ({ name }) => {
   };
   const [open, setOpen] = React.useState(false);
   const handleAdd = (colId) => () => {
-    setCurItem({ add: true, date: new Date(), colId });
+    setCurItem({
+      add: true,
+      date: null,
+      colId,
+      index: items[colId].length,
+    });
     setOpen(true);
   };
-  const handleEdit = (colId, item) => () => {
-    setCurItem({ edit: true, ...item, colId });
+  const handleEdit = (item) => () => {
+    setCurItem({ edit: true, ...item });
     setOpen(true);
   };
   const handleChange = (type) => (e) => {
@@ -208,16 +304,65 @@ const Tasks = ({ name }) => {
   const handleSave = () => {
     if (curItem.add) {
       const { add, ...newItem } = curItem;
+      fetch(`${url}/tasks/${username}/${name}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          data: {
+            title: newItem.title,
+            description: newItem.description,
+            due_date: newItem.date,
+            column_id: newItem.colId,
+            index: newItem.index,
+          },
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          setItems((state) => ({
+            ...state,
+            [curItem.colId]: state[curItem.colId].concat([
+              { ...newItem, id: data.id.toString() },
+            ]),
+          }));
+        });
+    } else {
+      const { edit, ...newItem } = curItem;
+      fetch(`${url}/tasks/${username}/${name}/${curItem.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          data: {
+            title: newItem.title,
+            description: newItem.description,
+            due_date: newItem.date,
+          },
+        }),
+      });
+
       setItems((state) => ({
         ...state,
-        [curItem.colId]: state[curItem.colId].concat([
-          { ...newItem, id: curItem.title },
-        ]),
+        [curItem.colId]: state[curItem.colId].map((item) =>
+          item.id === curItem.id ? { ...newItem } : item,
+        ),
       }));
     }
     setOpen(false);
   };
   const handleDelete = () => {
+    fetch(`${url}/tasks/${username}/${name}/${curItem.id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    });
     setItems((state) => ({
       ...state,
       [curItem.colId]: state[curItem.colId].filter((x) => x.id !== curItem.id),
@@ -242,39 +387,49 @@ const Tasks = ({ name }) => {
                   }}
                   {...provided.droppableProps}
                 >
-                  {items[col.id].map((item, index) => (
-                    <Draggable
-                      draggableId={item.id}
-                      index={index}
-                      key={item.id}
-                    >
-                      {(prov, snap) => (
-                        <Paper
-                          ref={prov.innerRef}
-                          {...prov.draggableProps}
-                          {...prov.dragHandleProps}
-                          elevation={snap.isDragging ? 15 : 1}
-                          className={classes.item}
-                        >
-                          <Typography className={classes.itemTitle}>
-                            {item.title}
-                          </Typography>
-                          <div className={classes.itemFooter}>
-                            <Alarm className={classes.icon} />
-                            <Typography className={classes.itemText}>
-                              {item.date.toDateString().substr(4)}
+                  {items[col.id]
+                    .sort((a, b) => a.index - b.index)
+                    .map((item) => (
+                      <Draggable
+                        draggableId={item.id}
+                        index={item.index}
+                        key={item.id}
+                      >
+                        {(prov, snap) => (
+                          <Paper
+                            ref={prov.innerRef}
+                            {...prov.draggableProps}
+                            {...prov.dragHandleProps}
+                            elevation={snap.isDragging ? 15 : 1}
+                            className={classes.item}
+                            style={{
+                              backgroundColor: snap.isDragging
+                                ? '#EDEAE6'
+                                : light,
+                              ...prov.draggableProps.style,
+                            }}
+                          >
+                            <Typography className={classes.itemTitle}>
+                              {item.title}
                             </Typography>
-                            <IconButton
-                              className={classes.iconButton}
-                              onClick={handleEdit(col.id, item)}
-                            >
-                              <Edit className={classes.icon} />
-                            </IconButton>
-                          </div>
-                        </Paper>
-                      )}
-                    </Draggable>
-                  ))}
+                            <div className={classes.itemFooter}>
+                              <Alarm className={classes.icon} />
+                              <Typography className={classes.itemText}>
+                                {item.date
+                                  ? item.date.toDateString().substr(4)
+                                  : null}
+                              </Typography>
+                              <IconButton
+                                className={classes.iconButton}
+                                onClick={handleEdit(item)}
+                              >
+                                <Edit className={classes.icon} />
+                              </IconButton>
+                            </div>
+                          </Paper>
+                        )}
+                      </Draggable>
+                    ))}
                   {provided.placeholder}
                 </div>
               )}
@@ -324,7 +479,7 @@ const Tasks = ({ name }) => {
             fullWidth
           />
           <Typography className={classes.dialogSubtitle}>Due date:</Typography>
-          <KeyboardDatePicker
+          <DatePicker
             inputVariant="outlined"
             onChange={handleDateChange}
             value={curItem.date}
@@ -355,6 +510,8 @@ const Tasks = ({ name }) => {
 
 Tasks.propTypes = {
   name: PropTypes.string.isRequired,
+  token: PropTypes.string.isRequired,
+  username: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (state) => {

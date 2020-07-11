@@ -13,7 +13,7 @@ const Notification = (props) => {
       autoHideDuration={2000}
       onClose={handleClose}
     >
-      <Alert onClose={handleClose} severity={severity}>
+      <Alert onClose={handleClose} severity={severity} variant="filled">
         {message}
       </Alert>
     </Snackbar>

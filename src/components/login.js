@@ -16,7 +16,7 @@ const useStyles = makeStyles({
   },
   button: {
     color: light,
-    backgroundColor: accent,
+    // backgroundColor: accent,
     width: '100%',
   },
   form: {
@@ -131,7 +131,12 @@ const Login = (props) => {
             />
           </div>
         </form>
-        <Button className={classes.button} onClick={handleSubmit}>
+        <Button
+          color="primary"
+          variant="contained"
+          className={classes.button}
+          onClick={handleSubmit}
+        >
           Login
         </Button>
         <Notification

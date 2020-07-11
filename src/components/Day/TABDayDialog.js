@@ -15,6 +15,7 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import { TwitterPicker } from 'react-color';
 import { connect } from 'react-redux';
+import { TimePicker } from '@material-ui/pickers';
 import { addNumOfEvents } from '../../redux/actions';
 import { dark, light, accent, medium } from '../../colors';
 import { colors } from '../constant';
@@ -91,6 +92,16 @@ const DayDialog = ({
     setNewEvents(tmp);
   };
 
+  const handleDateChange = (index, type) => (e) => {
+    const tmp = newEvents.map((x) => ({ ...x }));
+    tmp.forEach((event) => {
+      // eslint-disable-next-line no-param-reassign
+      if (event.index === index) event[type] = e;
+    });
+    setTab(false);
+    setNewEvents(tmp);
+  };
+
   const handleColorChange = (index) => (e) => {
     const tmp = newEvents.map((x) => ({ ...x }));
     tmp.forEach((event) => {
@@ -113,10 +124,20 @@ const DayDialog = ({
 
   const addEvent = () => {
     const tmp = newEvents.map((x) => ({ ...x }));
-    tmp.push({ index: numOfEvents + count, title: 'New Event', color: accent });
+    tmp.push({
+      index: numOfEvents + count,
+      title: 'New Event',
+      color: accent,
+      start: null,
+      end: null,
+    });
     setNewEvents(tmp);
     setCount(count + 1);
   };
+  console.log(newEvents);
+  React.useEffect(() => {
+    if (newEvents.length === 0) addEvent();
+  }, []);
 
   const deleteEvent = (index) => () => {
     const tmp = newEvents
@@ -129,8 +150,6 @@ const DayDialog = ({
     setValue(newValue);
     setTab(true);
   };
-
-  if (!newEvents.length) addEvent();
 
   const styles = {
     card: {
@@ -165,23 +184,27 @@ const DayDialog = ({
         style={{ backgroundColor: medium }}
         ref={ref}
       >
-        <AppBar position="sticky" color="default">
-          <Tabs
-            value={value}
-            onChange={handleValueChange}
-            variant="scrollable"
-            TabIndicatorProps={{ style: { background: accent } }}
-          >
-            {newEvents.map((event) => {
-              const label = (
-                <Typography style={{ fontWeight: 'bold', color: event.color }}>
-                  {event.title}
-                </Typography>
-              );
-              return <Tab label={label} disableRipple />;
-            })}
-          </Tabs>
-        </AppBar>
+        {newEvents.length > 0 ? (
+          <AppBar position="sticky" color="default">
+            <Tabs
+              value={value}
+              onChange={handleValueChange}
+              variant="scrollable"
+              TabIndicatorProps={{ style: { background: accent } }}
+            >
+              {newEvents.map((event) => {
+                const label = (
+                  <Typography
+                    style={{ fontWeight: 'bold', color: event.color }}
+                  >
+                    {event.title}
+                  </Typography>
+                );
+                return <Tab label={label} disableRipple />;
+              })}
+            </Tabs>
+          </AppBar>
+        ) : null}
         {newEvents.map(
           (event, index) =>
             value === index && (
@@ -225,11 +248,12 @@ const DayDialog = ({
                 >
                   Start Time:
                 </Typography>
-                <TextField
+                <TimePicker
                   fullWidth
-                  defaultValue={event.start}
-                  onChange={handleChange(event.index, 'start')}
-                  variant="outlined"
+                  value={event.start}
+                  onChange={handleDateChange(event.index, 'start')}
+                  inputVariant="outlined"
+                  DialogProps={{ style: { zIndex: 1500 } }}
                 />
                 <Typography
                   style={{
@@ -240,11 +264,12 @@ const DayDialog = ({
                 >
                   End Time:
                 </Typography>
-                <TextField
+                <TimePicker
                   fullWidth
-                  defaultValue={event.end}
-                  onChange={handleChange(event.index, 'end')}
-                  variant="outlined"
+                  value={event.end}
+                  onChange={handleDateChange(event.index, 'end')}
+                  inputVariant="outlined"
+                  DialogProps={{ style: { zIndex: 1500 } }}
                 />
                 <Typography
                   style={{

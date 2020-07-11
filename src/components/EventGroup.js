@@ -41,7 +41,7 @@ const EventGroup = ({ name, path, username, token, ...routerProps }) => {
   return (
     <>
       <Drawer variant="permanent" anchor="left">
-        <Toolbar />
+        <Toolbar style={{ minHeight: '75px' }} />
         <List>
           <Link to={`/events-group/${name}/customize`}>
             <ListItem button divider>
