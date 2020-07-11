@@ -154,7 +154,7 @@ const DrawerMobile = ({
   return (
     <>
       <List style={{ backgroundColor: light }}>
-        <Link to={`/profile/${username}`}>
+        <Link to="/profile">
           <ListItem button divider>
             <ListItemIcon>
               <AccountCircle style={{ color: dark }} />

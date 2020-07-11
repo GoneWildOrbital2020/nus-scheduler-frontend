@@ -18,6 +18,7 @@ import NavbarDrawer from './components/NavbarDrawer';
 import EventGroup from './components/EventGroup';
 import Profile from './components/profile';
 import AutomaticLogout from './components/AutomaticLogout';
+import Authenticate from './components/Authenticate';
 import { accent } from './colors';
 
 /* eslint-disable no-underscore-dangle */
@@ -32,6 +33,7 @@ const theme = createMuiTheme({
     primary: { main: accent },
   },
 });
+
 function App() {
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -43,6 +45,15 @@ function App() {
               <div className="content" style={{ marginTop: '75px' }}>
                 <Switch>
                   <Route path="/" exact component={Calendar} />
+                  <Route
+                    path="/activate/:email/:token"
+                    render={({ match }) => (
+                      <Authenticate
+                        email={match.params.email}
+                        token={match.params.token}
+                      />
+                    )}
+                  />
                   <Route path="/login" exact component={Login} />
                   <Route path="/signup" exact component={Signup} />
                   <Route
@@ -53,11 +64,7 @@ function App() {
                   />
                   <Route path="/upload" exact component={Upload} />
                   <Route path="/upload/notes" exact component={NotesGrid} />
-                  <Route
-                    path={`/profile/${store.getState().username}`}
-                    exact
-                    render={() => <Profile />}
-                  />
+                  <Route path="/profile" exact render={() => <Profile />} />
                 </Switch>
               </div>
               <Footer />

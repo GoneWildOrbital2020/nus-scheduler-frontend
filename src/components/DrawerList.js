@@ -68,7 +68,7 @@ const DrawerList = ({ dispatch, token, username, ...routeProps }) => {
     window.localStorage.setItem('avatar', null);
     window.localStorage.setItem('logoutTime', null);
     dispatch(toggleLogout());
-    window.location.replace('/login');
+    history.push('/login');
   };
 
   const classes = useStyles();
@@ -131,7 +131,7 @@ const DrawerList = ({ dispatch, token, username, ...routeProps }) => {
   return (
     <>
       <List style={{ backgroundColor: light }}>
-        <Link to={`/profile/${username}`}>
+        <Link to="/profile">
           <ListItem button divider>
             <ListItemIcon>
               <AccountCircle style={{ color: dark }} />
