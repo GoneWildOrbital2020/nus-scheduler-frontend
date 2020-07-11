@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { TextField, Button } from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
-import { dark, light, accent } from '../colors';
+import { dark, light } from '../colors';
 import Notification from './notification';
 import { url } from './constant';
 
@@ -14,7 +14,6 @@ const useStyles = makeStyles({
   button: {
     color: light,
     width: '100%',
-    backgroundColor: accent,
   },
   form: {
     boxSizing: 'border-box',
@@ -126,7 +125,12 @@ const Signup = ({ ...routerProps }) => {
             />
           </div>
         </form>
-        <Button className={classes.button} onClick={handleSubmit}>
+        <Button
+          className={classes.button}
+          onClick={handleSubmit}
+          variant="contained"
+          color="primary"
+        >
           Signup
         </Button>
         <Notification

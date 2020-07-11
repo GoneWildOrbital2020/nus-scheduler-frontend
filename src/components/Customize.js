@@ -19,14 +19,13 @@ import { TwitterPicker } from 'react-color';
 import Loader from 'react-loader-spinner';
 import { Close } from '@material-ui/icons';
 import { url, monthIdx, colors } from './constant';
-import { dark, light, accent } from '../colors';
+import { dark, light } from '../colors';
 import { addNumOfEvents } from '../redux/actions';
 import './Customize.css';
 
 const useStyles = makeStyles((theme) => ({
   button: {
     color: light,
-    backgroundColor: accent,
     marginLeft: '1rem',
   },
   paper: {
@@ -79,6 +78,10 @@ const useStyles = makeStyles((theme) => ({
       width: 'calc((100% - 2rem) / 2)',
     },
     margin: '0.5rem',
+    transition: '0.3s',
+    '&:hover': {
+      filter: 'brightness(0.8)',
+    },
   },
   bottomButtons: {
     [theme.breakpoints.up('lg')]: {
@@ -380,10 +383,10 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
                   onClick={handleAddDate({ key: value.id, ...value.events[0] })}
                   style={{
                     color: light,
-                    backgroundColor: accent,
                     margin: '1rem',
                   }}
                   variant="contained"
+                  color="primary"
                 >
                   Add date
                 </Button>
@@ -398,6 +401,7 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
                   }}
                   disabled={value.events.length === 0}
                   variant="contained"
+                  color="primary"
                 >
                   Edit All
                 </Button>
@@ -409,6 +413,7 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
                   }}
                   disabled={value.events.length === 0}
                   variant="contained"
+                  color="primary"
                 >
                   Delete All
                 </Button>
@@ -416,10 +421,10 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
                   onClick={handleDeleteActivity(value.id)}
                   style={{
                     color: light,
-                    backgroundColor: accent,
                     margin: '1rem',
                   }}
                   variant="contained"
+                  color="primary"
                 >
                   Delete Activity
                 </Button>
@@ -456,6 +461,7 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
                   className={classes.button}
                   onClick={handleRepName}
                   variant="contained"
+                  color="primary"
                   disabled={repName === ''}
                 >
                   Add
@@ -582,15 +588,17 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
             >
               <Button
                 onClick={handleSave}
-                style={{ color: light, backgroundColor: accent }}
+                style={{ color: light }}
                 variant="contained"
+                color="primary"
               >
                 Save
               </Button>
               <Button
                 onClick={handleDelete(cur.id, cur.key)}
-                style={{ color: light, backgroundColor: accent }}
+                style={{ color: light }}
                 variant="contained"
+                color="primary"
               >
                 Delete
               </Button>
@@ -715,8 +723,9 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
             >
               <Button
                 onClick={handleSaveAll}
-                style={{ color: light, backgroundColor: accent }}
+                style={{ color: light }}
                 variant="contained"
+                color="primary"
               >
                 Save
               </Button>

@@ -320,7 +320,6 @@ const DayDialog = ({
                   onClick={deleteEvent(event.index)}
                   color="primary"
                   className={classes.deleteEventButton}
-                  style={{ backgroundColor: accent }}
                 >
                   Delete Event
                 </Button>
@@ -337,7 +336,6 @@ const DayDialog = ({
           variant="contained"
           onClick={shouldSave(true)}
           color="primary"
-          style={{ backgroundColor: accent }}
           className={classes.saveChangesButton}
         >
           Save Changes
@@ -347,7 +345,6 @@ const DayDialog = ({
           variant="contained"
           onClick={addEvent}
           color="primary"
-          style={{ backgroundColor: accent }}
           className={classes.addEventButton}
         >
           Add Event

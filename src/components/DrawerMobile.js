@@ -36,14 +36,13 @@ import {
 } from '@material-ui/icons';
 import { Link, withRouter } from 'react-router-dom';
 import { toggleLogout } from '../redux/actions';
-import { dark, light, accent } from '../colors';
+import { dark, light } from '../colors';
 import { url } from './constant';
 import Notification from './notification';
 
 const useStyles = makeStyles(() => ({
   button: {
     color: light,
-    backgroundColor: accent,
     marginLeft: '1rem',
   },
 }));
@@ -273,6 +272,7 @@ const DrawerMobile = ({
             onClick={handleAdd}
             className={classes.button}
             variant="contained"
+            color="primary"
             disabled={name === ''}
           >
             Add

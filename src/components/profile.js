@@ -8,7 +8,7 @@ import {
 } from '@material-ui/core';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { accent, light, dark } from '../colors';
+import { light, dark } from '../colors';
 import Notification from './notification';
 import { toggleLogin } from '../redux/actions';
 import { url } from './constant';
@@ -38,7 +38,6 @@ const useStyles = makeStyles((theme) => ({
   },
   button: {
     width: '100%',
-    backgroundColor: accent,
     color: light,
     margin: '0.5rem 0',
   },
@@ -158,7 +157,7 @@ const Profile = (props) => {
           id="avatar-upload"
           onChange={handleUploadAvatar}
         />
-        <Button className={classes.button} variant="contained" component="span">
+        <Button className={classes.button} variant="contained" color="primary">
           Upload Image
         </Button>
       </label>
@@ -192,6 +191,7 @@ const Profile = (props) => {
       <Button
         className={classes.button}
         variant="contained"
+        color="primary"
         disabled={check()}
         onClick={handleSubmit}
       >

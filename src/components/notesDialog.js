@@ -115,7 +115,8 @@ const NotesDialog = (props) => {
           <Button
             className={classes.button}
             variant="contained"
-            style={{ backgroundColor: accent, marginRight: '10px' }}
+            color="primary"
+            style={{ marginRight: '10px' }}
             onClick={handleDelete}
           >
             Delete Note
@@ -123,7 +124,7 @@ const NotesDialog = (props) => {
           <Button
             className={classes.button}
             variant="contained"
-            style={{ backgroundColor: accent }}
+            color="primary"
             onClick={handleSave}
           >
             Save changes

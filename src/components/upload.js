@@ -29,7 +29,7 @@ import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
-import { accent, light, dark } from '../colors';
+import { light, dark } from '../colors';
 import Notification from './notification';
 import { url, monthProperties } from './constant';
 
@@ -97,7 +97,6 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   button: {
-    backgroundColor: `${accent}`,
     color: `${light}`,
   },
   textField: {
@@ -488,6 +487,7 @@ const Upload = (props) => {
             />
             <Button
               variant="contained"
+              color="primary"
               className={classes.button}
               component="span"
               disabled={!name}
@@ -514,6 +514,7 @@ const Upload = (props) => {
             />
             <Button
               variant="contained"
+              color="primary"
               className={classes.button}
               component="span"
               disabled={!name}

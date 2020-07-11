@@ -16,7 +16,7 @@ import {
 } from '@material-ui/core';
 import { Alarm, Edit, Close } from '@material-ui/icons';
 import { KeyboardDatePicker } from '@material-ui/pickers';
-import { accent, light, dark, medium } from '../colors';
+import { light, dark, medium } from '../colors';
 
 const useStyles = makeStyles(() => ({
   container: {
@@ -119,7 +119,6 @@ const useStyles = makeStyles(() => ({
   },
   button: {
     color: light,
-    backgroundColor: accent,
   },
 }));
 
@@ -335,6 +334,7 @@ const Tasks = ({ name }) => {
             <Button
               className={classes.button}
               variant="contained"
+              color="primary"
               onClick={handleDelete}
             >
               Delete
@@ -343,6 +343,7 @@ const Tasks = ({ name }) => {
           <Button
             className={classes.button}
             variant="contained"
+            color="primary"
             onClick={handleSave}
           >
             Save

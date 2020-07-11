@@ -5,7 +5,7 @@ import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { toggleLogin } from '../redux/actions';
-import { dark, light, accent } from '../colors';
+import { dark, light } from '../colors';
 import Notification from './notification';
 import { url } from './constant';
 
@@ -16,7 +16,6 @@ const useStyles = makeStyles({
   },
   button: {
     color: light,
-    backgroundColor: accent,
     width: '100%',
   },
   form: {
@@ -150,7 +149,12 @@ const Login = (props) => {
             />
           </div>
         </form>
-        <Button className={classes.button} onClick={handleSubmit}>
+        <Button
+          className={classes.button}
+          onClick={handleSubmit}
+          variant="contained"
+          color="primary"
+        >
           Login
         </Button>
         <Notification
@@ -163,7 +167,13 @@ const Login = (props) => {
           Not a user ?
         </h5>
         <Link className={classes.link} to="/signup">
-          <Button className={classes.button}>SignUp</Button>
+          <Button
+            className={classes.button}
+            variant="contained"
+            color="primary"
+          >
+            SignUp
+          </Button>
         </Link>
       </div>
     </div>

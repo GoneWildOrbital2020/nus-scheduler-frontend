@@ -9,7 +9,7 @@ import {
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Notes from './notes';
-import { accent, light } from '../colors';
+import { light } from '../colors';
 import Notification from './notification';
 import { url } from './constant';
 
@@ -46,7 +46,9 @@ const useStyles = makeStyles((theme) => ({
   },
   button: {
     color: light,
-    width: '50%',
+    [theme.breakpoints.down('xs')]: {
+      width: '50%',
+    },
     margin: '0.5rem auto',
     [theme.breakpoints.up('sm')]: {
       position: 'absolute',
@@ -282,9 +284,9 @@ const NotesGrid = (props) => {
       <div className={classes.top}>
         <Typography className={classes.title}>Notes</Typography>
         <Button
-          variant="outlined"
+          variant="contained"
           className={classes.button}
-          style={{ backgroundColor: accent }}
+          color="primary"
           onClick={handleAddNote}
         >
           Add Notes

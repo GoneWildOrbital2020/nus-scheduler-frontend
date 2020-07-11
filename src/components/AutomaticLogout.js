@@ -10,7 +10,7 @@ import {
   Typography,
 } from '@material-ui/core';
 import { toggleLogout } from '../redux/actions';
-import { light, accent, dark } from '../colors';
+import { light, dark } from '../colors';
 
 const useStyles = makeStyles(() => ({
   dialog: {
@@ -19,7 +19,6 @@ const useStyles = makeStyles(() => ({
   },
   button: {
     color: light,
-    backgroundColor: accent,
   },
 }));
 
@@ -56,13 +55,14 @@ const AutomaticLogout = (props) => {
 
   return (
     <Dialog open={open} onClose={handleClose}>
-      <DialogContent className={classes.dialog} >
+      <DialogContent className={classes.dialog}>
         <Typography>Your session has expired, please login again!</Typography>
       </DialogContent>
       <DialogActions style={{ backgroundColor: light }}>
         <Button
           className={classes.button}
-          variant="outlined"
+          variant="contained"
+          color="primary"
           onClick={handleClose}
         >
           OK
