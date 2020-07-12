@@ -19,9 +19,40 @@ const DayTile = ({
   const [openAlert, setOpenAlert] = React.useState(false);
   const [message, setMessage] = React.useState('');
   const [severity, setSeverity] = React.useState('success');
-  const [currEvents, setCurrEvents] = React.useState(propEvents);
+  const [currEvents, setCurrEvents] = React.useState(
+    propEvents.map((event) => {
+      const start = new Date();
+      if (event.start) {
+        start.setHours(event.start.substring(0, 2));
+        start.setMinutes(event.start.substring(3, 5));
+      }
+      const end = new Date();
+      if (event.end) {
+        end.setHours(event.end.substring(0, 2));
+        end.setMinutes(event.end.substring(3, 5));
+      }
+      return { ...event, start, end };
+    }),
+  );
 
-  React.useEffect(() => setCurrEvents(propEvents), [propEvents]);
+  React.useEffect(
+    () =>
+      setCurrEvents(
+        propEvents.map((event) => {
+          let start = null;
+          if (event.start) {
+            console.log(event.start);
+            start = new Date(event.start);
+          }
+          let end = null;
+          if (event.end) {
+            end = new Date(event.end);
+          }
+          return { ...event, start, end };
+        }),
+      ),
+    [propEvents],
+  );
 
   const saveEventsToDB = (year, month, day, events) => {
     const options = {
@@ -105,7 +136,11 @@ DayTile.propTypes = {
       end: PropTypes.string,
       location: PropTypes.string,
     }),
-  ).isRequired,
+  ),
+};
+
+DayTile.defaultProps = {
+  propEvents: [],
 };
 
 const mapStateToProps = (state) => ({

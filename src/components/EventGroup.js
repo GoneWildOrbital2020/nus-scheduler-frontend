@@ -72,7 +72,7 @@ const EventGroup = ({ name, path, username, token, ...routerProps }) => {
         anchor="left"
         classes={{ paperAnchorLeft: classes.paperAnchorLeft }}
       >
-        <Toolbar />
+        <Toolbar style={{ minHeight: '75px' }} />
         <List>
           <Link to={`/events-group/${name}/customize`}>
             <ListItem button divider>
