@@ -13,7 +13,7 @@ import { connect } from 'react-redux';
 import Logo from '../images/logov2light.png';
 import { light, dark } from '../colors';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: dark,
     position: 'fixed',
@@ -36,6 +36,9 @@ const useStyles = makeStyles({
     width: '3rem',
     height: '3rem',
     marginRight: '1rem',
+    [theme.breakpoints.down('xs')]: {
+      marginRight: '0.5rem',
+    },
   },
   right: {
     width: '85%',
@@ -55,7 +58,19 @@ const useStyles = makeStyles({
   link: {
     textDecoration: 'none',
   },
-});
+  typography: {
+    color: light,
+    fontSize: '1rem',
+  },
+  gutters: {
+    paddingLeft: '16px',
+    paddingRight: '16px',
+    [theme.breakpoints.down('xs')]: {
+      paddingLeft: '8px',
+      paddingRight: '8px',
+    },
+  },
+}));
 
 const Navbar = (props) => {
   const { isLoggedIn, toggleDrawer, username, avatar } = props;
@@ -63,7 +78,7 @@ const Navbar = (props) => {
   return (
     <div>
       <AppBar position="static" className={classes.root}>
-        <Toolbar>
+        <Toolbar classes={{ gutters: classes.gutters }}>
           <div className={classes.left}>
             <Link to="/" className={classes.link}>
               <Button color="inherit" className={classes.button}>
@@ -87,7 +102,9 @@ const Navbar = (props) => {
                     alt="profile"
                   />
                 )}
-                <Typography>{username}</Typography>
+                <Typography className={classes.typography}>
+                  {username}
+                </Typography>
               </Button>
             ) : (
               <Link to="/login" className={classes.link}>

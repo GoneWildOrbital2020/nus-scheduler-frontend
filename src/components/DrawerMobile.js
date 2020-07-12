@@ -6,6 +6,7 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
+  ListSubheader,
   Collapse,
   Divider,
   Dialog,
@@ -22,11 +23,15 @@ import {
   Create,
   Label,
   GitHub,
+  Delete,
   ExitToApp,
   Backup,
   ExpandLess,
   ExpandMore,
   Event,
+  EventNote,
+  Folder,
+  Note,
   Close,
 } from '@material-ui/icons';
 import { Link, withRouter } from 'react-router-dom';
@@ -43,14 +48,20 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const DrawerList = ({ dispatch, token, username, ...routeProps }) => {
+const DrawerMobile = ({
+  dispatch,
+  token,
+  username,
+  moduleName,
+  ...routeProps
+}) => {
   const [open, setOpen] = React.useState(false);
   const [openModal, setOpenModal] = React.useState(false);
   const [titles, setTitles] = React.useState([]);
   const [openAlert, setOpenAlert] = React.useState(false);
   const [message, setMessage] = React.useState('');
   const [severity, setSeverity] = React.useState('success');
-  const { history } = routeProps;
+  const { history, location } = routeProps;
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -115,6 +126,18 @@ const DrawerList = ({ dispatch, token, username, ...routeProps }) => {
     };
     fetch(`${url}/events/${username}`, options);
     history.push(`/events-group/${name}/customize`);
+  };
+
+  const handleDeleteGroup = () => {
+    const options = {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    fetch(`${url}/events/${username}/${moduleName}`, options);
+    history.replace('/');
   };
 
   React.useEffect(() => {
@@ -243,7 +266,6 @@ const DrawerList = ({ dispatch, token, username, ...routeProps }) => {
             required
             label="Name"
             fullWidth
-            variant="outlined"
           />
         </DialogContent>
         <DialogActions style={{ backgroundColor: light, padding: '1.5rem' }}>
@@ -257,14 +279,63 @@ const DrawerList = ({ dispatch, token, username, ...routeProps }) => {
           </Button>
         </DialogActions>
       </Dialog>
+      {location.pathname.substring(0, 13) === '/events-group' ? (
+        <List
+          subheader={(
+            <ListSubheader component="div" style={{ color: dark }}>
+              Events Group Options
+            </ListSubheader>
+          )}
+        >
+          <Link to={`/events-group/${moduleName}/customize`}>
+            <ListItem button divider>
+              <ListItemIcon>
+                <EventNote style={{ color: dark }} />
+              </ListItemIcon>
+              <ListItemText primary="Activities" style={{ color: dark }} />
+            </ListItem>
+          </Link>
+          <Link to={`/events-group/${moduleName}/uploads`}>
+            <ListItem button divider>
+              <ListItemIcon>
+                <Folder style={{ color: dark }} />
+              </ListItemIcon>
+              <ListItemText
+                primary="Files and Images"
+                style={{ color: dark }}
+              />
+            </ListItem>
+          </Link>
+          <Link to={`/events-group/${moduleName}/notes`}>
+            <ListItem button divider>
+              <ListItemIcon>
+                <Note style={{ color: dark }} />
+              </ListItemIcon>
+              <ListItemText primary="Notes" style={{ color: dark }} />
+            </ListItem>
+          </Link>
+          <ListItem button divider onClick={handleDeleteGroup}>
+            <ListItemIcon>
+              <Delete style={{ color: dark }} />
+            </ListItemIcon>
+            <ListItemText
+              primary="Delete Event Group"
+              style={{ color: dark }}
+            />
+          </ListItem>
+        </List>
+      ) : (
+        <></>
+      )}
     </>
   );
 };
 
-DrawerList.propTypes = {
+DrawerMobile.propTypes = {
   dispatch: PropTypes.func.isRequired,
   token: PropTypes.string.isRequired,
   username: PropTypes.string.isRequired,
+  moduleName: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (state) => {
@@ -274,4 +345,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default withRouter(connect(mapStateToProps)(DrawerList));
+export default withRouter(connect(mapStateToProps)(DrawerMobile));
