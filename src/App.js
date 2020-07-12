@@ -19,6 +19,8 @@ import EventGroup from './components/EventGroup';
 import Profile from './components/profile';
 import AutomaticLogout from './components/AutomaticLogout';
 import Authenticate from './components/Authenticate';
+import ForgotPassword from './components/ForgotPassword';
+import ResetPassword from './components/ResetPassword';
 import { accent } from './colors';
 
 /* eslint-disable no-underscore-dangle */
@@ -54,6 +56,15 @@ function App() {
                       />
                     )}
                   />
+                  <Route
+                    path="/reset/:email/:token"
+                    render={({ match }) => (
+                      <ResetPassword
+                        email={match.params.email}
+                        token={match.params.token}
+                      />
+                    )}
+                  />
                   <Route path="/login" exact component={Login} />
                   <Route path="/signup" exact component={Signup} />
                   <Route
@@ -65,6 +76,11 @@ function App() {
                   <Route path="/upload" exact component={Upload} />
                   <Route path="/upload/notes" exact component={NotesGrid} />
                   <Route path="/profile" exact render={() => <Profile />} />
+                  <Route
+                    path="/forgotPassword"
+                    exact
+                    component={ForgotPassword}
+                  />
                 </Switch>
               </div>
               <Footer />

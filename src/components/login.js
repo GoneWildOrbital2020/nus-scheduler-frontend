@@ -114,13 +114,16 @@ const Login = (props) => {
       setSeverity('error');
       setOpen(true);
       setMessage('Account activation failed!');
-    }
-    if (location.state && location.state.fromSignup) {
+    } else if (location.state && location.state.fromSignup) {
       setSeverity('success');
       setOpen(true);
       setMessage(
         'Signup successful! Please check your email for account activation.',
       );
+    } else if (location.state && location.state.fromReset) {
+      setSeverity('success');
+      setOpen(true);
+      setMessage('Reset password successful!');
     }
   }, []);
 
@@ -173,6 +176,18 @@ const Login = (props) => {
             color="primary"
           >
             SignUp
+          </Button>
+        </Link>
+        <h5 style={{ color: dark, marginTop: '1rem', marginBottom: '0.25rem' }}>
+          Forgot password?
+        </h5>
+        <Link to="/forgotPassword">
+          <Button
+            className={classes.button}
+            variant="contained"
+            color="primary"
+          >
+            Reset Password
           </Button>
         </Link>
       </div>

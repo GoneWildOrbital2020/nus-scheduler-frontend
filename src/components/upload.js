@@ -484,6 +484,7 @@ const Upload = (props) => {
               id="image-upload"
               type="file"
               onChange={handleUploadImage}
+              disabled={!name}
             />
             <Button
               variant="contained"
@@ -511,6 +512,7 @@ const Upload = (props) => {
               id="file-upload"
               type="file"
               onChange={handleUploadFile}
+              disabled={!name}
             />
             <Button
               variant="contained"
