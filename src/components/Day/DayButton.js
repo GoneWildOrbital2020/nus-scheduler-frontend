@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Typography, makeStyles } from '@material-ui/core';
 import { LabelImportant } from '@material-ui/icons';
-import { light } from '../../colors';
+import { light, dark } from '../../colors';
 
 const useStyles = makeStyles((theme) => ({
   buttonRoot: {
@@ -28,24 +28,24 @@ const useStyles = makeStyles((theme) => ({
     border: '0',
   },
   buttonContainer: {
-    height: '12rem',
+    height: '10rem',
     [theme.breakpoints.down('md')]: {
-      height: '15rem',
+      height: '13rem',
     },
     [theme.breakpoints.down('sm')]: {
-      height: '18rem',
+      height: '16rem',
     },
     [theme.breakpoints.down('xs')]: {
-      height: '21rem',
+      height: '19rem',
     },
     display: 'flex',
     flexDirection: 'column',
+    padding: '1rem 0',
   },
   buttonNumber: {
-    fontSize: '2rem',
-    fontWeight: 'bold',
     flex: '1 1 0',
-    paddingTop: '0',
+    marginBottom: '1rem',
+    color: dark,
   },
   buttonEvents: {
     flex: '4 1 0',
@@ -74,7 +74,9 @@ const DayButton = ({ index, events, handleOpen }) => {
       style={{ backgroundColor: light }}
       onClick={handleOpen}
     >
-      <div className={classes.buttonNumber}>{index}</div>
+      <Typography variant="h5" className={classes.buttonNumber}>
+        {index}
+      </Typography>
       <div className={classes.buttonEvents}>
         {events.map((event) => (
           <div key={event.index} className={classes.buttonEvent}>

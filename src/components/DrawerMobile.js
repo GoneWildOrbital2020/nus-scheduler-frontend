@@ -150,6 +150,12 @@ const DrawerMobile = ({
       });
   }, []);
 
+  const subHeader = (
+    <ListSubheader component="div" style={{ color: dark }}>
+      Events Group Options
+    </ListSubheader>
+  );
+
   return (
     <>
       <List style={{ backgroundColor: light }}>
@@ -214,7 +220,7 @@ const DrawerMobile = ({
           <ListItemIcon>
             <ExitToApp style={{ color: dark }} />
           </ListItemIcon>
-          <ListItemText primary="Logout" style={{ color: dark }} />
+          <ListItemText primary="Log Out" style={{ color: dark }} />
         </ListItem>
         <ListItem
           onClick={() => window.open('https://github.com/GoneWildOrbital2020')}
@@ -247,9 +253,7 @@ const DrawerMobile = ({
             padding: '2rem 1.5rem 0.5rem 1.5rem',
           }}
         >
-          <Typography
-            style={{ fontSize: '1.5rem', color: dark, fontWeight: 'bold' }}
-          >
+          <Typography variant="h5" style={{ color: dark }}>
             Add Event Group
           </Typography>
           <IconButton
@@ -280,13 +284,7 @@ const DrawerMobile = ({
         </DialogActions>
       </Dialog>
       {location.pathname.substring(0, 13) === '/events-group' ? (
-        <List
-          subheader={(
-            <ListSubheader component="div" style={{ color: dark }}>
-              Events Group Options
-            </ListSubheader>
-          )}
-        >
+        <List subheader={subHeader}>
           <Link to={`/events-group/${moduleName}/customize`}>
             <ListItem button divider>
               <ListItemIcon>

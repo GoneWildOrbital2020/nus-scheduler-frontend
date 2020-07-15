@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TextField, Button } from '@material-ui/core';
+import { TextField, Button, Typography } from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import { dark, light } from '../colors';
@@ -22,7 +22,7 @@ const useStyles = makeStyles({
     display: 'inline-block',
     border: 'solid gray 1px',
     borderRadius: '10px',
-    padding: '1em',
+    padding: '2rem',
   },
   input: {
     margin: '1rem 0',
@@ -68,7 +68,7 @@ const Signup = ({ ...routerProps }) => {
     })
       .then((res) => {
         if (res.status === 400 || res.status === 500) {
-          throw new Error('Signup failed, please try again!');
+          throw new Error('Sign up failed, please try again!');
         }
         return res.json();
       })
@@ -94,7 +94,9 @@ const Signup = ({ ...routerProps }) => {
   return (
     <div className={classes.signup}>
       <div className={classes.form} style={{ backgroundColor: light }}>
-        <h1 style={{ color: dark }}>JOIN NOW</h1>
+        <Typography variant="h4" style={{ color: dark }}>
+          JOIN NOW
+        </Typography>
         <form>
           <div className={classes.input}>
             <TextField

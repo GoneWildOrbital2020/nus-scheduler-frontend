@@ -10,7 +10,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import Logo from '../images/logov2light.png';
+import Logo from '../images/logov5light.png';
 import { light, dark } from '../colors';
 
 const useStyles = makeStyles((theme) => ({
@@ -109,7 +109,7 @@ const Navbar = (props) => {
             ) : (
               <Link to="/login" className={classes.link}>
                 <Button color="inherit" className={classes.button}>
-                  Login
+                  log in
                 </Button>
               </Link>
             )}

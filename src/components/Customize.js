@@ -13,7 +13,7 @@ import {
   makeStyles,
   IconButton,
 } from '@material-ui/core';
-import { KeyboardDatePicker } from '@material-ui/pickers';
+import { DatePicker, TimePicker } from '@material-ui/pickers';
 import { chunk } from 'lodash';
 import { TwitterPicker } from 'react-color';
 import Loader from 'react-loader-spinner';
@@ -124,12 +124,16 @@ const Customize = ({ name, token, numOfEvents, dispatch }) => {
         setEvents(data.rep.sort((a, b) => a.id - b.id));
       });
   }, [name]);
-
   const [open, setOpen] = React.useState(false);
   const [cur, setCur] = React.useState({});
 
   const handleChange = (type) => (e) => {
     const val = e.target.value;
+    setCur((state) => ({ ...state, [type]: val }));
+  };
+
+  const handleDateChange = (type) => (e) => {
+    const val = e;
     setCur((state) => ({ ...state, [type]: val }));
   };
 
@@ -260,7 +264,7 @@ const Customize = ({ name, token, numOfEvents, dispatch }) => {
 
   const [date, setDate] = React.useState(new Date());
 
-  const handleDateChange = (value) => setDate(value);
+  const handleDate = (value) => setDate(value);
 
   const handleAddDate = (add) => () => {
     const options = {
@@ -280,9 +284,9 @@ const Customize = ({ name, token, numOfEvents, dispatch }) => {
           location: add.location,
           color: add.color,
         },
-        day: date.getUTCDate(),
-        month: date.getUTCMonth(),
-        year: date.getUTCFullYear(),
+        day: date.getDate(),
+        month: date.getMonth(),
+        year: date.getFullYear(),
       }),
     };
     fetch(`${url}/events/${name}/${add.key}`, options)
@@ -327,30 +331,21 @@ const Customize = ({ name, token, numOfEvents, dispatch }) => {
       {!events.empty ? (
         <>
           {events.map((value) => (
-            <Paper className={classes.paper}>
-              <Typography
-                align="left"
-                style={{ fontSize: '1.5rem', color: dark, fontWeight: 'bold' }}
-              >
+            <Paper className={classes.paper} key={value.id}>
+              <Typography variant="h5" align="left" style={{ color: dark }}>
                 {value.name}
               </Typography>
 
               <Grid container direction="column" style={{ margin: '1rem 0' }}>
                 {chunk(
                   value.events.sort((a, b) => {
-                    if (a.day.month.year.index === b.day.month.year.index) {
-                      if (
-                        monthIdx[a.day.month.month_name] !==
-                        monthIdx[b.day.month.month_name]
-                      ) {
-                        return (
-                          monthIdx[a.day.month.month_name] -
-                          monthIdx[b.day.month.month_name]
-                        );
+                    if (a.year === b.year) {
+                      if (monthIdx[a.month] !== monthIdx[b.month]) {
+                        return monthIdx[a.month] - monthIdx[b.month];
                       }
-                      return a.day.index - b.day.index;
+                      return a.day - b.day;
                     }
-                    return a.day.month.year.index - b.day.month.year.index;
+                    return a.year - b.year;
                   }),
                   8,
                 ).map((row) => (
@@ -364,17 +359,18 @@ const Customize = ({ name, token, numOfEvents, dispatch }) => {
                           setOpen(true);
                           setCur({ key: value.id, ...event });
                         }}
+                        key={event.id}
                       >
-                        {`${event.day.index} ${event.day.month.month_name} ${event.day.month.year.index}`}
+                        {`${event.day} ${event.month} ${event.year}`}
                       </Button>
                     ))}
                   </Grid>
                 ))}
               </Grid>
               <div className={classes.bottomButtons}>
-                <KeyboardDatePicker
+                <DatePicker
                   value={date}
-                  onChange={handleDateChange}
+                  onChange={handleDate}
                   format="d MMM yyyy"
                   className={classes.calendar}
                   inputVariant="outlined"
@@ -440,9 +436,7 @@ const Customize = ({ name, token, numOfEvents, dispatch }) => {
                 alignItems: 'flex-start',
               }}
             >
-              <Typography
-                style={{ fontSize: '1.5rem', color: dark, fontWeight: 'bold' }}
-              >
+              <Typography variant="h5" style={{ color: dark }}>
                 Add Activity
               </Typography>
               <div
@@ -483,9 +477,7 @@ const Customize = ({ name, token, numOfEvents, dispatch }) => {
                 padding: '2rem 1.5rem 0.5rem 1.5rem',
               }}
             >
-              <Typography
-                style={{ fontSize: '1.5rem', color: dark, fontWeight: 'bold' }}
-              >
+              <Typography variant="h5" style={{ color: dark }}>
                 Edit Event
               </Typography>
               <IconButton
@@ -496,7 +488,7 @@ const Customize = ({ name, token, numOfEvents, dispatch }) => {
               </IconButton>
             </div>
             <DialogContent style={{ backgroundColor: light }}>
-              <Typography style={{ fontWeight: 'bold', color: dark }}>
+              <Typography variant="body2" style={{ color: dark }}>
                 Title:
               </Typography>
               <TextField
@@ -506,8 +498,8 @@ const Customize = ({ name, token, numOfEvents, dispatch }) => {
                 variant="outlined"
               />
               <Typography
+                variant="body2"
                 style={{
-                  fontWeight: 'bold',
                   paddingTop: '1rem',
                   color: dark,
                 }}
@@ -524,38 +516,40 @@ const Customize = ({ name, token, numOfEvents, dispatch }) => {
                 variant="outlined"
               />
               <Typography
+                variant="body2"
                 style={{
-                  fontWeight: 'bold',
                   paddingTop: '1rem',
                   color: dark,
                 }}
               >
                 Start Time:
               </Typography>
-              <TextField
+              <TimePicker
                 fullWidth
-                defaultValue={cur.start}
-                onChange={handleChange('start')}
-                variant="outlined"
+                value={cur.start}
+                onChange={handleDateChange('start')}
+                inputVariant="outlined"
+                DialogProps={{ style: { zIndex: 1500 } }}
               />
               <Typography
+                variant="body2"
                 style={{
-                  fontWeight: 'bold',
                   paddingTop: '1rem',
                   color: dark,
                 }}
               >
                 End Time:
               </Typography>
-              <TextField
+              <TimePicker
                 fullWidth
-                defaultValue={cur.end}
-                onChange={handleChange('end')}
-                variant="outlined"
+                value={cur.end}
+                onChange={handleDateChange('end')}
+                inputVariant="outlined"
+                DialogProps={{ style: { zIndex: 1500 } }}
               />
               <Typography
+                variant="body2"
                 style={{
-                  fontWeight: 'bold',
                   paddingTop: '1rem',
                   color: dark,
                 }}
@@ -569,7 +563,8 @@ const Customize = ({ name, token, numOfEvents, dispatch }) => {
                 variant="outlined"
               />
               <Typography
-                style={{ fontWeight: 'bold', paddingTop: '1rem', color: dark }}
+                variant="body2"
+                style={{ paddingTop: '1rem', color: dark }}
               >
                 Color:
               </Typography>
@@ -618,9 +613,7 @@ const Customize = ({ name, token, numOfEvents, dispatch }) => {
                 padding: '2rem 1.5rem 0.5rem 1.5rem',
               }}
             >
-              <Typography
-                style={{ fontSize: '1.5rem', color: dark, fontWeight: 'bold' }}
-              >
+              <Typography variant="h5" style={{ color: dark }}>
                 Edit All Events
               </Typography>
               <IconButton
@@ -631,7 +624,7 @@ const Customize = ({ name, token, numOfEvents, dispatch }) => {
               </IconButton>
             </div>
             <DialogContent style={{ backgroundColor: light }}>
-              <Typography style={{ fontWeight: 'bold', color: dark }}>
+              <Typography variant="body2" style={{ color: dark }}>
                 Title:
               </Typography>
               <TextField
@@ -641,8 +634,8 @@ const Customize = ({ name, token, numOfEvents, dispatch }) => {
                 variant="outlined"
               />
               <Typography
+                variant="body2"
                 style={{
-                  fontWeight: 'bold',
                   paddingTop: '1rem',
                   color: dark,
                 }}
@@ -659,38 +652,40 @@ const Customize = ({ name, token, numOfEvents, dispatch }) => {
                 variant="outlined"
               />
               <Typography
+                variant="body2"
                 style={{
-                  fontWeight: 'bold',
                   paddingTop: '1rem',
                   color: dark,
                 }}
               >
                 Start Time:
               </Typography>
-              <TextField
+              <TimePicker
                 fullWidth
-                defaultValue={cur.start}
-                onChange={handleChange('start')}
-                variant="outlined"
+                value={cur.start}
+                onChange={handleDateChange('start')}
+                inputVariant="outlined"
+                DialogProps={{ style: { zIndex: 1500 } }}
               />
               <Typography
+                variant="body2"
                 style={{
-                  fontWeight: 'bold',
                   paddingTop: '1rem',
                   color: dark,
                 }}
               >
                 End Time:
               </Typography>
-              <TextField
+              <TimePicker
                 fullWidth
-                defaultValue={cur.end}
-                onChange={handleChange('end')}
-                variant="outlined"
+                value={cur.end}
+                onChange={handleDateChange('end')}
+                inputVariant="outlined"
+                DialogProps={{ style: { zIndex: 1500 } }}
               />
               <Typography
+                variant="body2"
                 style={{
-                  fontWeight: 'bold',
                   paddingTop: '1rem',
                   color: dark,
                 }}
@@ -704,7 +699,8 @@ const Customize = ({ name, token, numOfEvents, dispatch }) => {
                 variant="outlined"
               />
               <Typography
-                style={{ fontWeight: 'bold', paddingTop: '1rem', color: dark }}
+                variant="body2"
+                style={{ paddingTop: '1rem', color: dark }}
               >
                 Color:
               </Typography>

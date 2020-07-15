@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   buttonTitle: {
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
     overflowWrap: 'break-word',
     maxHeight: '3rem',
     height: '2rem',
@@ -48,7 +48,9 @@ const NotesTile = (props) => {
       onClick={handleOpen}
     >
       <div className={classes.buttonInside}>
-        <div className={classes.buttonTitle}>{title}</div>
+        <Typography variant="body2" className={classes.buttonTitle}>
+          {title}
+        </Typography>
         <Typography className={classes.typography}>{text}</Typography>
       </div>
     </Button>

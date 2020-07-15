@@ -56,7 +56,7 @@ const AutomaticLogout = (props) => {
   return (
     <Dialog open={open} onClose={handleClose}>
       <DialogContent className={classes.dialog}>
-        <Typography>Your session has expired, please login again!</Typography>
+        <Typography>Your session has expired, please log in again!</Typography>
       </DialogContent>
       <DialogActions style={{ backgroundColor: light }}>
         <Button

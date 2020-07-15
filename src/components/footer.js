@@ -1,5 +1,5 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core';
+import { makeStyles, Typography } from '@material-ui/core';
 import { light } from '../colors';
 
 const useStyles = makeStyles(() => ({
@@ -18,8 +18,8 @@ const Footer = () => {
   const classes = useStyles();
   return (
     <footer className={classes.footer}>
-      <p>&copy; Copyright 2020</p>
-      <p>Made by Audrey Felicio Anwar & Fidella Widjojo</p>
+      <Typography>&copy; Copyright 2020</Typography>
+      <Typography>Made by Audrey Felicio Anwar & Fidella Widjojo</Typography>
     </footer>
   );
 };

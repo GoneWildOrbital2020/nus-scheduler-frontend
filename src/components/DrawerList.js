@@ -191,7 +191,7 @@ const DrawerList = ({ dispatch, token, username, ...routeProps }) => {
           <ListItemIcon>
             <ExitToApp style={{ color: dark }} />
           </ListItemIcon>
-          <ListItemText primary="Logout" style={{ color: dark }} />
+          <ListItemText primary="Log Out" style={{ color: dark }} />
         </ListItem>
         <ListItem
           onClick={() => window.open('https://github.com/GoneWildOrbital2020')}
@@ -224,9 +224,7 @@ const DrawerList = ({ dispatch, token, username, ...routeProps }) => {
             padding: '2rem 1.5rem 0.5rem 1.5rem',
           }}
         >
-          <Typography
-            style={{ fontSize: '1.5rem', color: dark, fontWeight: 'bold' }}
-          >
+          <Typography variant="h5" style={{ color: dark }}>
             Add Event Group
           </Typography>
           <IconButton
@@ -237,10 +235,15 @@ const DrawerList = ({ dispatch, token, username, ...routeProps }) => {
           </IconButton>
         </div>
         <DialogContent style={{ backgroundColor: light }}>
+          <Typography
+            variant="body2"
+            style={{ marginTop: '1rem', color: dark }}
+          >
+            Name:
+          </Typography>
           <TextField
             onChange={(e) => setName(e.target.value)}
             required
-            label="Name"
             fullWidth
             variant="outlined"
           />

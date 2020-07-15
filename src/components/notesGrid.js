@@ -37,8 +37,8 @@ const useStyles = makeStyles((theme) => ({
   title: {
     display: 'inline-block',
     color: light,
-    fontSize: '2rem',
-    fontWeight: 'bold',
+    // fontSize: '2rem',
+    // fontWeight: 'bold',
   },
   grid: {
     width: 'max-content',
@@ -282,7 +282,9 @@ const NotesGrid = (props) => {
   return (
     <div className={classes.container}>
       <div className={classes.top}>
-        <Typography className={classes.title}>Notes</Typography>
+        <Typography variant="h4" className={classes.title}>
+          Notes
+        </Typography>
         <Button
           variant="contained"
           className={classes.button}

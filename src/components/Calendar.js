@@ -139,18 +139,14 @@ const Calendar = ({
         <Button onClick={handleOpenDialog}>
           <div className={classes.inside}>
             <Typography
+              variant="h4"
               style={{
-                fontSize: '2rem',
-                fontWeight: 'bold',
                 color: light,
-                marginBottom: '-1rem',
               }}
             >
               {activeYear}
             </Typography>
-            <Typography
-              style={{ fontSize: '3rem', fontWeight: 'bold', color: light }}
-            >
+            <Typography variant="h2" style={{ color: light }}>
               {monthProperties[activeMonth].name}
             </Typography>
           </div>
