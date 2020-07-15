@@ -9,7 +9,7 @@ import { monthProperties, monthPropertiesLeap, url } from './constant';
 import Notification from './notification';
 import { light } from '../colors';
 
-const Month = ({ activeMonth, activeYear, username, token }) => {
+const Month = ({ activeMonth, activeYear, token }) => {
   const generateRows = (num) => {
     const rows = [];
     for (let i = 0; i < num; i += 1) {
@@ -154,13 +154,11 @@ Month.propTypes = {
   activeMonth: PropTypes.number.isRequired,
   activeYear: PropTypes.number.isRequired,
   token: PropTypes.string.isRequired,
-  username: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   activeMonth: state.activeMonth,
   activeYear: state.activeYear,
-  username: state.username,
   token: state.token,
 });
 

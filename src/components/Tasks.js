@@ -13,6 +13,7 @@ import {
   DialogContent,
   TextField,
   DialogActions,
+  Grid,
 } from '@material-ui/core';
 import { Alarm, Edit, Close } from '@material-ui/icons';
 import { DatePicker } from '@material-ui/pickers';
@@ -20,9 +21,15 @@ import { groupBy } from 'lodash';
 import { light, dark, medium } from '../colors';
 import { url } from './constant';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   container: {
-    width: 'calc(85% - 3rem)',
+    width: '85%',
+    [theme.breakpoints.down('md')]: {
+      width: '75%',
+    },
+    [theme.breakpoints.down('xs')]: {
+      width: '100%',
+    },
     float: 'right',
     display: 'flex',
     padding: '1.5rem',
@@ -34,6 +41,12 @@ const useStyles = makeStyles(() => ({
   column: {
     margin: '0.5rem',
     width: 'calc((100% - 4rem) / 4)',
+    [theme.breakpoints.down('md')]: {
+      width: 'calc((100% - 2rem) / 2)',
+    },
+    [theme.breakpoints.down('xs')]: {
+      width: 'calc(100% - 1rem)',
+    },
     display: 'flex',
     flexDirection: 'column',
     backgroundColor: '#384241',
@@ -130,7 +143,7 @@ const cols = [
   { id: done, title: 'Done' },
 ];
 
-const Tasks = ({ name, username, token }) => {
+const Tasks = ({ name, token }) => {
   const classes = useStyles();
   const [items, setItems] = React.useState({
     [toDo]: [],
@@ -139,7 +152,7 @@ const Tasks = ({ name, username, token }) => {
     [done]: [],
   });
   const fetchTasks = () =>
-    fetch(`${url}/tasks/${username}/${name}`, {
+    fetch(`${url}/tasks/${name}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -171,7 +184,7 @@ const Tasks = ({ name, username, token }) => {
   const [curItem, setCurItem] = React.useState({});
   console.log(items);
   const updatePos = (item) => {
-    fetch(`${url}/tasks/${username}/${name}/${item.id}`, {
+    fetch(`${url}/tasks/${name}/${item.id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -297,7 +310,7 @@ const Tasks = ({ name, username, token }) => {
   const handleSave = () => {
     if (curItem.add) {
       const { add, ...newItem } = curItem;
-      fetch(`${url}/tasks/${username}/${name}`, {
+      fetch(`${url}/tasks/${name}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -324,7 +337,7 @@ const Tasks = ({ name, username, token }) => {
         });
     } else {
       const { edit, ...newItem } = curItem;
-      fetch(`${url}/tasks/${username}/${name}/${curItem.id}`, {
+      fetch(`${url}/tasks/${name}/${curItem.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -349,7 +362,7 @@ const Tasks = ({ name, username, token }) => {
     setOpen(false);
   };
   const handleDelete = () => {
-    fetch(`${url}/tasks/${username}/${name}/${curItem.id}`, {
+    fetch(`${url}/tasks/${name}/${curItem.id}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -364,7 +377,7 @@ const Tasks = ({ name, username, token }) => {
   };
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
-      <div className={classes.container}>
+      <Grid container item className={classes.container}>
         {cols.map((col) => (
           <Paper className={classes.column}>
             <Typography variant="h5" className={classes.title}>
@@ -434,7 +447,7 @@ const Tasks = ({ name, username, token }) => {
             </Button>
           </Paper>
         ))}
-      </div>
+      </Grid>
       <Dialog
         open={open}
         onClose={() => setOpen(false)}
@@ -510,13 +523,11 @@ const Tasks = ({ name, username, token }) => {
 Tasks.propTypes = {
   name: PropTypes.string.isRequired,
   token: PropTypes.string.isRequired,
-  username: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (state) => {
   return {
     token: state.token,
-    username: state.username,
   };
 };
 
