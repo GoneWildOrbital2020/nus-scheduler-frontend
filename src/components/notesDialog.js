@@ -10,27 +10,29 @@ import {
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import PropTypes from 'prop-types';
-import { light, medium, accent } from '../colors';
+import { light, medium, accent, dark } from '../colors';
 
 const useStyles = makeStyles(() => ({
   title: {
-    backgroundColor: medium,
-    color: light,
-    padding: '1rem 2rem',
+    backgroundColor: light,
+    color: dark,
+    padding: '2rem',
+    paddingBottom: '0',
+    display: 'flex',
+    justifyContent: 'space-between',
   },
   inside: {
     backgroundColor: light,
     padding: '2rem',
+    paddingTop: '1rem',
   },
   textField: {
     width: '100%',
     color: accent,
-    marginTop: '1rem',
+    // marginTop: '1rem',
     marginBottom: '1rem',
   },
-  typography: {
-    fontWeight: 'bold',
-  },
+  typography: {},
   buttons: {
     display: 'flex',
     float: 'right',
@@ -87,14 +89,16 @@ const NotesDialog = (props) => {
       maxWidth="lg"
       style={{ zIndex: 1500 }}
     >
-      <DialogTitle className={classes.title}>
-        {newTitle}
+      <div className={classes.title}>
+        <Typography variant="h5">{newTitle}</Typography>
         <IconButton className={classes.closeButton} onClick={handleClose}>
           <CloseIcon />
         </IconButton>
-      </DialogTitle>
+      </div>
       <div className={classes.inside}>
-        <Typography className={classes.typography}>Title:</Typography>
+        <Typography variant="body2" className={classes.typography}>
+          Title:
+        </Typography>
         <TextField
           variant="outlined"
           defaultValue={newTitle}
@@ -102,7 +106,9 @@ const NotesDialog = (props) => {
           className={classes.textField}
           onChange={handleChangeTitle}
         />
-        <Typography className={classes.typography}>Text:</Typography>
+        <Typography variant="body2" className={classes.typography}>
+          Text:
+        </Typography>
         <TextField
           variant="outlined"
           defaultValue={newText}

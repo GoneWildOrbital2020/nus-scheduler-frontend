@@ -27,13 +27,13 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     color: dark,
-    fontSize: '2rem',
-    fontWeight: 'bold',
+    // fontSize: '2rem',
+    // fontWeight: 'bold',
   },
   typography: {
     color: dark,
-    fontWeight: 'bold',
-    fontSize: '1.5rem',
+    // fontWeight: 'bold',
+    // fontSize: '1.5rem',
     marginTop: '2rem',
   },
   button: {
@@ -142,8 +142,14 @@ const Profile = (props) => {
 
   return (
     <Paper className={classes.root}>
-      <Typography className={classes.title}>Edit Profile</Typography>
-      <Typography className={classes.typography} style={{ marginTop: '1rem' }}>
+      <Typography variant="h4" className={classes.title}>
+        Edit Profile
+      </Typography>
+      <Typography
+        variant="body2"
+        className={classes.typography}
+        style={{ marginTop: '1rem' }}
+      >
         Change Avatar
       </Typography>
       {avatarProps !== '' ? (
@@ -162,7 +168,9 @@ const Profile = (props) => {
           Upload Image
         </Button>
       </label>
-      <Typography className={classes.typography}>Change Credentials</Typography>
+      <Typography variant="body2" className={classes.typography}>
+        Change Credentials
+      </Typography>
       <TextField
         className={classes.textField}
         label="Username"

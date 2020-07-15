@@ -28,9 +28,7 @@ const useStyles = makeStyles(() => ({
     padding: '1.5rem',
   },
   title: {
-    fontSize: '1.5rem',
     color: light,
-    fontWeight: 'bold',
     marginBottom: '0.5rem',
   },
   column: {
@@ -100,19 +98,15 @@ const useStyles = makeStyles(() => ({
     padding: '2rem 1.5rem 0.5rem 1.5rem',
   },
   dialogTitle: {
-    fontSize: '1.5rem',
     color: dark,
-    fontWeight: 'bold',
   },
   dialogContent: {
     backgroundColor: light,
   },
   dialogSubtitleFirst: {
-    fontWeight: 'bold',
     color: dark,
   },
   dialogSubtitle: {
-    fontWeight: 'bold',
     color: dark,
     marginTop: '1rem',
   },
@@ -374,7 +368,9 @@ const Tasks = ({ name, username, token }) => {
       <div className={classes.container}>
         {cols.map((col) => (
           <Paper className={classes.column}>
-            <Typography className={classes.title}>{col.title}</Typography>
+            <Typography variant="h5" className={classes.title}>
+              {col.title}
+            </Typography>
             <Droppable droppableId={col.id}>
               {(provided, snapshot) => (
                 <div
@@ -446,7 +442,7 @@ const Tasks = ({ name, username, token }) => {
         className={classes.dialog}
       >
         <div className={classes.dialogHeader}>
-          <Typography className={classes.dialogTitle}>
+          <Typography variant="h5" className={classes.dialogTitle}>
             {`${curItem.add ? 'Add' : 'Edit'} Task`}
           </Typography>
           <IconButton
@@ -457,7 +453,7 @@ const Tasks = ({ name, username, token }) => {
           </IconButton>
         </div>
         <DialogContent className={classes.dialogContent}>
-          <Typography className={classes.dialogSubtitleFirst}>
+          <Typography variant="body2" className={classes.dialogSubtitleFirst}>
             Title:
           </Typography>
           <TextField
@@ -466,7 +462,7 @@ const Tasks = ({ name, username, token }) => {
             defaultValue={curItem.title}
             fullWidth
           />
-          <Typography className={classes.dialogSubtitle}>
+          <Typography variant="body2" className={classes.dialogSubtitle}>
             Description:
           </Typography>
           <TextField
@@ -478,7 +474,9 @@ const Tasks = ({ name, username, token }) => {
             defaultValue={curItem.description}
             fullWidth
           />
-          <Typography className={classes.dialogSubtitle}>Due date:</Typography>
+          <Typography variant="body2" className={classes.dialogSubtitle}>
+            Due date:
+          </Typography>
           <DatePicker
             inputVariant="outlined"
             onChange={handleDateChange}
