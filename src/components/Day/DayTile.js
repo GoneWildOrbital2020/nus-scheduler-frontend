@@ -7,14 +7,7 @@ import DayDialog from './TABDayDialog';
 import { url } from '../constant';
 import Notification from '../notification';
 
-const DayTile = ({
-  index,
-  username,
-  token,
-  propEvents,
-  activeMonth,
-  activeYear,
-}) => {
+const DayTile = ({ index, token, propEvents, activeMonth, activeYear }) => {
   const [open, setOpen] = React.useState(false);
   const [openAlert, setOpenAlert] = React.useState(false);
   const [message, setMessage] = React.useState('');
@@ -32,7 +25,7 @@ const DayTile = ({
       },
       body: JSON.stringify({ events }),
     };
-    fetch(`${url}/calendars/${username}/${year}/${month}/${day}`, options)
+    fetch(`${url}/calendars/${year}/${month}/${day}`, options)
       .then((res) => {
         if (!res.ok) {
           throw new Error('Failed to save changes!');
@@ -91,7 +84,6 @@ const DayTile = ({
 
 DayTile.propTypes = {
   index: PropTypes.number.isRequired,
-  username: PropTypes.string.isRequired,
   token: PropTypes.string.isRequired,
   activeMonth: PropTypes.number.isRequired,
   activeYear: PropTypes.number.isRequired,
@@ -111,7 +103,6 @@ DayTile.propTypes = {
 const mapStateToProps = (state) => ({
   activeMonth: state.activeMonth,
   activeYear: state.activeYear,
-  username: state.username,
   token: state.token,
 });
 

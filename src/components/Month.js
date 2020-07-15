@@ -30,7 +30,7 @@ const Month = ({ activeMonth, activeYear, username, token }) => {
 
   const fetchEvents = async () => {
     const response = await fetch(
-      `${url}/calendars/${username}/${activeYear}/${activeMonth}`,
+      `${url}/calendars/${activeYear}/${activeMonth}`,
       {
         method: 'GET',
         headers: {
@@ -59,7 +59,7 @@ const Month = ({ activeMonth, activeYear, username, token }) => {
         });
     };
     getEvents();
-  }, [activeMonth]);
+  }, [activeMonth, activeYear]);
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {

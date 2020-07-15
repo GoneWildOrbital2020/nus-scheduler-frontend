@@ -98,7 +98,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
+const Customize = ({ name, token, numOfEvents, dispatch }) => {
   const classes = useStyles();
   const styles = {
     card: {
@@ -108,7 +108,7 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
 
   const [events, setEvents] = React.useState({ empty: true });
   const fetchEvents = () =>
-    fetch(`${url}/events/${username}/${name}`, {
+    fetch(`${url}/events/${name}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -228,7 +228,7 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
         },
       }),
     };
-    fetch(`${url}/events/${username}/${name}/${cur.key}`, options);
+    fetch(`${url}/events/${name}/${cur.key}`, options);
     setOpenEdit(false);
   };
 
@@ -243,7 +243,7 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
         Authorization: `Bearer ${token}`,
       },
     };
-    fetch(`${url}/events/${username}/${name}/${key}`, options);
+    fetch(`${url}/events/${name}/${key}`, options);
   };
 
   const handleDeleteActivity = (key) => () => {
@@ -255,7 +255,7 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
         Authorization: `Bearer ${token}`,
       },
     };
-    fetch(`${url}/events/${username}/${name}/${key}/all`, options);
+    fetch(`${url}/events/${name}/${key}/all`, options);
   };
 
   const [date, setDate] = React.useState(new Date());
@@ -285,7 +285,7 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
         year: date.getUTCFullYear(),
       }),
     };
-    fetch(`${url}/events/${username}/${name}/${add.key}`, options)
+    fetch(`${url}/events/${name}/${add.key}`, options)
       .then((response) => response.json())
       .then((data) => {
         setEvents((state) =>
@@ -311,7 +311,7 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
         name: repName,
       }),
     };
-    fetch(`${url}/events/rep/${username}/${name}`, options)
+    fetch(`${url}/events/rep/${name}`, options)
       .then((response) => response.json())
       .then(({ id }) =>
         setEvents((state) => {
@@ -743,14 +743,12 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
 
 Customize.propTypes = {
   name: PropTypes.string.isRequired,
-  username: PropTypes.string.isRequired,
   token: PropTypes.string.isRequired,
   numOfEvents: PropTypes.number.isRequired,
   dispatch: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-  username: state.username,
   token: state.token,
   numOfEvents: state.numOfEvents,
 });

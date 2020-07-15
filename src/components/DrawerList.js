@@ -76,7 +76,7 @@ const DrawerList = ({ dispatch, token, username, ...routeProps }) => {
     event.preventDefault();
     const reader = new FileReader();
     reader.onload = (e) => {
-      fetch(`${url}/events/nusmod/${username}`, {
+      fetch(`${url}/events/nusmod/`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -93,7 +93,7 @@ const DrawerList = ({ dispatch, token, username, ...routeProps }) => {
     reader.readAsText(event.target.files[0]);
   };
 
-  const fetchTitles = fetch(`${url}/events/${username}`, {
+  const fetchTitles = fetch(`${url}/events/`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -112,7 +112,7 @@ const DrawerList = ({ dispatch, token, username, ...routeProps }) => {
       },
       body: JSON.stringify({ name }),
     };
-    fetch(`${url}/events/${username}`, options);
+    fetch(`${url}/events/`, options);
     history.push(`/events-group/${name}/customize`);
   };
 

@@ -75,7 +75,7 @@ const Calendar = ({
   };
 
   const fetchNumOfEvents = async () => {
-    const response = await fetch(`${url}/calendars/${username}/${activeYear}`, {
+    const response = await fetch(`${url}/calendars/${activeYear}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

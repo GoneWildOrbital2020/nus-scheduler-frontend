@@ -123,7 +123,7 @@ const Profile = (props) => {
         setSeverity('success');
         setOpen(true);
         setMessage('Update successful!');
-        window.location.replace(`/profile/${json.username}`);
+        window.location.replace(`/profile`);
       })
       .catch((err) => {
         setSeverity('error');
@@ -157,7 +157,12 @@ const Profile = (props) => {
           id="avatar-upload"
           onChange={handleUploadAvatar}
         />
-        <Button className={classes.button} variant="contained" color="primary">
+        <Button
+          className={classes.button}
+          component="span"
+          variant="contained"
+          color="primary"
+        >
           Upload Image
         </Button>
       </label>

@@ -134,7 +134,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Upload = (props) => {
-  const { token, username, name: groupName } = props;
+  const { token, name: groupName } = props;
   const classes = useStyles();
   const extraSmall = useMediaQuery((theme) => theme.breakpoints.down('xs'));
   const [name, setName] = useState('');
@@ -145,7 +145,7 @@ const Upload = (props) => {
   const [severity, setSeverity] = useState('success');
 
   useEffect(() => {
-    const fetchFile = fetch(`${url}/upload/get/file/${username}/${groupName}`, {
+    const fetchFile = fetch(`${url}/upload/get/file/${groupName}`, {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -154,19 +154,16 @@ const Upload = (props) => {
       return res.json();
     });
 
-    const fetchImage = fetch(
-      `${url}/upload/get/image/${username}/${groupName}`,
-      {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+    const fetchImage = fetch(`${url}/upload/get/image/${groupName}`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
       },
-    ).then((res) => {
+    }).then((res) => {
       return res.json();
     });
 
-    const fetchTotal = fetch(`${url}/upload/get/totalfiles/${username}`, {
+    const fetchTotal = fetch(`${url}/upload/get/totalfiles/`, {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -239,7 +236,7 @@ const Upload = (props) => {
     data.append('identifier', total + 1);
     data.append('name', name);
     data.append('image', event.target.files[0]);
-    fetch(`${url}/upload/image/${username}/${groupName}`, {
+    fetch(`${url}/upload/image/${groupName}`, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -270,7 +267,7 @@ const Upload = (props) => {
     data.append('identifier', total + 1);
     data.append('name', name);
     data.append('file', event.target.files[0]);
-    fetch(`${url}/upload/file/${username}/${groupName}`, {
+    fetch(`${url}/upload/file/${groupName}`, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -299,7 +296,7 @@ const Upload = (props) => {
     const data = {
       identifier: rowData.identifier,
     };
-    fetch(`${url}/upload/delete/files/${username}/${groupName}`, {
+    fetch(`${url}/upload/delete/files/${groupName}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -539,14 +536,12 @@ const Upload = (props) => {
 
 Upload.propTypes = {
   token: PropTypes.string.isRequired,
-  username: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (state) => {
   return {
     token: state.token,
-    username: state.username,
   };
 };
 

@@ -62,7 +62,7 @@ const EventGroup = ({ name, path, username, token, ...routerProps }) => {
         Authorization: `Bearer ${token}`,
       },
     };
-    fetch(`${url}/events/${username}/${name}`, options);
+    fetch(`${url}/events/${name}`, options);
     history.replace('/');
   };
   return !extraSmall ? (
@@ -131,6 +131,7 @@ const EventGroup = ({ name, path, username, token, ...routerProps }) => {
           path={`${path}/notes`}
           render={() => <NotesGrid name={name} />}
         />
+        <Route path={`${path}/tasks`} render={() => <Tasks name={name} />} />
       </Switch>
     </>
   ) : (
