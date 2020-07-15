@@ -37,8 +37,8 @@ const useStyles = makeStyles((theme) => ({
   title: {
     display: 'inline-block',
     color: light,
-    fontSize: '2rem',
-    fontWeight: 'bold',
+    // fontSize: '2rem',
+    // fontWeight: 'bold',
   },
   grid: {
     width: 'max-content',
@@ -46,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
   },
   button: {
     color: light,
-    width: '50%',
+    // width: '50%',
     margin: '0.5rem auto',
     [theme.breakpoints.up('sm')]: {
       position: 'absolute',
@@ -280,7 +280,9 @@ const NotesGrid = (props) => {
   return (
     <div className={classes.container}>
       <div className={classes.top}>
-        <Typography className={classes.title}>Notes</Typography>
+        <Typography variant="h4" className={classes.title}>
+          Notes
+        </Typography>
         <Button
           variant="outlined"
           className={classes.button}

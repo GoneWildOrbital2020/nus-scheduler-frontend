@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TextField, Button } from '@material-ui/core';
+import { TextField, Button, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -26,7 +26,7 @@ const useStyles = makeStyles({
     display: 'inline-block',
     border: 'solid gray 1px',
     borderRadius: '10px',
-    padding: '1em',
+    padding: '2rem',
     backgroundColor: light,
   },
   input: {
@@ -109,7 +109,9 @@ const Login = (props) => {
   return (
     <div className={classes.login}>
       <div className={classes.form}>
-        <h1 style={{ color: dark }}>WELCOME</h1>
+        <Typography variant="h4" style={{ color: dark }}>
+          WELCOME
+        </Typography>
         <form>
           <div className={classes.input}>
             <TextField
@@ -145,11 +147,14 @@ const Login = (props) => {
           open={open}
           severity={severity}
         />
-        <h5 style={{ color: dark, marginTop: '1rem', marginBottom: '0.25rem' }}>
-          Not a user ?
-        </h5>
+        <Typography
+          variant="body2"
+          style={{ color: dark, marginTop: '1rem', marginBottom: '0.25rem' }}
+        >
+          Not a user?
+        </Typography>
         <Link className={classes.link} to="/signup">
-          <Button className={classes.button}>SignUp</Button>
+          <Button className={classes.button}>Sign Up</Button>
         </Link>
       </div>
     </div>

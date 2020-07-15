@@ -3,7 +3,7 @@ import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import './App.css';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import { ThemeProvider } from '@material-ui/core/styles';
 
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
@@ -18,7 +18,7 @@ import NavbarDrawer from './components/NavbarDrawer';
 import EventGroup from './components/EventGroup';
 import Profile from './components/profile';
 import AutomaticLogout from './components/AutomaticLogout';
-import { accent } from './colors';
+import theme from './theme';
 
 /* eslint-disable no-underscore-dangle */
 const store = createStore(
@@ -27,11 +27,6 @@ const store = createStore(
 );
 /* eslint-enable */
 
-const theme = createMuiTheme({
-  palette: {
-    primary: { main: accent },
-  },
-});
 function App() {
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>

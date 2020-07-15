@@ -106,19 +106,19 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   typography: {
-    fontSize: '1.5rem',
+    // fontSize: '1.5rem',
     [theme.breakpoints.down('xs')]: {
       fontSize: '1rem',
     },
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
     color: dark,
   },
   typography2: {
-    fontSize: '1.5rem',
+    // fontSize: '1.5rem',
     [theme.breakpoints.down('xs')]: {
       fontSize: '1rem',
     },
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
     marginBottom: '1rem',
     alignSelf: 'flex-start',
   },
@@ -339,6 +339,11 @@ const Upload = (props) => {
     }
     setOpen(false);
   };
+  const title = (
+    <Typography variant="h5" className={classes.typography}>
+      Files & Images
+    </Typography>
+  );
 
   return (
     <div className={classes.root}>
@@ -349,11 +354,7 @@ const Upload = (props) => {
             padding: '2rem 1rem',
           }}
           icons={tableIcons}
-          title={(
-            <Typography className={classes.typography}>
-              Files & Images
-            </Typography>
-          )}
+          title={title}
           columns={
             !extraSmall
               ? [
@@ -468,7 +469,7 @@ const Upload = (props) => {
         />
       </div>
       <Paper className={classes.paper}>
-        <Typography className={classes.typography2}>
+        <Typography variant="h5" className={classes.typography2}>
           Upload Files & Images
         </Typography>
         <div className={classes.buttons}>

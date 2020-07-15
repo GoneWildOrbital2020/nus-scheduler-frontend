@@ -329,10 +329,7 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
         <>
           {events.map((value) => (
             <Paper className={classes.paper} key={value.id}>
-              <Typography
-                align="left"
-                style={{ fontSize: '1.5rem', color: dark, fontWeight: 'bold' }}
-              >
+              <Typography variant="h5" align="left" style={{ color: dark }}>
                 {value.name}
               </Typography>
 
@@ -434,9 +431,7 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
                 alignItems: 'flex-start',
               }}
             >
-              <Typography
-                style={{ fontSize: '1.5rem', color: dark, fontWeight: 'bold' }}
-              >
+              <Typography variant="h5" style={{ color: dark }}>
                 Add Activity
               </Typography>
               <div
@@ -476,9 +471,7 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
                 padding: '2rem 1.5rem 0.5rem 1.5rem',
               }}
             >
-              <Typography
-                style={{ fontSize: '1.5rem', color: dark, fontWeight: 'bold' }}
-              >
+              <Typography variant="h5" style={{ color: dark }}>
                 Edit Event
               </Typography>
               <IconButton
@@ -489,7 +482,7 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
               </IconButton>
             </div>
             <DialogContent style={{ backgroundColor: light }}>
-              <Typography style={{ fontWeight: 'bold', color: dark }}>
+              <Typography variant="body2" style={{ color: dark }}>
                 Title:
               </Typography>
               <TextField
@@ -499,8 +492,8 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
                 variant="outlined"
               />
               <Typography
+                variant="body2"
                 style={{
-                  fontWeight: 'bold',
                   paddingTop: '1rem',
                   color: dark,
                 }}
@@ -517,8 +510,8 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
                 variant="outlined"
               />
               <Typography
+                variant="body2"
                 style={{
-                  fontWeight: 'bold',
                   paddingTop: '1rem',
                   color: dark,
                 }}
@@ -533,8 +526,8 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
                 DialogProps={{ style: { zIndex: 1500 } }}
               />
               <Typography
+                variant="body2"
                 style={{
-                  fontWeight: 'bold',
                   paddingTop: '1rem',
                   color: dark,
                 }}
@@ -549,8 +542,8 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
                 DialogProps={{ style: { zIndex: 1500 } }}
               />
               <Typography
+                variant="body2"
                 style={{
-                  fontWeight: 'bold',
                   paddingTop: '1rem',
                   color: dark,
                 }}
@@ -564,7 +557,8 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
                 variant="outlined"
               />
               <Typography
-                style={{ fontWeight: 'bold', paddingTop: '1rem', color: dark }}
+                variant="body2"
+                style={{ paddingTop: '1rem', color: dark }}
               >
                 Color:
               </Typography>
@@ -611,9 +605,7 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
                 padding: '2rem 1.5rem 0.5rem 1.5rem',
               }}
             >
-              <Typography
-                style={{ fontSize: '1.5rem', color: dark, fontWeight: 'bold' }}
-              >
+              <Typography variant="h5" style={{ color: dark }}>
                 Edit All Events
               </Typography>
               <IconButton
@@ -624,7 +616,7 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
               </IconButton>
             </div>
             <DialogContent style={{ backgroundColor: light }}>
-              <Typography style={{ fontWeight: 'bold', color: dark }}>
+              <Typography variant="body2" style={{ color: dark }}>
                 Title:
               </Typography>
               <TextField
@@ -634,8 +626,8 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
                 variant="outlined"
               />
               <Typography
+                variant="body2"
                 style={{
-                  fontWeight: 'bold',
                   paddingTop: '1rem',
                   color: dark,
                 }}
@@ -652,8 +644,8 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
                 variant="outlined"
               />
               <Typography
+                variant="body2"
                 style={{
-                  fontWeight: 'bold',
                   paddingTop: '1rem',
                   color: dark,
                 }}
@@ -668,8 +660,8 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
                 DialogProps={{ style: { zIndex: 1500 } }}
               />
               <Typography
+                variant="body2"
                 style={{
-                  fontWeight: 'bold',
                   paddingTop: '1rem',
                   color: dark,
                 }}
@@ -683,15 +675,9 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
                 inputVariant="outlined"
                 DialogProps={{ style: { zIndex: 1500 } }}
               />
-              <TextField
-                fullWidth
-                defaultValue={cur.end}
-                onChange={handleChange('end')}
-                variant="outlined"
-              />
               <Typography
+                variant="body2"
                 style={{
-                  fontWeight: 'bold',
                   paddingTop: '1rem',
                   color: dark,
                 }}
@@ -705,7 +691,8 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
                 variant="outlined"
               />
               <Typography
-                style={{ fontWeight: 'bold', paddingTop: '1rem', color: dark }}
+                variant="body2"
+                style={{ paddingTop: '1rem', color: dark }}
               >
                 Color:
               </Typography>

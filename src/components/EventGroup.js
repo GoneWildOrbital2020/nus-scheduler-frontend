@@ -36,9 +36,10 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   typography: {
-    fontSize: '2rem',
+    marginTop: '2rem',
+    // fontSize: '2rem',
     color: light,
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
     width: '85%',
     [theme.breakpoints.down('md')]: {
       width: '75%',
@@ -120,7 +121,9 @@ const EventGroup = ({ name, path, username, token, ...routerProps }) => {
           </ListItem>
         </List>
       </Drawer>
-      <Typography className={classes.typography}>{name}</Typography>
+      <Typography variant="h2" className={classes.typography}>
+        {name}
+      </Typography>
       <Switch>
         <Route
           path={`${path}/customize`}
@@ -131,11 +134,14 @@ const EventGroup = ({ name, path, username, token, ...routerProps }) => {
           path={`${path}/notes`}
           render={() => <NotesGrid name={name} />}
         />
+        <Route path={`${path}/tasks`} render={() => <Tasks name={name} />} />
       </Switch>
     </>
   ) : (
     <>
-      <Typography className={classes.typography}>{name}</Typography>
+      <Typography variant="h2" className={classes.typography}>
+        {name}
+      </Typography>
       <Switch>
         <Route
           path={`${path}/customize`}

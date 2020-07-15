@@ -204,9 +204,8 @@ const DayDialog = ({
     >
       <div className={classes.dialogTitle} style={{ backgroundColor: medium }}>
         <Typography
+          variant="h4"
           style={{
-            fontWeight: 'bold',
-            fontSize: '2.5rem',
             color: light,
           }}
         >
@@ -231,9 +230,7 @@ const DayDialog = ({
             >
               {newEvents.map((event) => {
                 const label = (
-                  <Typography
-                    style={{ fontWeight: 'bold', color: event.color }}
-                  >
+                  <Typography variant="body2" style={{ color: event.color }}>
                     {event.title}
                   </Typography>
                 );
@@ -250,7 +247,7 @@ const DayDialog = ({
                 className={classes.container}
                 style={{ backgroundColor: light }}
               >
-                <Typography style={{ fontWeight: 'bold', color: dark }}>
+                <Typography variant="body2" style={{ color: dark }}>
                   Title:
                 </Typography>
                 <TextField
@@ -260,8 +257,8 @@ const DayDialog = ({
                   variant="outlined"
                 />
                 <Typography
+                  variant="body2"
                   style={{
-                    fontWeight: 'bold',
                     paddingTop: '1rem',
                     color: dark,
                   }}
@@ -277,8 +274,8 @@ const DayDialog = ({
                   variant="outlined"
                 />
                 <Typography
+                  variant="body2"
                   style={{
-                    fontWeight: 'bold',
                     paddingTop: '1rem',
                     color: dark,
                   }}
@@ -293,6 +290,7 @@ const DayDialog = ({
                   DialogProps={{ style: { zIndex: 1500 } }}
                 />
                 <Typography
+                  variant="body2"
                   style={{
                     fontWeight: 'bold',
                     paddingTop: '1rem',
@@ -309,8 +307,8 @@ const DayDialog = ({
                   DialogProps={{ style: { zIndex: 1500 } }}
                 />
                 <Typography
+                  variant="body2"
                   style={{
-                    fontWeight: 'bold',
                     paddingTop: '1rem',
                     color: dark,
                   }}
@@ -324,8 +322,8 @@ const DayDialog = ({
                   variant="outlined"
                 />
                 <Typography
+                  variant="body2"
                   style={{
-                    fontWeight: 'bold',
                     paddingTop: '1rem',
                     color: dark,
                   }}
