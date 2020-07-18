@@ -29,7 +29,7 @@ import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
-import { accent, light, dark } from '../colors';
+import { light, dark } from '../colors';
 import Notification from './notification';
 import { url, monthProperties } from './constant';
 
@@ -97,7 +97,6 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   button: {
-    backgroundColor: `${accent}`,
     color: `${light}`,
   },
   textField: {
@@ -135,7 +134,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Upload = (props) => {
-  const { token, username, name: groupName } = props;
+  const { token, name: groupName } = props;
   const classes = useStyles();
   const extraSmall = useMediaQuery((theme) => theme.breakpoints.down('xs'));
   const [name, setName] = useState('');
@@ -146,7 +145,7 @@ const Upload = (props) => {
   const [severity, setSeverity] = useState('success');
 
   useEffect(() => {
-    const fetchFile = fetch(`${url}/upload/get/file/${username}/${groupName}`, {
+    const fetchFile = fetch(`${url}/upload/get/file/${groupName}`, {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -155,19 +154,16 @@ const Upload = (props) => {
       return res.json();
     });
 
-    const fetchImage = fetch(
-      `${url}/upload/get/image/${username}/${groupName}`,
-      {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+    const fetchImage = fetch(`${url}/upload/get/image/${groupName}`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
       },
-    ).then((res) => {
+    }).then((res) => {
       return res.json();
     });
 
-    const fetchTotal = fetch(`${url}/upload/get/totalfiles/${username}`, {
+    const fetchTotal = fetch(`${url}/upload/get/totalfiles/`, {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -240,7 +236,7 @@ const Upload = (props) => {
     data.append('identifier', total + 1);
     data.append('name', name);
     data.append('image', event.target.files[0]);
-    fetch(`${url}/upload/image/${username}/${groupName}`, {
+    fetch(`${url}/upload/image/${groupName}`, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -271,7 +267,7 @@ const Upload = (props) => {
     data.append('identifier', total + 1);
     data.append('name', name);
     data.append('file', event.target.files[0]);
-    fetch(`${url}/upload/file/${username}/${groupName}`, {
+    fetch(`${url}/upload/file/${groupName}`, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -300,7 +296,7 @@ const Upload = (props) => {
     const data = {
       identifier: rowData.identifier,
     };
-    fetch(`${url}/upload/delete/files/${username}/${groupName}`, {
+    fetch(`${url}/upload/delete/files/${groupName}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -486,9 +482,11 @@ const Upload = (props) => {
               id="image-upload"
               type="file"
               onChange={handleUploadImage}
+              disabled={!name}
             />
             <Button
               variant="contained"
+              color="primary"
               className={classes.button}
               component="span"
               disabled={!name}
@@ -512,9 +510,11 @@ const Upload = (props) => {
               id="file-upload"
               type="file"
               onChange={handleUploadFile}
+              disabled={!name}
             />
             <Button
               variant="contained"
+              color="primary"
               className={classes.button}
               component="span"
               disabled={!name}
@@ -537,14 +537,12 @@ const Upload = (props) => {
 
 Upload.propTypes = {
   token: PropTypes.string.isRequired,
-  username: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (state) => {
   return {
     token: state.token,
-    username: state.username,
   };
 };
 

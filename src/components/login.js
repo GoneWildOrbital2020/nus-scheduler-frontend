@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TextField, Button, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { toggleLogin } from '../redux/actions';
-import { dark, light, accent } from '../colors';
+import { dark, light } from '../colors';
 import Notification from './notification';
 import { url } from './constant';
 
@@ -16,7 +16,6 @@ const useStyles = makeStyles({
   },
   button: {
     color: light,
-    // backgroundColor: accent,
     width: '100%',
   },
   form: {
@@ -39,6 +38,8 @@ const useStyles = makeStyles({
 
 const Login = (props) => {
   const classes = useStyles();
+  const { ...routeProps } = props;
+  const { history, location } = routeProps;
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [open, setOpen] = useState(false);
@@ -68,7 +69,10 @@ const Login = (props) => {
       body: JSON.stringify(data),
     })
       .then((res) => {
-        if (res.status === 500 || res.status === 400) {
+        if (res.status === 403) {
+          throw new Error('Account has not been activated!');
+        }
+        if (res.status !== 201) {
           throw new Error('Login failed, please try again!');
         }
         return res.json();
@@ -87,10 +91,9 @@ const Login = (props) => {
         window.localStorage.setItem('avatar', json.avatar);
         window.localStorage.setItem('isLoggedIn', true);
         window.localStorage.setItem('logoutTime', Date.parse(json.logout_time));
-        setSeverity('success');
-        setOpen(true);
-        setMessage('Login successful!');
-        window.location.replace('/');
+        history.push('/', {
+          fromLogin: true,
+        });
       })
       .catch((err) => {
         setSeverity('error');
@@ -105,6 +108,24 @@ const Login = (props) => {
     }
     setOpen(false);
   };
+
+  useEffect(() => {
+    if (location.state && location.state.fromAuthenticate) {
+      setSeverity('error');
+      setOpen(true);
+      setMessage('Account activation failed!');
+    } else if (location.state && location.state.fromSignup) {
+      setSeverity('success');
+      setOpen(true);
+      setMessage(
+        'Signup successful! Please check your email for account activation.',
+      );
+    } else if (location.state && location.state.fromReset) {
+      setSeverity('success');
+      setOpen(true);
+      setMessage('Reset password successful!');
+    }
+  }, []);
 
   return (
     <div className={classes.login}>
@@ -134,10 +155,10 @@ const Login = (props) => {
           </div>
         </form>
         <Button
-          color="primary"
-          variant="contained"
           className={classes.button}
           onClick={handleSubmit}
+          variant="contained"
+          color="primary"
         >
           Login
         </Button>
@@ -154,7 +175,25 @@ const Login = (props) => {
           Not a user?
         </Typography>
         <Link className={classes.link} to="/signup">
-          <Button className={classes.button}>Sign Up</Button>
+          <Button
+            className={classes.button}
+            variant="contained"
+            color="primary"
+          >
+            SignUp
+          </Button>
+        </Link>
+        <h5 style={{ color: dark, marginTop: '1rem', marginBottom: '0.25rem' }}>
+          Forgot password?
+        </h5>
+        <Link to="/forgotPassword">
+          <Button
+            className={classes.button}
+            variant="contained"
+            color="primary"
+          >
+            Reset Password
+          </Button>
         </Link>
       </div>
     </div>
@@ -172,4 +211,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(null, mapDispatchToProps)(Login);
+export default withRouter(connect(null, mapDispatchToProps)(Login));

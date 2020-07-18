@@ -36,14 +36,13 @@ import {
 } from '@material-ui/icons';
 import { Link, withRouter } from 'react-router-dom';
 import { toggleLogout } from '../redux/actions';
-import { dark, light, accent } from '../colors';
+import { dark, light } from '../colors';
 import { url } from './constant';
 import Notification from './notification';
 
 const useStyles = makeStyles(() => ({
   button: {
     color: light,
-    backgroundColor: accent,
     marginLeft: '1rem',
   },
 }));
@@ -88,7 +87,7 @@ const DrawerMobile = ({
     event.preventDefault();
     const reader = new FileReader();
     reader.onload = (e) => {
-      fetch(`${url}/events/nusmod/${username}`, {
+      fetch(`${url}/events/nusmod/`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -105,7 +104,7 @@ const DrawerMobile = ({
     reader.readAsText(event.target.files[0]);
   };
 
-  const fetchTitles = fetch(`${url}/events/${username}`, {
+  const fetchTitles = fetch(`${url}/events/`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -124,7 +123,7 @@ const DrawerMobile = ({
       },
       body: JSON.stringify({ name }),
     };
-    fetch(`${url}/events/${username}`, options);
+    fetch(`${url}/events/`, options);
     history.push(`/events-group/${name}/customize`);
   };
 
@@ -136,7 +135,7 @@ const DrawerMobile = ({
         Authorization: `Bearer ${token}`,
       },
     };
-    fetch(`${url}/events/${username}/${moduleName}`, options);
+    fetch(`${url}/events/${moduleName}`, options);
     history.replace('/');
   };
 
@@ -160,7 +159,7 @@ const DrawerMobile = ({
   return (
     <>
       <List style={{ backgroundColor: light }}>
-        <Link to={`/profile/${username}`}>
+        <Link to="/profile">
           <ListItem button divider>
             <ListItemIcon>
               <AccountCircle style={{ color: dark }} />
@@ -277,6 +276,7 @@ const DrawerMobile = ({
             onClick={handleAdd}
             className={classes.button}
             variant="contained"
+            color="primary"
             disabled={name === ''}
           >
             Add

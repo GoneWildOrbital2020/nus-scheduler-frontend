@@ -12,6 +12,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Logo from '../images/logov5light.png';
 import { light, dark } from '../colors';
+import { url } from './constant';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -98,7 +99,7 @@ const Navbar = (props) => {
                 ) : (
                   <img
                     className={classes.avatar}
-                    src={`http://localhost:8000${avatar}`}
+                    src={`${url}${avatar}`}
                     alt="profile"
                   />
                 )}

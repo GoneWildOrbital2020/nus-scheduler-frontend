@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Redirect } from 'react-router-dom';
+import { Redirect, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Button, Typography, makeStyles, IconButton } from '@material-ui/core';
 import { DatePicker } from '@material-ui/pickers';
@@ -42,12 +42,14 @@ const Calendar = ({
   dispatch,
   token,
   isLoggedIn,
+  ...routerProps
 }) => {
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState('');
   const [severity, setSeverity] = useState('success');
   const [openDialog, setOpenDialog] = useState(false);
   const [date, setDate] = useState(new Date());
+  const { location } = routerProps;
   const classes = useStyles();
 
   const handleClose = (event, reason) => {
@@ -73,7 +75,7 @@ const Calendar = ({
   };
 
   const fetchNumOfEvents = async () => {
-    const response = await fetch(`${url}/calendars/${username}/${activeYear}`, {
+    const response = await fetch(`${url}/calendars/${activeYear}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -94,6 +96,18 @@ const Calendar = ({
         setMessage(err.message);
       });
   }, [activeYear]);
+
+  useEffect(() => {
+    if (location.state && location.state.fromLogin) {
+      setSeverity('success');
+      setOpen(true);
+      setMessage('Login successful!');
+    } else if (location.state && location.state.fromAuthenticate) {
+      setSeverity('success');
+      setOpen(true);
+      setMessage('Account activation successful!');
+    }
+  }, []);
 
   if (!JSON.parse(isLoggedIn)) {
     return <Redirect to="/login" />;
@@ -185,4 +199,4 @@ const mapStateToProps = (state) => ({
   isLoggedIn: state.isLoggedIn,
 });
 
-export default connect(mapStateToProps)(Calendar);
+export default withRouter(connect(mapStateToProps)(Calendar));

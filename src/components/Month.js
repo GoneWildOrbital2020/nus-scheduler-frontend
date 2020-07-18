@@ -9,7 +9,7 @@ import { monthProperties, monthPropertiesLeap, url } from './constant';
 import Notification from './notification';
 import { light } from '../colors';
 
-const Month = ({ activeMonth, activeYear, username, token }) => {
+const Month = ({ activeMonth, activeYear, token }) => {
   const generateRows = (num) => {
     const rows = [];
     for (let i = 0; i < num; i += 1) {
@@ -30,7 +30,7 @@ const Month = ({ activeMonth, activeYear, username, token }) => {
 
   const fetchEvents = async () => {
     const response = await fetch(
-      `${url}/calendars/${username}/${activeYear}/${activeMonth}`,
+      `${url}/calendars/${activeYear}/${activeMonth}`,
       {
         method: 'GET',
         headers: {
@@ -59,7 +59,7 @@ const Month = ({ activeMonth, activeYear, username, token }) => {
         });
     };
     getEvents();
-  }, [activeMonth]);
+  }, [activeMonth, activeYear]);
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -154,13 +154,11 @@ Month.propTypes = {
   activeMonth: PropTypes.number.isRequired,
   activeYear: PropTypes.number.isRequired,
   token: PropTypes.string.isRequired,
-  username: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   activeMonth: state.activeMonth,
   activeYear: state.activeYear,
-  username: state.username,
   token: state.token,
 });
 

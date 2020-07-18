@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { TextField, Button, Typography } from '@material-ui/core';
+import { withRouter } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
-import { dark, light, accent } from '../colors';
+import { dark, light } from '../colors';
 import Notification from './notification';
 import { url } from './constant';
 
@@ -13,7 +14,6 @@ const useStyles = makeStyles({
   button: {
     color: light,
     width: '100%',
-    backgroundColor: accent,
   },
   form: {
     boxSizing: 'border-box',
@@ -29,7 +29,7 @@ const useStyles = makeStyles({
   },
 });
 
-const Signup = () => {
+const Signup = ({ ...routerProps }) => {
   const classes = useStyles();
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
@@ -37,6 +37,7 @@ const Signup = () => {
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState('');
   const [severity, setSeverity] = useState('success');
+  const { history } = routerProps;
 
   const handleChangeUsername = (event) => {
     setUsername(event.target.value);
@@ -72,10 +73,9 @@ const Signup = () => {
         return res.json();
       })
       .then(() => {
-        setSeverity('success');
-        setOpen(true);
-        setMessage('Sign up successful!');
-        window.location.replace('/login');
+        history.push('/login', {
+          fromSignup: true,
+        });
       })
       .catch((err) => {
         setSeverity('error');
@@ -127,8 +127,13 @@ const Signup = () => {
             />
           </div>
         </form>
-        <Button className={classes.button} onClick={handleSubmit}>
-          Sign up
+        <Button
+          className={classes.button}
+          onClick={handleSubmit}
+          variant="contained"
+          color="primary"
+        >
+          Signup
         </Button>
         <Notification
           open={open}
@@ -141,4 +146,4 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default withRouter(Signup);

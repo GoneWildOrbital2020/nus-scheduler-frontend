@@ -8,7 +8,7 @@ import {
 } from '@material-ui/core';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { accent, light, dark } from '../colors';
+import { light, dark } from '../colors';
 import Notification from './notification';
 import { toggleLogin } from '../redux/actions';
 import { url } from './constant';
@@ -27,18 +27,13 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     color: dark,
-    // fontSize: '2rem',
-    // fontWeight: 'bold',
   },
   typography: {
     color: dark,
-    // fontWeight: 'bold',
-    // fontSize: '1.5rem',
     marginTop: '2rem',
   },
   button: {
     width: '100%',
-    backgroundColor: accent,
     color: light,
     margin: '0.5rem 0',
   },
@@ -65,7 +60,7 @@ const Profile = (props) => {
   const [password, setPassword] = useState('');
   const [newUsername, setNewUsername] = useState(username);
   const [retype, setRetype] = useState('');
-  const [avatar, setAvatar] = useState('');
+  const [avatar, setAvatar] = useState(null);
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState('');
   const [severity, setSeverity] = useState('success');
@@ -101,8 +96,12 @@ const Profile = (props) => {
     const data = new FormData();
     data.append('email', email);
     data.append('username', newUsername);
-    data.append('password', password);
-    data.append('avatar', avatar);
+    if (avatar !== null) {
+      data.append('avatar', avatar);
+    }
+    if (password !== '') {
+      data.append('password', password);
+    }
     fetch(`${url}/users/update/`, {
       method: 'POST',
       headers: {
@@ -118,13 +117,25 @@ const Profile = (props) => {
         }
       })
       .then((json) => {
-        window.localStorage.setItem('username', json.username);
-        window.localStorage.setItem('avatar', json.avatar);
-        dispatch(toggleLogin(email, token, json.username, json.avatar));
+        window.localStorage.setItem('username', json[0].fields.username);
+        if (json[0].fields.avatar) {
+          window.localStorage.setItem(
+            'avatar',
+            `/media/${json[0].fields.avatar}`,
+          );
+        }
+        dispatch(
+          toggleLogin(
+            email,
+            token,
+            json[0].fields.username,
+            `/media/${json[0].fields.avatar}`,
+          ),
+        );
         setSeverity('success');
         setOpen(true);
         setMessage('Update successful!');
-        window.location.replace(`/profile/${json.username}`);
+        window.location.replace(`/profile`);
       })
       .catch((err) => {
         setSeverity('error');
@@ -152,7 +163,7 @@ const Profile = (props) => {
       >
         Change Avatar
       </Typography>
-      {avatarProps !== '' ? (
+      {imageUrl !== `${url}` ? (
         <img className={classes.avatar} src={imageUrl} alt="profile" />
       ) : (
         <div />
@@ -164,7 +175,12 @@ const Profile = (props) => {
           id="avatar-upload"
           onChange={handleUploadAvatar}
         />
-        <Button className={classes.button} variant="contained" component="span">
+        <Button
+          className={classes.button}
+          component="span"
+          variant="contained"
+          color="primary"
+        >
           Upload Image
         </Button>
       </label>
@@ -200,6 +216,7 @@ const Profile = (props) => {
       <Button
         className={classes.button}
         variant="contained"
+        color="primary"
         disabled={check()}
         onClick={handleSubmit}
       >

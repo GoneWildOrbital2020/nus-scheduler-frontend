@@ -9,7 +9,7 @@ import {
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Notes from './notes';
-import { accent, light } from '../colors';
+import { light } from '../colors';
 import Notification from './notification';
 import { url } from './constant';
 
@@ -46,7 +46,9 @@ const useStyles = makeStyles((theme) => ({
   },
   button: {
     color: light,
-    // width: '50%',
+    [theme.breakpoints.down('xs')]: {
+      width: '50%',
+    },
     margin: '0.5rem auto',
     [theme.breakpoints.up('sm')]: {
       position: 'absolute',
@@ -60,7 +62,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const NotesGrid = (props) => {
-  const { token, username, name } = props;
+  const { token, name } = props;
   const [count, setCount] = useState(0);
   const [total, setTotal] = useState(0);
   const [notes, setNotes] = useState([]);
@@ -95,7 +97,7 @@ const NotesGrid = (props) => {
       title,
       text,
     };
-    fetch(`${url}/upload/note/${username}/${name}`, {
+    fetch(`${url}/upload/note/${name}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -135,7 +137,7 @@ const NotesGrid = (props) => {
       title,
       text,
     };
-    fetch(`${url}/upload/note/${username}/${name}`, {
+    fetch(`${url}/upload/note/${name}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -187,7 +189,7 @@ const NotesGrid = (props) => {
     const data = {
       identifier,
     };
-    fetch(`${url}/upload/delete/note/${username}/${name}`, {
+    fetch(`${url}/upload/delete/note/${name}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -222,7 +224,7 @@ const NotesGrid = (props) => {
   };
 
   useEffect(() => {
-    const getNotes = fetch(`${url}/upload/get/note/${username}/${name}`, {
+    const getNotes = fetch(`${url}/upload/get/note/${name}`, {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -244,7 +246,7 @@ const NotesGrid = (props) => {
         return newNotes;
       });
 
-    const getTotal = fetch(`${url}/upload/get/totalnotes/${username}`, {
+    const getTotal = fetch(`${url}/upload/get/totalnotes/`, {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -284,9 +286,9 @@ const NotesGrid = (props) => {
           Notes
         </Typography>
         <Button
-          variant="outlined"
+          variant="contained"
           className={classes.button}
-          style={{ backgroundColor: accent }}
+          color="primary"
           onClick={handleAddNote}
         >
           Add Notes
@@ -328,7 +330,6 @@ const NotesGrid = (props) => {
 };
 
 NotesGrid.propTypes = {
-  username: PropTypes.string.isRequired,
   token: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
 };
@@ -336,7 +337,6 @@ NotesGrid.propTypes = {
 const mapStateToProps = (state) => {
   return {
     token: state.token,
-    username: state.username,
   };
 };
 

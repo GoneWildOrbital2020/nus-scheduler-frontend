@@ -19,14 +19,13 @@ import { TwitterPicker } from 'react-color';
 import Loader from 'react-loader-spinner';
 import { Close } from '@material-ui/icons';
 import { url, monthIdx, colors } from './constant';
-import { dark, light, accent } from '../colors';
+import { dark, light } from '../colors';
 import { addNumOfEvents } from '../redux/actions';
 import './Customize.css';
 
 const useStyles = makeStyles((theme) => ({
   button: {
     color: light,
-    backgroundColor: accent,
     marginLeft: '1rem',
   },
   paper: {
@@ -79,6 +78,10 @@ const useStyles = makeStyles((theme) => ({
       width: 'calc((100% - 2rem) / 2)',
     },
     margin: '0.5rem',
+    transition: '0.3s',
+    '&:hover': {
+      filter: 'brightness(0.8)',
+    },
   },
   bottomButtons: {
     [theme.breakpoints.up('lg')]: {
@@ -95,7 +98,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
+const Customize = ({ name, token, numOfEvents, dispatch }) => {
   const classes = useStyles();
   const styles = {
     card: {
@@ -105,7 +108,7 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
 
   const [events, setEvents] = React.useState({ empty: true });
   const fetchEvents = () =>
-    fetch(`${url}/events/${username}/${name}`, {
+    fetch(`${url}/events/${name}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -229,7 +232,7 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
         },
       }),
     };
-    fetch(`${url}/events/${username}/${name}/${cur.key}`, options);
+    fetch(`${url}/events/${name}/${cur.key}`, options);
     setOpenEdit(false);
   };
 
@@ -244,7 +247,7 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
         Authorization: `Bearer ${token}`,
       },
     };
-    fetch(`${url}/events/${username}/${name}/${key}`, options);
+    fetch(`${url}/events/${name}/${key}`, options);
   };
 
   const handleDeleteActivity = (key) => () => {
@@ -256,7 +259,7 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
         Authorization: `Bearer ${token}`,
       },
     };
-    fetch(`${url}/events/${username}/${name}/${key}/all`, options);
+    fetch(`${url}/events/${name}/${key}/all`, options);
   };
 
   const [date, setDate] = React.useState(new Date());
@@ -286,7 +289,7 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
         year: date.getFullYear(),
       }),
     };
-    fetch(`${url}/events/${username}/${name}/${add.key}`, options)
+    fetch(`${url}/events/${name}/${add.key}`, options)
       .then((response) => response.json())
       .then((data) => {
         setEvents((state) =>
@@ -312,7 +315,7 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
         name: repName,
       }),
     };
-    fetch(`${url}/events/rep/${username}/${name}`, options)
+    fetch(`${url}/events/rep/${name}`, options)
       .then((response) => response.json())
       .then(({ id }) =>
         setEvents((state) => {
@@ -376,10 +379,10 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
                   onClick={handleAddDate({ key: value.id, ...value.events[0] })}
                   style={{
                     color: light,
-                    backgroundColor: accent,
                     margin: '1rem',
                   }}
                   variant="contained"
+                  color="primary"
                 >
                   Add date
                 </Button>
@@ -394,6 +397,7 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
                   }}
                   disabled={value.events.length === 0}
                   variant="contained"
+                  color="primary"
                 >
                   Edit All
                 </Button>
@@ -405,6 +409,7 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
                   }}
                   disabled={value.events.length === 0}
                   variant="contained"
+                  color="primary"
                 >
                   Delete All
                 </Button>
@@ -412,10 +417,10 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
                   onClick={handleDeleteActivity(value.id)}
                   style={{
                     color: light,
-                    backgroundColor: accent,
                     margin: '1rem',
                   }}
                   variant="contained"
+                  color="primary"
                 >
                   Delete Activity
                 </Button>
@@ -450,6 +455,7 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
                   className={classes.button}
                   onClick={handleRepName}
                   variant="contained"
+                  color="primary"
                   disabled={repName === ''}
                 >
                   Add
@@ -577,15 +583,17 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
             >
               <Button
                 onClick={handleSave}
-                style={{ color: light, backgroundColor: accent }}
+                style={{ color: light }}
                 variant="contained"
+                color="primary"
               >
                 Save
               </Button>
               <Button
                 onClick={handleDelete(cur.id, cur.key)}
-                style={{ color: light, backgroundColor: accent }}
+                style={{ color: light }}
                 variant="contained"
+                color="primary"
               >
                 Delete
               </Button>
@@ -711,8 +719,9 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
             >
               <Button
                 onClick={handleSaveAll}
-                style={{ color: light, backgroundColor: accent }}
+                style={{ color: light }}
                 variant="contained"
+                color="primary"
               >
                 Save
               </Button>
@@ -730,14 +739,12 @@ const Customize = ({ name, username, token, numOfEvents, dispatch }) => {
 
 Customize.propTypes = {
   name: PropTypes.string.isRequired,
-  username: PropTypes.string.isRequired,
   token: PropTypes.string.isRequired,
   numOfEvents: PropTypes.number.isRequired,
   dispatch: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-  username: state.username,
   token: state.token,
   numOfEvents: state.numOfEvents,
 });

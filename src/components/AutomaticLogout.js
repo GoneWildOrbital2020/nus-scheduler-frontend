@@ -10,7 +10,7 @@ import {
   Typography,
 } from '@material-ui/core';
 import { toggleLogout } from '../redux/actions';
-import { light, accent, dark } from '../colors';
+import { light, dark } from '../colors';
 
 const useStyles = makeStyles(() => ({
   dialog: {
@@ -62,8 +62,8 @@ const AutomaticLogout = (props) => {
         <Button
           className={classes.button}
           variant="contained"
-          onClick={handleClose}
           color="primary"
+          onClick={handleClose}
         >
           OK
         </Button>
