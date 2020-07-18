@@ -27,13 +27,9 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     color: dark,
-    // fontSize: '2rem',
-    // fontWeight: 'bold',
   },
   typography: {
     color: dark,
-    // fontWeight: 'bold',
-    // fontSize: '1.5rem',
     marginTop: '2rem',
   },
   button: {
@@ -64,7 +60,7 @@ const Profile = (props) => {
   const [password, setPassword] = useState('');
   const [newUsername, setNewUsername] = useState(username);
   const [retype, setRetype] = useState('');
-  const [avatar, setAvatar] = useState('');
+  const [avatar, setAvatar] = useState(null);
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState('');
   const [severity, setSeverity] = useState('success');
@@ -100,8 +96,12 @@ const Profile = (props) => {
     const data = new FormData();
     data.append('email', email);
     data.append('username', newUsername);
-    data.append('password', password);
-    data.append('avatar', avatar);
+    if (avatar !== null) {
+      data.append('avatar', avatar);
+    }
+    if (password !== '') {
+      data.append('password', password);
+    }
     fetch(`${url}/users/update/`, {
       method: 'POST',
       headers: {
@@ -117,9 +117,21 @@ const Profile = (props) => {
         }
       })
       .then((json) => {
-        window.localStorage.setItem('username', json.username);
-        window.localStorage.setItem('avatar', json.avatar);
-        dispatch(toggleLogin(email, token, json.username, json.avatar));
+        window.localStorage.setItem('username', json[0].fields.username);
+        if (json[0].fields.avatar) {
+          window.localStorage.setItem(
+            'avatar',
+            `/media/${json[0].fields.avatar}`,
+          );
+        }
+        dispatch(
+          toggleLogin(
+            email,
+            token,
+            json[0].fields.username,
+            `/media/${json[0].fields.avatar}`,
+          ),
+        );
         setSeverity('success');
         setOpen(true);
         setMessage('Update successful!');
@@ -151,7 +163,7 @@ const Profile = (props) => {
       >
         Change Avatar
       </Typography>
-      {avatarProps !== '' ? (
+      {imageUrl !== `${url}` ? (
         <img className={classes.avatar} src={imageUrl} alt="profile" />
       ) : (
         <div />
