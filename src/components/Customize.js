@@ -108,7 +108,7 @@ const Customize = ({ name, token, numOfEvents, dispatch }) => {
 
   const [events, setEvents] = React.useState({ empty: true });
   const fetchEvents = () =>
-    fetch(`${url}/events/${name}`, {
+    fetch(`${url}/events/activity/${name}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

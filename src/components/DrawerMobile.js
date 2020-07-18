@@ -135,7 +135,7 @@ const DrawerMobile = ({
         Authorization: `Bearer ${token}`,
       },
     };
-    fetch(`${url}/events/${moduleName}`, options);
+    fetch(`${url}/events/activity/${moduleName}`, options);
     history.replace('/');
   };
 

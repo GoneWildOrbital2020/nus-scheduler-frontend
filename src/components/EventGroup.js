@@ -63,7 +63,7 @@ const EventGroup = ({ name, path, username, token, ...routerProps }) => {
         Authorization: `Bearer ${token}`,
       },
     };
-    fetch(`${url}/events/${name}`, options);
+    fetch(`${url}/events/activity/${name}`, options);
     history.replace('/');
   };
   return !extraSmall ? (
