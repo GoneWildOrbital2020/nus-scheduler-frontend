@@ -20,6 +20,7 @@ const useStyles = makeStyles((theme) => ({
     position: 'fixed',
     zIndex: 1400,
     height: '75px',
+    top: '0',
   },
   menuButton: {
     marginRight: 0,

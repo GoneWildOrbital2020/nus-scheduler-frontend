@@ -29,7 +29,7 @@ function App() {
             <Route
               path="/page"
               exact
-              render={() => (
+              component={() => (
                 <ThemeProvider theme={themeLandingPage}>
                   <ScopedCssBaseline>
                     <LandingPage />

@@ -7,12 +7,14 @@ import {
   useMediaQuery,
 } from '@material-ui/core';
 import { Link } from 'react-router-dom';
-import { light, medium, accent } from '../colors';
+import { light, medium, dark, accent } from '../colors';
 import heroPage from '../images/heroPage.svg';
 import hero from '../images/herov1.png';
 import customize from '../images/customize.svg';
 import note from '../images/note.svg';
 import plan from '../images/plan.svg';
+import Footer from './footer';
+import NavbarDrawer from './NavbarDrawer';
 
 const useStyles = makeStyles((theme) => ({
   landing: {
@@ -20,36 +22,68 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'left',
   },
   top: {
-    height: '100vh',
+    height: 'calc(100vh - 73px)',
+    marginTop: '73px',
     [theme.breakpoints.up('lg')]: {
       paddingTop: '4rem',
       paddingLeft: '6rem',
     },
     [theme.breakpoints.down('md')]: {
-      textAlign: 'center',
-      backgroundPosition: '0 0',
-      marginTop: '-1px',
+      backgroundPosition: 'center',
+      backgroundSize: 'auto 100%',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
     },
     backgroundImage: `url(${heroPage})`,
     backgroundRepeat: 'no-repeat',
-    backgroundPosition: '0 -20vh',
-    backgroundSize: 'cover',
+    backgroundPosition: '0 0',
+    backgroundSize: '100% 100%',
     marginLeft: '-1px',
   },
   paragraph: {
     [theme.breakpoints.up('lg')]: {
       maxWidth: '45rem',
     },
+    [theme.breakpoints.down('md')]: {
+      width: '80%',
+      margin: '0 auto',
+    },
   },
   typography: {
     marginBottom: '1rem',
   },
+  title: {
+    marginBottom: '1rem',
+    [theme.breakpoints.down('md')]: {
+      fontSize: '3rem',
+      width: '80%',
+      margin: '1rem auto',
+    },
+    [theme.breakpoints.down('xs')]: {
+      fontSize: '1.5rem',
+      margin: '0 auto',
+      marginBottom: '1rem',
+    },
+  },
+  description: {
+    marginBottom: '1rem',
+    fontFamily: 'Ubuntu',
+    letterSpacing: '0.1rem',
+    [theme.breakpoints.down('md')]: {
+      fontSize: '2.125rem',
+    },
+    [theme.breakpoints.down('xs')]: {
+      fontSize: '1.25rem',
+    },
+  },
   button: {
     marginTop: '1rem',
+    [theme.breakpoints.down('xs')]: {
+      marginTop: '0.5rem',
+    },
   },
-  bottom: {
-    minHeight: '100vh',
-  },
+  bottom: {},
   hero: {
     position: 'relative',
     width: '50vw',
@@ -60,6 +94,9 @@ const useStyles = makeStyles((theme) => ({
       float: 'right',
       marginRight: '6rem',
     },
+    [theme.breakpoints.down('xs')]: {
+      width: '80vw',
+    },
   },
   grid: {
     width: '75%',
@@ -68,40 +105,30 @@ const useStyles = makeStyles((theme) => ({
     },
     margin: '0 auto',
   },
-  innerGrid1: {
+  innerGrid: {
     width: '33.3%',
-    alignItems: 'flex-start',
-    // marginRight: '6rem',
+    alignItems: 'center',
     [theme.breakpoints.down('md')]: {
       width: '100%',
-      alignItems: 'center',
-      marginRight: '0',
     },
   },
-  innerGrid2: {
-    width: '33.3%',
+  innerGridContent: {
+    display: 'flex',
+    flexDirection: 'column',
     alignItems: 'flex-start',
-    // marginRight: '2rem',
-    [theme.breakpoints.down('md')]: {
-      width: '100%',
-      alignItems: 'center',
-      marginRight: '0',
-    },
-  },
-  innerGrid3: {
-    width: '33.3%',
-    alignItems: 'flex-start',
-    [theme.breakpoints.down('md')]: {
-      width: '100%',
+    [theme.breakpoints.down('xs')]: {
       alignItems: 'center',
     },
   },
   icon: {
-    height: '30vh',
+    height: '20vh',
     margin: '2rem 0',
+    alignSelf: 'center',
+    filter: `drop-shadow(3px 3px 3px #8B484B)`,
   },
   iconTitle: {
     color: accent,
+    textShadow: `1px 1px 3px #424D4D`,
   },
 }));
 
@@ -111,13 +138,14 @@ const LandingPage = () => {
 
   return (
     <div className={classes.landing}>
+      <NavbarDrawer />
       {mediumScreen ? (
         <div className={classes.top}>
           <img src={hero} alt="" className={classes.hero} />
           <Typography
             variant="h2"
             style={{ color: light }}
-            className={classes.typography}
+            className={classes.title}
           >
             Do You Have Problem Organizing Your Schoolwork?
           </Typography>
@@ -125,7 +153,7 @@ const LandingPage = () => {
             <Typography
               variant="h3"
               style={{ color: medium }}
-              className={classes.typography}
+              className={classes.description}
             >
               NUS Scheduler is a one-stop solution for your daily academic
               planning. Stop being overwhelmed by your course load.
@@ -146,7 +174,7 @@ const LandingPage = () => {
           <Typography
             variant="h2"
             style={{ color: light }}
-            className={classes.typography}
+            className={classes.title}
           >
             Do You Have Problem Organizing Your Schoolwork?
           </Typography>
@@ -154,7 +182,7 @@ const LandingPage = () => {
             <Typography
               variant="h3"
               style={{ color: medium }}
-              className={classes.typography}
+              className={classes.description}
             >
               NUS Scheduler is a one-stop solution for your daily academic
               planning. Stop being overwhelmed by your course load.
@@ -165,6 +193,7 @@ const LandingPage = () => {
               className={classes.button}
               variant="contained"
               color="primary"
+              size="large"
             >
               Start Now
             </Button>
@@ -174,57 +203,70 @@ const LandingPage = () => {
       )}
       <div className={classes.bottom}>
         <Typography
-          variant="h2"
-          style={{ color: light, textAlign: 'center' }}
+          variant="h3"
+          style={{
+            color: light,
+            textAlign: 'center',
+            fontFamily: 'Ubuntu',
+            textShadow: `3px 3px 10px #424D4D`,
+            letterSpacing: '0.3rem',
+          }}
           className={classes.typography}
         >
-          Features
+          FEATURES
         </Typography>
         <Grid container item direction="row" className={classes.grid}>
-          <Grid container direction="column" className={classes.innerGrid1}>
-            <img src={customize} alt="" className={classes.icon} />
-            <Typography variant="h5" className={classes.iconTitle}>
-              Make It Your Own
-            </Typography>
-            <Typography variant="h6" style={{ color: light }}>
-              <ul>
-                <li>Lorem Ipsum Dolor Sit Amet</li>
-                <li>Lorem Ipsum Dolor Sit Amet</li>
-                <li>Lorem Ipsum Dolor Sit Amet</li>
-                <li>Lorem Ipsum Dolor Sit Amet</li>
-              </ul>
-            </Typography>
+          <Grid container direction="column" className={classes.innerGrid}>
+            <div className={classes.innerGridContent}>
+              <img src={customize} alt="" className={classes.icon} />
+              <Typography variant="h5" className={classes.iconTitle}>
+                Make It Your Own
+              </Typography>
+              <Typography variant="h6" style={{ color: light }}>
+                <ul>
+                  <li>Lorem Ipsum Dolor Sit Amet</li>
+                  <li>Lorem Ipsum Dolor Sit Amet</li>
+                  <li>Lorem Ipsum Dolor Sit Amet</li>
+                  <li>Lorem Ipsum Dolor Sit Amet</li>
+                </ul>
+              </Typography>
+            </div>
           </Grid>
-          <Grid container direction="column" className={classes.innerGrid2}>
-            <img src={plan} alt="" className={classes.icon} />
-            <Typography variant="h5" className={classes.iconTitle}>
-              Be a Master Planner
-            </Typography>
-            <Typography variant="h6" style={{ color: light }}>
-              <ul>
-                <li>Lorem Ipsum Dolor Sit Amet</li>
-                <li>Lorem Ipsum Dolor Sit Amet</li>
-                <li>Lorem Ipsum Dolor Sit Amet</li>
-                <li>Lorem Ipsum Dolor Sit Amet</li>
-              </ul>
-            </Typography>
+          <Grid container direction="column" className={classes.innerGrid}>
+            <div className={classes.innerGridContent}>
+              <img src={plan} alt="" className={classes.icon} />
+              <Typography variant="h5" className={classes.iconTitle}>
+                Be a Master Planner
+              </Typography>
+              <Typography variant="h6" style={{ color: light }}>
+                <ul>
+                  <li>Lorem Ipsum Dolor Sit Amet</li>
+                  <li>Lorem Ipsum Dolor Sit Amet</li>
+                  <li>Lorem Ipsum Dolor Sit Amet</li>
+                  <li>Lorem Ipsum Dolor Sit Amet</li>
+                </ul>
+              </Typography>
+            </div>
           </Grid>
-          <Grid container direction="column" className={classes.innerGrid3}>
-            <img src={note} alt="" className={classes.icon} />
-            <Typography variant="h5" className={classes.iconTitle}>
-              Make It Your Own
-            </Typography>
-            <Typography variant="h6" style={{ color: light }}>
-              <ul>
-                <li>Lorem Ipsum Dolor Sit Amet</li>
-                <li>Lorem Ipsum Dolor Sit Amet</li>
-                <li>Lorem Ipsum Dolor Sit Amet</li>
-                <li>Lorem Ipsum Dolor Sit Amet</li>
-              </ul>
-            </Typography>
+          <Grid container direction="column" className={classes.innerGrid}>
+            <div className={classes.innerGridContent}>
+              <img src={note} alt="" className={classes.icon} />
+              <Typography variant="h5" className={classes.iconTitle}>
+                Make It Your Own
+              </Typography>
+              <Typography variant="h6" style={{ color: light }}>
+                <ul>
+                  <li>Lorem Ipsum Dolor Sit Amet</li>
+                  <li>Lorem Ipsum Dolor Sit Amet</li>
+                  <li>Lorem Ipsum Dolor Sit Amet</li>
+                  <li>Lorem Ipsum Dolor Sit Amet</li>
+                </ul>
+              </Typography>
+            </div>
           </Grid>
         </Grid>
       </div>
+      <Footer />
     </div>
   );
 };
