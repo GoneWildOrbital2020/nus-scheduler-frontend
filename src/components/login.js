@@ -91,7 +91,7 @@ const Login = (props) => {
         window.localStorage.setItem('avatar', json.avatar);
         window.localStorage.setItem('isLoggedIn', true);
         window.localStorage.setItem('logoutTime', Date.parse(json.logout_time));
-        history.push('/', {
+        history.push('/calendar', {
           fromLogin: true,
         });
       })
@@ -160,7 +160,7 @@ const Login = (props) => {
           variant="contained"
           color="primary"
         >
-          Login
+          LOG IN
         </Button>
         <Notification
           message={message}
@@ -180,12 +180,15 @@ const Login = (props) => {
             variant="contained"
             color="primary"
           >
-            SignUp
+            SIGN UP
           </Button>
         </Link>
-        <h5 style={{ color: dark, marginTop: '1rem', marginBottom: '0.25rem' }}>
+        <Typography
+          variant="body2"
+          style={{ color: dark, marginTop: '1rem', marginBottom: '0.25rem' }}
+        >
           Forgot password?
-        </h5>
+        </Typography>
         <Link to="/forgotPassword">
           <Button
             className={classes.button}

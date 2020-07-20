@@ -56,7 +56,7 @@ const Authenticate = (props) => {
         window.localStorage.setItem('avatar', json.avatar);
         window.localStorage.setItem('isLoggedIn', true);
         window.localStorage.setItem('logoutTime', Date.parse(json.logout_time));
-        history.push('/', {
+        history.push('/calendar', {
           fromAuthenticate: true,
         });
       })

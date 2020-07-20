@@ -1,7 +1,8 @@
 import { createMuiTheme } from '@material-ui/core';
-import { accent } from './colors';
+import { accent, medium } from './colors';
+import background from './images/bg.svg';
 
-export default createMuiTheme({
+export const theme = createMuiTheme({
   palette: {
     primary: { main: accent },
   },
@@ -31,6 +32,55 @@ export default createMuiTheme({
     body2: {
       fontFamily: 'Nunito Sans',
       fontWeight: 700,
+    },
+  },
+  overrides: {
+    MuiScopedCssBaseline: {
+      root: {
+        backgroundImage: `url(${background})`,
+        backgroundColor: medium,
+      },
+    },
+  },
+});
+
+export const themeLandingPage = createMuiTheme({
+  palette: {
+    primary: { main: accent },
+  },
+  typography: {
+    body1: {
+      fontFamily: 'Nunito Sans',
+    },
+    button: {
+      fontFamily: 'Nunito Sans',
+      fontWeight: 800,
+    },
+    h2: {
+      fontFamily: 'Kalam',
+    },
+    h3: {
+      fontFamily: 'Montserrat',
+      fontWeight: 800,
+    },
+    h4: {
+      fontFamily: 'Ubuntu',
+      fontWeight: 500,
+    },
+    h5: {
+      fontFamily: 'Ubuntu',
+      fontWeight: 500,
+    },
+    body2: {
+      fontFamily: 'Nunito Sans',
+      fontWeight: 700,
+    },
+  },
+  overrides: {
+    MuiScopedCssBaseline: {
+      root: {
+        backgroundColor: medium,
+      },
     },
   },
 });
