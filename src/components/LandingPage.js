@@ -24,8 +24,11 @@ const useStyles = makeStyles((theme) => ({
   top: {
     height: 'calc(100vh - 73px)',
     marginTop: '73px',
+    [theme.breakpoints.up('l')]: {
+      paddingTop: '4rem !important',
+    },
     [theme.breakpoints.up('lg')]: {
-      paddingTop: '4rem',
+      paddingTop: '2rem',
       paddingLeft: '6rem',
     },
     [theme.breakpoints.down('md')]: {
@@ -86,8 +89,11 @@ const useStyles = makeStyles((theme) => ({
   bottom: {},
   hero: {
     position: 'relative',
-    width: '50vw',
+    width: '45vw',
     marginBottom: '2rem',
+    [theme.breakpoints.up('l')]: {
+      width: '50vw',
+    },
     [theme.breakpoints.up('lg')]: {
       top: '-23rem',
       marginBottom: '-23rem',
@@ -238,10 +244,9 @@ const LandingPage = () => {
               </Typography>
               <Typography variant="h6" style={{ color: light }}>
                 <ul>
-                  <li>Lorem Ipsum Dolor Sit Amet</li>
-                  <li>Lorem Ipsum Dolor Sit Amet</li>
-                  <li>Lorem Ipsum Dolor Sit Amet</li>
-                  <li>Lorem Ipsum Dolor Sit Amet</li>
+                  <li>Represent yourself with a custom avatar</li>
+                  <li>Create color palettes for your events</li>
+                  <li>Be creative in naming your activities</li>
                 </ul>
               </Typography>
             </div>
@@ -254,10 +259,9 @@ const LandingPage = () => {
               </Typography>
               <Typography variant="h6" style={{ color: light }}>
                 <ul>
-                  <li>Lorem Ipsum Dolor Sit Amet</li>
-                  <li>Lorem Ipsum Dolor Sit Amet</li>
-                  <li>Lorem Ipsum Dolor Sit Amet</li>
-                  <li>Lorem Ipsum Dolor Sit Amet</li>
+                  <li>Schedule daily events</li>
+                  <li>Group related events together</li>
+                  <li>Create a kanban board to monitor your tasks</li>
                 </ul>
               </Typography>
             </div>
@@ -266,14 +270,13 @@ const LandingPage = () => {
             <div className={classes.innerGridContent}>
               <img src={note} alt="" className={classes.icon} />
               <Typography variant="h5" className={classes.iconTitle}>
-                Make It Your Own
+                Stop Losing Your Data
               </Typography>
               <Typography variant="h6" style={{ color: light }}>
                 <ul>
-                  <li>Lorem Ipsum Dolor Sit Amet</li>
-                  <li>Lorem Ipsum Dolor Sit Amet</li>
-                  <li>Lorem Ipsum Dolor Sit Amet</li>
-                  <li>Lorem Ipsum Dolor Sit Amet</li>
+                  <li>Organize all your files in one place</li>
+                  <li>Create notes to summarize your thoughts</li>
+                  <li>Import your NUSMODS data</li>
                 </ul>
               </Typography>
             </div>

@@ -3,7 +3,7 @@ import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import './App.css';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import { ThemeProvider } from '@material-ui/core/styles';
+import { ThemeProvider, responsiveFontSizes } from '@material-ui/core/styles';
 import ScopedCssBaseline from '@material-ui/core/ScopedCssBaseline';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
@@ -30,7 +30,7 @@ function App() {
               path="/"
               exact
               component={() => (
-                <ThemeProvider theme={themeLandingPage}>
+                <ThemeProvider theme={responsiveFontSizes(themeLandingPage)}>
                   <ScopedCssBaseline>
                     <LandingPage />
                   </ScopedCssBaseline>

@@ -6,7 +6,6 @@ import {
   Typography,
 } from '@material-ui/core';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import { GitHub } from '@material-ui/icons';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
@@ -113,7 +112,6 @@ const Navbar = (props) => {
               <>
                 <a href="https://github.com/GoneWildOrbital2020">
                   <Button color="inherit" className={classes.button}>
-                    <GitHub style={{ color: 'light', marginRight: '0.5rem' }} />
                     Source
                   </Button>
                 </a>
