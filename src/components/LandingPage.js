@@ -71,7 +71,7 @@ const useStyles = makeStyles((theme) => ({
   },
   description: {
     marginBottom: '1rem',
-    fontFamily: 'Ubuntu',
+    fontFamily: 'Nunito sans',
     letterSpacing: '0.1rem',
     [theme.breakpoints.down('md')]: {
       fontSize: '2.125rem',
