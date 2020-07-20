@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const NavbarDrawer = ({ location }) => {
+const NavbarDrawer = ({ location, elevation }) => {
   const classes = useStyles();
   const extraSmall = useMediaQuery((theme) => theme.breakpoints.down('xs'));
   const [drawerOpen, setDrawerOpen] = React.useState(false);
@@ -32,7 +32,7 @@ const NavbarDrawer = ({ location }) => {
   React.useEffect(() => setDrawerOpen(false), [location.pathname]);
   return (
     <>
-      <Navbar toggleDrawer={toggleDrawer} />
+      <Navbar toggleDrawer={toggleDrawer} elevation={elevation} />
       <Drawer
         open={drawerOpen}
         anchor="right"
@@ -52,6 +52,7 @@ const NavbarDrawer = ({ location }) => {
 
 NavbarDrawer.propTypes = {
   location: PropTypes.shape.isRequired,
+  elevation: PropTypes.number.isRequired,
 };
 
 export default withRouter(NavbarDrawer);

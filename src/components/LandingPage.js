@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Typography,
   Grid,
@@ -7,7 +7,7 @@ import {
   useMediaQuery,
 } from '@material-ui/core';
 import { Link } from 'react-router-dom';
-import { light, medium, dark, accent } from '../colors';
+import { light, medium, accent } from '../colors';
 import heroPage from '../images/heroPage.svg';
 import hero from '../images/herov1.png';
 import customize from '../images/customize.svg';
@@ -135,10 +135,24 @@ const useStyles = makeStyles((theme) => ({
 const LandingPage = () => {
   const classes = useStyles();
   const mediumScreen = useMediaQuery((theme) => theme.breakpoints.down('md'));
+  const [elevation, setElevation] = useState(0);
+
+  const handleScroll = () => {
+    const newY = window.scrollY;
+    if (newY === 0) {
+      setElevation(0);
+    } else {
+      setElevation(4);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+  }, []);
 
   return (
     <div className={classes.landing}>
-      <NavbarDrawer />
+      <NavbarDrawer elevation={elevation} />
       {mediumScreen ? (
         <div className={classes.top}>
           <img src={hero} alt="" className={classes.hero} />

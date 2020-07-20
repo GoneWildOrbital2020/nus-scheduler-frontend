@@ -31,10 +31,10 @@ const Pages = () => {
     <ThemeProvider theme={theme}>
       <ScopedCssBaseline>
         <div className={classes.app}>
-          <NavbarDrawer />
+          <NavbarDrawer elevation={4} />
           <div className="content" style={{ marginTop: '75px' }}>
             <Switch>
-              <Route path="/" exact component={Calendar} />
+              <Route path="/calendar" exact component={Calendar} />
               <Route
                 path="/activate/:email/:token"
                 render={({ match }) => (

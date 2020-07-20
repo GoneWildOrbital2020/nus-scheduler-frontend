@@ -30,19 +30,18 @@ const useStyles = makeStyles((theme) => ({
   },
   paper: {
     backgroundColor: light,
-    width: 'calc(85% - 8rem)',
+    width: 'calc(85% - 4rem)',
     [theme.breakpoints.down('md')]: {
-      width: 'calc(75% - 8rem)',
+      width: 'calc(75% - 4rem)',
     },
     [theme.breakpoints.down('xs')]: {
-      width: 'calc(100% - 8rem)',
+      width: 'calc(100% - 4rem)',
     },
     float: 'right',
     margin: '1rem 2rem',
     padding: '2rem',
   },
   paperActivity: {
-    width: 'max-width',
     display: 'flex',
     float: 'left',
     margin: '2rem',

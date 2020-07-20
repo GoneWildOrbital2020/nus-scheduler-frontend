@@ -26,6 +26,7 @@ const useStyles = makeStyles(() => ({
     fontSize: '1rem',
     color: dark,
     margin: '1rem 0',
+    textAlign: 'left',
   },
   textField: {
     margin: '1rem auto',

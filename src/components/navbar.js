@@ -6,6 +6,7 @@ import {
   Typography,
 } from '@material-ui/core';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import { GitHub } from '@material-ui/icons';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
@@ -75,14 +76,14 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Navbar = (props) => {
-  const { isLoggedIn, toggleDrawer, username, avatar } = props;
+  const { isLoggedIn, toggleDrawer, username, avatar, elevation } = props;
   const classes = useStyles();
   return (
     <div>
-      <AppBar position="static" className={classes.root}>
+      <AppBar position="static" className={classes.root} elevation={elevation}>
         <Toolbar classes={{ gutters: classes.gutters }}>
           <div className={classes.left}>
-            <Link to="/" className={classes.link}>
+            <Link to="/calendar" className={classes.link}>
               <Button color="inherit" className={classes.button}>
                 <img className={classes.image} src={Logo} alt="logo" />
               </Button>
@@ -109,11 +110,19 @@ const Navbar = (props) => {
                 </Typography>
               </Button>
             ) : (
-              <Link to="/login" className={classes.link}>
-                <Button color="inherit" className={classes.button}>
-                  log in
-                </Button>
-              </Link>
+              <>
+                <a href="https://github.com/GoneWildOrbital2020">
+                  <Button color="inherit" className={classes.button}>
+                    <GitHub style={{ color: 'light', marginRight: '0.5rem' }} />
+                    Source
+                  </Button>
+                </a>
+                <Link to="/login" className={classes.link}>
+                  <Button color="inherit" className={classes.button}>
+                    log in
+                  </Button>
+                </Link>
+              </>
             )}
           </div>
         </Toolbar>
@@ -127,6 +136,7 @@ Navbar.propTypes = {
   toggleDrawer: PropTypes.func.isRequired,
   username: PropTypes.string.isRequired,
   avatar: PropTypes.string.isRequired,
+  elevation: PropTypes.number.isRequired,
 };
 
 const mapStateToProps = (state) => {

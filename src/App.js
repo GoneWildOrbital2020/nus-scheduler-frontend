@@ -27,7 +27,7 @@ function App() {
         <Router>
           <Switch>
             <Route
-              path="/page"
+              path="/"
               exact
               component={() => (
                 <ThemeProvider theme={themeLandingPage}>

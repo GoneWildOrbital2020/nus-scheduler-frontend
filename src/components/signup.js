@@ -133,7 +133,7 @@ const Signup = ({ ...routerProps }) => {
           variant="contained"
           color="primary"
         >
-          Signup
+          SIGN UP
         </Button>
         <Notification
           open={open}

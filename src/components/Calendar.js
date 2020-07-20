@@ -133,7 +133,7 @@ const Calendar = ({
         <IconButton onClick={clickLeft}>
           <ArrowLeftIcon
             fontSize="large"
-            style={{ color: light, paddingTop: '2rem' }}
+            style={{ color: light, marginTop: '2rem' }}
           />
         </IconButton>
         <Button onClick={handleOpenDialog}>
@@ -165,7 +165,7 @@ const Calendar = ({
         <IconButton onClick={clickRight}>
           <ArrowRightIcon
             fontSize="large"
-            style={{ color: light, paddingTop: '2rem' }}
+            style={{ color: light, marginTop: '2rem' }}
           />
         </IconButton>
       </div>
