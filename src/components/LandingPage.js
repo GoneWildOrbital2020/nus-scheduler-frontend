@@ -72,7 +72,10 @@ const useStyles = makeStyles((theme) => ({
   description: {
     marginBottom: '1rem',
     fontFamily: 'Ubuntu',
-    letterSpacing: '0.1rem',
+    fontWeight: 500,
+    [theme.breakpoints.up('xl')]: {
+      margin: '3rem 0',
+    },
     [theme.breakpoints.down('md')]: {
       fontSize: '2.125rem',
     },
@@ -135,6 +138,7 @@ const useStyles = makeStyles((theme) => ({
   iconTitle: {
     color: accent,
     textShadow: `1px 1px 3px #424D4D`,
+    margin: '0 2rem',
   },
 }));
 
@@ -242,8 +246,11 @@ const LandingPage = () => {
               <Typography variant="h5" className={classes.iconTitle}>
                 Make It Your Own
               </Typography>
-              <Typography variant="h6" style={{ color: light }}>
-                <ul>
+              <Typography
+                variant="h6"
+                style={{ color: light, margin: '0 2rem' }}
+              >
+                <ul style={{ paddingLeft: '2rem', marginTop: '0.5rem' }}>
                   <li>Represent yourself with a custom avatar</li>
                   <li>Create color palettes for your events</li>
                   <li>Be creative in naming your activities</li>
@@ -257,8 +264,11 @@ const LandingPage = () => {
               <Typography variant="h5" className={classes.iconTitle}>
                 Be a Master Planner
               </Typography>
-              <Typography variant="h6" style={{ color: light }}>
-                <ul>
+              <Typography
+                variant="h6"
+                style={{ color: light, margin: '0 2rem' }}
+              >
+                <ul style={{ paddingLeft: '2rem', marginTop: '0.5rem' }}>
                   <li>Schedule daily events</li>
                   <li>Group related events together</li>
                   <li>Create a kanban board to monitor your tasks</li>
@@ -272,8 +282,11 @@ const LandingPage = () => {
               <Typography variant="h5" className={classes.iconTitle}>
                 Stop Losing Your Data
               </Typography>
-              <Typography variant="h6" style={{ color: light }}>
-                <ul>
+              <Typography
+                variant="h6"
+                style={{ color: light, margin: '0 2rem' }}
+              >
+                <ul style={{ paddingLeft: '2rem', marginTop: '0.5rem' }}>
                   <li>Organize all your files in one place</li>
                   <li>Create notes to summarize your thoughts</li>
                   <li>Import your NUSMODS data</li>

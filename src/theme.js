@@ -81,6 +81,9 @@ export const themeLandingPage = createMuiTheme({
       fontFamily: 'Ubuntu',
       fontWeight: 500,
     },
+    h6: {
+      fontFamily: 'Nunito Sans',
+    },
     body2: {
       fontFamily: 'Nunito Sans',
       fontWeight: 700,
