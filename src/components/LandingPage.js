@@ -74,7 +74,8 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: 'Ubuntu',
     fontWeight: 500,
     [theme.breakpoints.up('xl')]: {
-      margin: '3rem 0',
+      margin: '1rem 0',
+      lineHeight: '4rem',
     },
     [theme.breakpoints.down('md')]: {
       fontSize: '2.125rem',
