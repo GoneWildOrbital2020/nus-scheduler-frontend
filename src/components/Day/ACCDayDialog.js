@@ -14,7 +14,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import { TwitterPicker } from 'react-color';
 import './ACCDayDialog.css';
 import { connect } from 'react-redux';
-import { addNumOfEvents } from '../../redux/actions';
+import { addNumOfEvents } from '../../redux/Actions';
 
 const colors = [
   '#EFBC9B',

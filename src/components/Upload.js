@@ -29,9 +29,9 @@ import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
-import { light, dark } from '../colors';
-import Notification from './notification';
-import { url, monthProperties } from './constant';
+import { light, dark } from '../Colors';
+import Notification from './Notification';
+import { url, monthProperties } from './Constant';
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),

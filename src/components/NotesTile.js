@@ -1,7 +1,7 @@
 import React from 'react';
 import { makeStyles, Button, Typography } from '@material-ui/core';
 import PropTypes from 'prop-types';
-import { light } from '../colors';
+import { light } from '../Colors';
 
 const useStyles = makeStyles((theme) => ({
   button: {

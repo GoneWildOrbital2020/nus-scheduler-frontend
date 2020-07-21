@@ -20,11 +20,11 @@ import {
   Assignment,
 } from '@material-ui/icons';
 import { connect } from 'react-redux';
-import { dark, light } from '../colors';
+import { dark, light } from '../Colors';
 import Customize from './Customize';
-import Upload from './upload';
-import NotesGrid from './notesGrid';
-import { url } from './constant';
+import Upload from './Upload';
+import NotesGrid from './NotesGrid';
+import { url } from './Constant';
 import Tasks from './Tasks';
 
 const useStyles = makeStyles((theme) => ({

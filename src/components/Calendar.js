@@ -11,11 +11,11 @@ import {
   changeActiveDate,
   changeActiveYear,
   addNumOfEvents,
-} from '../redux/actions';
-import { monthProperties, url } from './constant';
+} from '../redux/Actions';
+import { monthProperties, url } from './Constant';
 import Month from './Month';
-import { light } from '../colors';
-import Notification from './notification';
+import { light } from '../Colors';
+import Notification from './Notification';
 
 const useStyles = makeStyles(() => ({
   headContainer: {

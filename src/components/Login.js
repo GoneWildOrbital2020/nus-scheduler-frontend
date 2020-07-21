@@ -4,10 +4,10 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { toggleLogin } from '../redux/actions';
-import { dark, light } from '../colors';
-import Notification from './notification';
-import { url } from './constant';
+import { toggleLogin } from '../redux/Actions';
+import { dark, light } from '../Colors';
+import Notification from './Notification';
+import { url } from './Constant';
 
 const useStyles = makeStyles({
   login: {

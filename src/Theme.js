@@ -1,5 +1,5 @@
 import { createMuiTheme } from '@material-ui/core';
-import { accent, medium } from './colors';
+import { accent, medium } from './Colors';
 import background from './images/bg.svg';
 
 export const theme = createMuiTheme({

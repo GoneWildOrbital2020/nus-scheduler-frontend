@@ -17,9 +17,9 @@ import CloseIcon from '@material-ui/icons/Close';
 import { TwitterPicker } from 'react-color';
 import { connect } from 'react-redux';
 import { TimePicker } from '@material-ui/pickers';
-import { addNumOfEvents } from '../../redux/actions';
-import { dark, light, accent, medium } from '../../colors';
-import { colors } from '../constant';
+import { addNumOfEvents } from '../../redux/Actions';
+import { dark, light, accent, medium } from '../../Colors';
+import { colors } from '../Constant';
 
 const useStyles = makeStyles((theme) => ({
   closeButton: {

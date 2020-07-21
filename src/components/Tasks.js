@@ -18,8 +18,8 @@ import {
 import { Alarm, Edit, Close } from '@material-ui/icons';
 import { DatePicker } from '@material-ui/pickers';
 import { groupBy } from 'lodash';
-import { light, dark, medium } from '../colors';
-import { url } from './constant';
+import { light, dark, medium } from '../Colors';
+import { url } from './Constant';
 
 const useStyles = makeStyles((theme) => ({
   container: {

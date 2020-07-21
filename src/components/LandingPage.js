@@ -7,13 +7,13 @@ import {
   useMediaQuery,
 } from '@material-ui/core';
 import { Link } from 'react-router-dom';
-import { light, medium, accent } from '../colors';
+import { light, medium, accent } from '../Colors';
 import heroPage from '../images/heroPage.svg';
 import hero from '../images/herov1.png';
 import customize from '../images/customize.svg';
 import note from '../images/note.svg';
 import plan from '../images/plan.svg';
-import Footer from './footer';
+import Footer from './Footer';
 import NavbarDrawer from './NavbarDrawer';
 
 const useStyles = makeStyles((theme) => ({
@@ -45,8 +45,11 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: '-1px',
   },
   paragraph: {
+    [theme.breakpoints.up('l')]: {
+      maxWidth: 'calc(40vw - 6rem) !important',
+    },
     [theme.breakpoints.up('lg')]: {
-      maxWidth: '45rem',
+      maxWidth: 'calc(50vw - 6rem)',
     },
     [theme.breakpoints.down('md')]: {
       width: '80%',
@@ -58,6 +61,9 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     marginBottom: '1rem',
+    '@media (max-width: 1368px)': {
+      fontSize: '3.25rem',
+    },
     [theme.breakpoints.down('md')]: {
       fontSize: '3rem',
       width: '80%',
@@ -76,6 +82,9 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up('xl')]: {
       margin: '1rem 0',
       lineHeight: '4rem',
+    },
+    '@media (max-width: 1368px)': {
+      fontSize: '2.25rem',
     },
     [theme.breakpoints.down('md')]: {
       fontSize: '2.125rem',
@@ -99,10 +108,14 @@ const useStyles = makeStyles((theme) => ({
       width: '50vw',
     },
     [theme.breakpoints.up('lg')]: {
-      top: '-23rem',
-      marginBottom: '-23rem',
+      top: '-21rem',
+      marginBottom: '-21rem',
       float: 'right',
       marginRight: '6rem',
+    },
+    '@media (max-width: 1368px) and (min-width: 1281px)': {
+      top: '-15rem',
+      marginBottom: '-15rem',
     },
     [theme.breakpoints.up('xl')]: {
       top: 'calc(-30rem + 10vh)',
