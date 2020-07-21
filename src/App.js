@@ -8,7 +8,6 @@ import ScopedCssBaseline from '@material-ui/core/ScopedCssBaseline';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import reducer from './redux/reducers';
-import AutomaticLogout from './components/AutomaticLogout';
 import LandingPage from './components/LandingPage';
 import Pages from './Pages';
 import { themeLandingPage } from './theme';
@@ -39,7 +38,6 @@ function App() {
             />
             <Route path="/" component={Pages} />
           </Switch>
-          <AutomaticLogout />
         </Router>
       </Provider>
     </MuiPickersUtilsProvider>

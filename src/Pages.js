@@ -3,6 +3,7 @@ import { Switch, Route } from 'react-router-dom';
 import { makeStyles, ThemeProvider } from '@material-ui/core';
 import ScopedCssBaseline from '@material-ui/core/ScopedCssBaseline';
 import Authenticate from './components/Authenticate';
+import AutomaticLogout from './components/AutomaticLogout';
 import ForgotPassword from './components/ForgotPassword';
 import ResetPassword from './components/ResetPassword';
 import EventGroup from './components/EventGroup';
@@ -69,6 +70,7 @@ const Pages = () => {
           </div>
           <Footer />
         </div>
+        <AutomaticLogout />
       </ScopedCssBaseline>
     </ThemeProvider>
   );

@@ -60,7 +60,7 @@ export const themeLandingPage = createMuiTheme({
   },
   typography: {
     body1: {
-      fontFamily: 'Ubuntu',
+      fontFamily: 'Nunito Sans',
     },
     button: {
       fontFamily: 'Nunito Sans',
