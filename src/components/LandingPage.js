@@ -104,6 +104,10 @@ const useStyles = makeStyles((theme) => ({
       float: 'right',
       marginRight: '6rem',
     },
+    [theme.breakpoints.up('xl')]: {
+      top: 'calc(-30rem + 10vh)',
+      marginBottom: 'calc(-30rem + 10vh)',
+    },
     [theme.breakpoints.down('xs')]: {
       width: '80vw',
     },
