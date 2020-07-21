@@ -2,7 +2,7 @@ import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import { makeStyles, ThemeProvider } from '@material-ui/core';
 import ScopedCssBaseline from '@material-ui/core/ScopedCssBaseline';
-import { theme } from './theme';
+import { theme } from './Theme';
 
 const Authenticate = React.lazy(() => import('./components/Authenticate'));
 const AutomaticLogout = React.lazy(() =>
@@ -11,13 +11,13 @@ const AutomaticLogout = React.lazy(() =>
 const ForgotPassword = React.lazy(() => import('./components/ForgotPassword'));
 const ResetPassword = React.lazy(() => import('./components/ResetPassword'));
 const EventGroup = React.lazy(() => import('./components/EventGroup'));
-const Profile = React.lazy(() => import('./components/profile'));
-const Upload = React.lazy(() => import('./components/upload'));
-const NotesGrid = React.lazy(() => import('./components/notesGrid'));
-const Login = React.lazy(() => import('./components/login'));
-const Signup = React.lazy(() => import('./components/signup'));
+const Profile = React.lazy(() => import('./components/Profile'));
+const Upload = React.lazy(() => import('./components/Upload'));
+const NotesGrid = React.lazy(() => import('./components/NotesGrid'));
+const Login = React.lazy(() => import('./components/Login'));
+const Signup = React.lazy(() => import('./components/Signup'));
 const Calendar = React.lazy(() => import('./components/Calendar'));
-const Footer = React.lazy(() => import('./components/footer'));
+const Footer = React.lazy(() => import('./components/Footer'));
 const NavbarDrawer = React.lazy(() => import('./components/NavbarDrawer'));
 
 const useStyles = makeStyles(() => ({

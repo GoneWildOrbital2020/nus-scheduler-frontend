@@ -8,9 +8,9 @@ import {
   Button,
   TextField,
 } from '@material-ui/core';
-import { url } from './constant';
-import { light, dark } from '../colors';
-import Notification from './notification';
+import { url } from './Constant';
+import { light, dark } from '../Colors';
+import Notification from './Notification';
 
 const useStyles = makeStyles(() => ({
   paper: {

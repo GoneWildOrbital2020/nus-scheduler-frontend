@@ -7,7 +7,7 @@ import {
   TOGGLE_LOGOUT,
   IS_LOADING_TRUE,
   IS_LOADING_FALSE,
-} from './actions';
+} from './Actions';
 
 const date = new Date();
 

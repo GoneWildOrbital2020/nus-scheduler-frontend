@@ -5,9 +5,9 @@ import { connect } from 'react-redux';
 import { groupBy } from 'lodash';
 import Loader from 'react-loader-spinner';
 import DayTile from './Day/DayTile';
-import { monthProperties, monthPropertiesLeap, url } from './constant';
-import Notification from './notification';
-import { light } from '../colors';
+import { monthProperties, monthPropertiesLeap, url } from './Constant';
+import Notification from './Notification';
+import { light } from '../Colors';
 
 const Month = ({ activeMonth, activeYear, token }) => {
   const generateRows = (num) => {

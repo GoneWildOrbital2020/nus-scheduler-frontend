@@ -9,8 +9,8 @@ import {
   makeStyles,
   Typography,
 } from '@material-ui/core';
-import { toggleLogout } from '../redux/actions';
-import { light, dark } from '../colors';
+import { toggleLogout } from '../redux/Actions';
+import { light, dark } from '../Colors';
 
 const useStyles = makeStyles(() => ({
   dialog: {

@@ -4,9 +4,9 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core';
-import { url } from './constant';
-import { light } from '../colors';
-import { toggleLogin } from '../redux/actions';
+import { url } from './Constant';
+import { light } from '../Colors';
+import { toggleLogin } from '../redux/Actions';
 
 const useStyles = makeStyles(() => ({
   loader: {

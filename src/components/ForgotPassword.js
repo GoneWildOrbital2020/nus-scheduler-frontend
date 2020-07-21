@@ -6,9 +6,9 @@ import {
   makeStyles,
   Button,
 } from '@material-ui/core';
-import { dark, light } from '../colors';
-import { url } from './constant';
-import Notification from './notification';
+import { dark, light } from '../Colors';
+import { url } from './Constant';
+import Notification from './Notification';
 
 const useStyles = makeStyles(() => ({
   paper: {

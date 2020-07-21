@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import NotesTile from './notesTile';
-import NotesDialog from './notesDialog';
+import NotesTile from './NotesTile';
+import NotesDialog from './NotesDialog';
 
 const Notes = (props) => {
   const { index, title, text, identifier, upload, deleteNote } = props;

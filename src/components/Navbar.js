@@ -11,8 +11,8 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Logo from '../images/logov5light.png';
-import { light, dark } from '../colors';
-import { url } from './constant';
+import { light, dark } from '../Colors';
+import { url } from './Constant';
 
 const useStyles = makeStyles((theme) => ({
   root: {

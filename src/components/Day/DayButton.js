@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Typography, makeStyles } from '@material-ui/core';
 import { LabelImportant } from '@material-ui/icons';
-import { light, dark } from '../../colors';
+import { light, dark } from '../../Colors';
 
 const useStyles = makeStyles((theme) => ({
   buttonRoot: {

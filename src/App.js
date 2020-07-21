@@ -7,8 +7,8 @@ import { ThemeProvider, responsiveFontSizes } from '@material-ui/core/styles';
 import ScopedCssBaseline from '@material-ui/core/ScopedCssBaseline';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
-import reducer from './redux/reducers';
-import { themeLandingPage } from './theme';
+import reducer from './redux/Reducers';
+import { themeLandingPage } from './Theme';
 
 /* eslint-disable no-underscore-dangle */
 const store = createStore(

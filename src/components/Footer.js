@@ -1,6 +1,6 @@
 import React from 'react';
 import { makeStyles, Typography } from '@material-ui/core';
-import { light } from '../colors';
+import { light } from '../Colors';
 
 const useStyles = makeStyles(() => ({
   footer: {

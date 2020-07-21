@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import DayButton from './DayButton';
 import DayDialog from './TABDayDialog';
-import { url } from '../constant';
-import Notification from '../notification';
+import { url } from '../Constant';
+import Notification from '../Notification';
 
 const DayTile = ({ index, token, propEvents, activeMonth, activeYear }) => {
   const [open, setOpen] = React.useState(false);

@@ -8,10 +8,10 @@ import {
 } from '@material-ui/core';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import Notes from './notes';
-import { light } from '../colors';
-import Notification from './notification';
-import { url } from './constant';
+import Notes from './Notes';
+import { light } from '../Colors';
+import Notification from './Notification';
+import { url } from './Constant';
 
 const useStyles = makeStyles((theme) => ({
   container: {

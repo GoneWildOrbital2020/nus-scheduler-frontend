@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { TextField, Button, Typography } from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
-import { dark, light } from '../colors';
-import Notification from './notification';
-import { url } from './constant';
+import { dark, light } from '../Colors';
+import Notification from './Notification';
+import { url } from './Constant';
 
 const useStyles = makeStyles({
   signup: {

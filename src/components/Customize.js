@@ -18,9 +18,9 @@ import { chunk } from 'lodash';
 import { TwitterPicker } from 'react-color';
 import Loader from 'react-loader-spinner';
 import { Close } from '@material-ui/icons';
-import { url, monthIdx, colors } from './constant';
-import { dark, light } from '../colors';
-import { addNumOfEvents } from '../redux/actions';
+import { url, monthIdx, colors } from './Constant';
+import { dark, light } from '../Colors';
+import { addNumOfEvents } from '../redux/Actions';
 import './Customize.css';
 
 const useStyles = makeStyles((theme) => ({

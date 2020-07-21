@@ -2,10 +2,10 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import { Drawer, Toolbar, makeStyles, useMediaQuery } from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
-import Navbar from './navbar';
+import Navbar from './Navbar';
 import DrawerList from './DrawerList';
 import DrawerMobile from './DrawerMobile';
-import { light } from '../colors';
+import { light } from '../Colors';
 
 const useStyles = makeStyles((theme) => ({
   paperAnchorRight: {

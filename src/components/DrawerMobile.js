@@ -35,10 +35,10 @@ import {
   Close,
 } from '@material-ui/icons';
 import { Link, withRouter } from 'react-router-dom';
-import { toggleLogout } from '../redux/actions';
-import { dark, light } from '../colors';
-import { url } from './constant';
-import Notification from './notification';
+import { toggleLogout } from '../redux/Actions';
+import { dark, light } from '../Colors';
+import { url } from './Constant';
+import Notification from './Notification';
 
 const useStyles = makeStyles(() => ({
   button: {

@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import {
   Dialog,
   Typography,
-  DialogTitle,
   makeStyles,
   TextField,
   Button,
@@ -10,7 +9,7 @@ import {
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import PropTypes from 'prop-types';
-import { light, medium, accent, dark } from '../colors';
+import { light, accent, dark } from '../Colors';
 
 const useStyles = makeStyles(() => ({
   title: {

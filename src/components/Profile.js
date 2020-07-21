@@ -8,10 +8,10 @@ import {
 } from '@material-ui/core';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { light, dark } from '../colors';
-import Notification from './notification';
-import { toggleLogin } from '../redux/actions';
-import { url } from './constant';
+import { light, dark } from '../Colors';
+import Notification from './Notification';
+import { toggleLogin } from '../redux/Actions';
+import { url } from './Constant';
 
 const useStyles = makeStyles((theme) => ({
   root: {
