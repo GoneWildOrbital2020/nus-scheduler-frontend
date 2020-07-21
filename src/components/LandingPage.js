@@ -55,6 +55,7 @@ const useStyles = makeStyles((theme) => ({
   },
   typography: {
     marginBottom: '1rem',
+    transform: 'translateY(5rem)',
   },
   title: {
     marginBottom: '1rem',
@@ -68,6 +69,11 @@ const useStyles = makeStyles((theme) => ({
       margin: '0 auto',
       marginBottom: '1rem',
     },
+    '-webkit-animation': 'fadein 2s' /* Safari, Chrome and Opera > 12.1 */,
+    '-moz-animation': 'fadein 2s' /* Firefox < 16 */,
+    '-ms-animation': 'fadein 2s' /* Internet Explorer */,
+    '-o-animation': 'fadein 2s' /* Opera < 12.1 */,
+    animation: 'fadein 2s',
   },
   description: {
     marginBottom: '1rem',
@@ -83,12 +89,22 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('xs')]: {
       fontSize: '1.25rem',
     },
+    '-webkit-animation': 'fadein 2s' /* Safari, Chrome and Opera > 12.1 */,
+    '-moz-animation': 'fadein 2s' /* Firefox < 16 */,
+    '-ms-animation': 'fadein 2s' /* Internet Explorer */,
+    '-o-animation': 'fadein 2s' /* Opera < 12.1 */,
+    animation: 'fadein 2s',
   },
   button: {
     marginTop: '1rem',
     [theme.breakpoints.down('xs')]: {
       marginTop: '0.5rem',
     },
+    '-webkit-animation': 'fadein 2s' /* Safari, Chrome and Opera > 12.1 */,
+    '-moz-animation': 'fadein 2s' /* Firefox < 16 */,
+    '-ms-animation': 'fadein 2s' /* Internet Explorer */,
+    '-o-animation': 'fadein 2s' /* Opera < 12.1 */,
+    animation: 'fadein 2s',
   },
   bottom: {},
   hero: {
@@ -111,6 +127,12 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('xs')]: {
       width: '80vw',
     },
+
+    '-webkit-animation': 'fadein 2s' /* Safari, Chrome and Opera > 12.1 */,
+    '-moz-animation': 'fadein 2s' /* Firefox < 16 */,
+    '-ms-animation': 'fadein 2s' /* Internet Explorer */,
+    '-o-animation': 'fadein 2s' /* Opera < 12.1 */,
+    animation: 'fadein 2s',
   },
   grid: {
     width: '75%',
@@ -118,6 +140,7 @@ const useStyles = makeStyles((theme) => ({
       width: '100%',
     },
     margin: '0 auto',
+    transform: 'translateY(5rem)',
   },
   innerGrid: {
     width: '33.3%',
@@ -151,6 +174,8 @@ const LandingPage = () => {
   const classes = useStyles();
   const mediumScreen = useMediaQuery((theme) => theme.breakpoints.down('md'));
   const [elevation, setElevation] = useState(0);
+  const [up, setUp] = useState({});
+  const [upDelay, setUpDelay] = useState({});
 
   const handleScroll = () => {
     const newY = window.scrollY;
@@ -158,6 +183,26 @@ const LandingPage = () => {
       setElevation(0);
     } else {
       setElevation(4);
+      setUp({
+        '-webkit-animation': 'up 1s' /* Safari, Chrome and Opera > 12.1 */,
+        '-moz-animation': 'up 1s' /* Firefox < 16 */,
+        '-ms-animation': 'up 1s' /* Internet Explorer */,
+        '-o-animation': 'up 1s' /* Opera < 12.1 */,
+        animation: 'up 1s',
+        transform: 'translateY(0)',
+      });
+      setTimeout(
+        () =>
+          setUpDelay({
+            '-webkit-animation': 'up 1s' /* Safari, Chrome and Opera > 12.1 */,
+            '-moz-animation': 'up 1s' /* Firefox < 16 */,
+            '-ms-animation': 'up 1s' /* Internet Explorer */,
+            '-o-animation': 'up 1s' /* Opera < 12.1 */,
+            animation: 'up 1s',
+            transform: 'translateY(0)',
+          }),
+        500,
+      );
     }
   };
 
@@ -234,6 +279,7 @@ const LandingPage = () => {
         <Typography
           variant="h3"
           style={{
+            ...up,
             color: light,
             textAlign: 'center',
             fontFamily: 'Ubuntu',
@@ -244,7 +290,13 @@ const LandingPage = () => {
         >
           FEATURES
         </Typography>
-        <Grid container item direction="row" className={classes.grid}>
+        <Grid
+          container
+          item
+          direction="row"
+          className={classes.grid}
+          style={{ ...upDelay }}
+        >
           <Grid container direction="column" className={classes.innerGrid}>
             <div className={classes.innerGridContent}>
               <img src={customize} alt="" className={classes.icon} />
