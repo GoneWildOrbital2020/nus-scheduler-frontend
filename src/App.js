@@ -8,8 +8,6 @@ import ScopedCssBaseline from '@material-ui/core/ScopedCssBaseline';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import reducer from './redux/reducers';
-import LandingPage from './components/LandingPage';
-import Pages from './Pages';
 import { themeLandingPage } from './theme';
 
 /* eslint-disable no-underscore-dangle */
@@ -18,26 +16,30 @@ const store = createStore(
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
 );
 /* eslint-enable */
+const Pages = React.lazy(() => import('./Pages'));
+const LandingPage = React.lazy(() => import('./components/LandingPage'));
 
 function App() {
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
       <Provider store={store}>
         <Router>
-          <Switch>
-            <Route
-              path="/"
-              exact
-              component={() => (
-                <ThemeProvider theme={responsiveFontSizes(themeLandingPage)}>
-                  <ScopedCssBaseline>
-                    <LandingPage />
-                  </ScopedCssBaseline>
-                </ThemeProvider>
-              )}
-            />
-            <Route path="/" component={Pages} />
-          </Switch>
+          <React.Suspense fallback={null}>
+            <Switch>
+              <Route
+                path="/"
+                exact
+                component={() => (
+                  <ThemeProvider theme={responsiveFontSizes(themeLandingPage)}>
+                    <ScopedCssBaseline>
+                      <LandingPage />
+                    </ScopedCssBaseline>
+                  </ThemeProvider>
+                )}
+              />
+              <Route path="/" component={Pages} />
+            </Switch>
+          </React.Suspense>
         </Router>
       </Provider>
     </MuiPickersUtilsProvider>
