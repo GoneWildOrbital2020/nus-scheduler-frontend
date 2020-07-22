@@ -31,7 +31,7 @@ import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import { light, dark } from '../Colors';
 import Notification from './Notification';
-import { url, monthProperties } from './Constant';
+import { url, monthProperties, fileUrl } from './Constant';
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -191,7 +191,7 @@ const Upload = (props) => {
             currFile.lastIndexOf('.') + 1,
             currFile.length,
           );
-          obj.download = `${url}/media/${currFile}`;
+          obj.download = `${fileUrl}/media/${currFile}`;
           newTableData.push(obj);
         });
         image.forEach((element) => {
@@ -210,7 +210,7 @@ const Upload = (props) => {
             currImage.lastIndexOf('.') + 1,
             currImage.length,
           );
-          obj.download = `${url}/media/${currImage}`;
+          obj.download = `${fileUrl}/media/${currImage}`;
           newTableData.push(obj);
         });
         setTableData(newTableData);

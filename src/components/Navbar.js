@@ -100,7 +100,7 @@ const Navbar = (props) => {
                 ) : (
                   <img
                     className={classes.avatar}
-                    src={`${url}${avatar}`}
+                    src={avatar}
                     alt="profile"
                   />
                 )}

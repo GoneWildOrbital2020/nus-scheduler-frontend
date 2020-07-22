@@ -45,6 +45,9 @@ export const monthIdx = {
 
 export const url = 'https://nus-scheduler-backend.herokuapp.com';
 
+export const fileUrl =
+  'https://nus-scheduler-assets.s3-ap-southeast-1.amazonaws.com';
+
 export const colors = [
   '#D5573B',
   '#A23E48',

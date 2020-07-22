@@ -11,7 +11,7 @@ import PropTypes from 'prop-types';
 import { light, dark } from '../Colors';
 import Notification from './Notification';
 import { toggleLogin } from '../redux/Actions';
-import { url } from './Constant';
+import { url, fileUrl } from './Constant';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -56,7 +56,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Profile = (props) => {
   const { username, token, email, avatar: avatarProps, dispatch } = props;
-  const [imageUrl, setImageUrl] = useState(`${url}${avatarProps}`);
+  const [imageUrl, setImageUrl] = useState(`${avatarProps}`);
   const [password, setPassword] = useState('');
   const [newUsername, setNewUsername] = useState(username);
   const [retype, setRetype] = useState('');
@@ -121,7 +121,7 @@ const Profile = (props) => {
         if (json[0].fields.avatar) {
           window.localStorage.setItem(
             'avatar',
-            `/media/${json[0].fields.avatar}`,
+            `${fileUrl}/media/${json[0].fields.avatar}`,
           );
         }
         dispatch(
@@ -129,7 +129,7 @@ const Profile = (props) => {
             email,
             token,
             json[0].fields.username,
-            `/media/${json[0].fields.avatar}`,
+            `${fileUrl}/media/${json[0].fields.avatar}`,
           ),
         );
         setSeverity('success');
