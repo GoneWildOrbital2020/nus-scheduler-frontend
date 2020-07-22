@@ -13,14 +13,11 @@ import Notification from './Notification';
 import { toggleLogin } from '../redux/Actions';
 import { url, fileUrl } from './Constant';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   root: {
     backgroundColor: light,
     margin: '2rem auto',
     width: '300px',
-    [theme.breakpoints.down('xs')]: {
-      width: '230px',
-    },
     textAlign: 'center',
     padding: '2rem',
     display: 'inline-block',

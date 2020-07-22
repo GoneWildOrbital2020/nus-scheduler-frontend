@@ -1,6 +1,5 @@
 import { createMuiTheme } from '@material-ui/core';
 import { accent, medium } from './Colors';
-import background from './images/bg.svg';
 
 export const theme = createMuiTheme({
   palette: {
@@ -37,7 +36,6 @@ export const theme = createMuiTheme({
   overrides: {
     MuiScopedCssBaseline: {
       root: {
-        backgroundImage: `url(${background})`,
         backgroundColor: medium,
       },
     },
