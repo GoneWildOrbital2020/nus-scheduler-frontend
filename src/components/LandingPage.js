@@ -7,12 +7,11 @@ import {
   useMediaQuery,
 } from '@material-ui/core';
 import { Link } from 'react-router-dom';
-import { light, medium, accent } from '../Colors';
 import heroPage from '../images/heroPage.svg';
 import hero from '../images/herov1.png';
-import customize from '../images/customize.svg';
-import note from '../images/note.svg';
-import plan from '../images/plan.svg';
+import customize from '../images/customize2.svg';
+import note from '../images/note2.svg';
+import plan from '../images/plan2.svg';
 import Footer from './Footer';
 import NavbarDrawer from './NavbarDrawer';
 
@@ -174,11 +173,9 @@ const useStyles = makeStyles((theme) => ({
     height: '20vh',
     margin: '2rem 0',
     alignSelf: 'center',
-    filter: `drop-shadow(3px 3px 3px #8B484B)`,
   },
   iconTitle: {
-    color: accent,
-    textShadow: `1px 1px 3px #424D4D`,
+    color: '#2D3533',
     margin: '0 2rem',
   },
 }));
@@ -231,15 +228,15 @@ const LandingPage = () => {
           <img src={hero} alt="" className={classes.hero} />
           <Typography
             variant="h2"
-            style={{ color: light }}
+            style={{ color: '#CECECA' }}
             className={classes.title}
           >
-            Do You Have Problem Organizing Your Schoolwork?
+            Do You Have Problems Organizing Your Schoolwork?
           </Typography>
           <div className={classes.paragraph}>
             <Typography
               variant="h3"
-              style={{ color: medium }}
+              style={{ color: '#8C999A' }}
               className={classes.description}
             >
               NUS Scheduler is a one-stop solution for your daily academic
@@ -260,15 +257,15 @@ const LandingPage = () => {
         <div className={classes.top}>
           <Typography
             variant="h2"
-            style={{ color: light }}
+            style={{ color: '#CECECA' }}
             className={classes.title}
           >
-            Do You Have Problem Organizing Your Schoolwork?
+            Do You Have Problems Organizing Your Schoolwork?
           </Typography>
           <div className={classes.paragraph}>
             <Typography
               variant="h3"
-              style={{ color: medium }}
+              style={{ color: '#8C999A' }}
               className={classes.description}
             >
               NUS Scheduler is a one-stop solution for your daily academic
@@ -293,10 +290,9 @@ const LandingPage = () => {
           variant="h3"
           style={{
             ...up,
-            color: light,
+            color: '#262C2A',
             textAlign: 'center',
-            fontFamily: 'Ubuntu',
-            textShadow: `3px 3px 10px #424D4D`,
+            fontFamily: 'Kalam',
             letterSpacing: '0.3rem',
           }}
           className={classes.typography}
@@ -318,7 +314,7 @@ const LandingPage = () => {
               </Typography>
               <Typography
                 variant="h6"
-                style={{ color: light, margin: '0 2rem' }}
+                style={{ color: '#3B4544', margin: '0 2rem' }}
               >
                 <ul style={{ paddingLeft: '2rem', marginTop: '0.5rem' }}>
                   <li>Represent yourself with a custom avatar</li>
@@ -336,7 +332,7 @@ const LandingPage = () => {
               </Typography>
               <Typography
                 variant="h6"
-                style={{ color: light, margin: '0 2rem' }}
+                style={{ color: '#3B4544', margin: '0 2rem' }}
               >
                 <ul style={{ paddingLeft: '2rem', marginTop: '0.5rem' }}>
                   <li>Schedule daily events</li>
@@ -348,13 +344,18 @@ const LandingPage = () => {
           </Grid>
           <Grid container direction="column" className={classes.innerGrid}>
             <div className={classes.innerGridContent}>
-              <img src={note} alt="" className={classes.icon} />
+              <img
+                src={note}
+                alt=""
+                className={classes.icon}
+                style={{ marginTop: '3rem', marginBottom: '1rem' }}
+              />
               <Typography variant="h5" className={classes.iconTitle}>
                 Stop Losing Your Data
               </Typography>
               <Typography
                 variant="h6"
-                style={{ color: light, margin: '0 2rem' }}
+                style={{ color: '#3B4544', margin: '0 2rem' }}
               >
                 <ul style={{ paddingLeft: '2rem', marginTop: '0.5rem' }}>
                   <li>Organize all your files in one place</li>

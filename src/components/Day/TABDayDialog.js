@@ -180,6 +180,7 @@ const DayDialog = ({
     const tmp = newEvents
       .filter((x) => x.index !== index)
       .map((x) => ({ ...x }));
+    if (tmp.length < value) setValue((state) => state - 1);
     setNewEvents(tmp);
   };
 
