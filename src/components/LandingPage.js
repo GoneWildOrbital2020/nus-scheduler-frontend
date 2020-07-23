@@ -116,6 +116,7 @@ const useStyles = makeStyles((theme) => ({
   },
   bottom: {},
   hero: {
+    filter: 'saturate(0.7)'
     position: 'relative',
     width: '45vw',
     marginBottom: '2rem',
