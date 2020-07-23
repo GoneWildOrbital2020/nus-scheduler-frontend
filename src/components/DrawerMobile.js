@@ -20,6 +20,7 @@ import {
 } from '@material-ui/core';
 import {
   AccountCircle,
+  Assignment,
   Create,
   Label,
   GitHub,
@@ -310,6 +311,14 @@ const DrawerMobile = ({
                 <Note style={{ color: dark }} />
               </ListItemIcon>
               <ListItemText primary="Notes" style={{ color: dark }} />
+            </ListItem>
+          </Link>
+          <Link to={`/events-group/${moduleName}/tasks`}>
+            <ListItem button divider>
+              <ListItemIcon>
+                <Assignment style={{ color: dark }} />
+              </ListItemIcon>
+              <ListItemText primary="Tasks" style={{ color: dark }} />
             </ListItem>
           </Link>
           <ListItem button divider onClick={handleDeleteGroup}>

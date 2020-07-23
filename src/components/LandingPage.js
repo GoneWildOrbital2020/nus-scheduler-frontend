@@ -21,8 +21,8 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'left',
   },
   top: {
-    height: 'calc(100vh - 73px)',
-    marginTop: '73px',
+    height: 'calc(100vh - 62px)',
+    marginTop: '62px',
     [theme.breakpoints.up('l')]: {
       paddingTop: '4rem !important',
     },

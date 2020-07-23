@@ -3,6 +3,7 @@ import { Switch, Route } from 'react-router-dom';
 import { makeStyles, ThemeProvider } from '@material-ui/core';
 import ScopedCssBaseline from '@material-ui/core/ScopedCssBaseline';
 import { theme } from './Theme';
+import background from './images/bg.svg';
 
 const Authenticate = React.lazy(() => import('./components/Authenticate'));
 const AutomaticLogout = React.lazy(() =>
@@ -26,6 +27,7 @@ const useStyles = makeStyles(() => ({
     display: 'flex',
     flexDirection: 'column',
     minHeight: '100vh',
+    backgroundImage: `url(${background})`,
   },
 }));
 
@@ -36,7 +38,7 @@ const Pages = () => {
       <ScopedCssBaseline>
         <div className={classes.app}>
           <NavbarDrawer elevation={4} />
-          <div className="content" style={{ marginTop: '75px' }}>
+          <div className="content" style={{ marginTop: '64px' }}>
             <Switch>
               <React.Suspense fallback={null}>
                 <Route path="/calendar" exact component={Calendar} />
