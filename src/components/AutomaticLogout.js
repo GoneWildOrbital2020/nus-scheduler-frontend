@@ -46,12 +46,12 @@ const AutomaticLogout = (props) => {
 
   useEffect(() => {
     const check = setInterval(() => {
-      if (logoutTime <= Date.now()) {
+      if (logoutTime && logoutTime <= Date.now()) {
         handleOpen();
       }
     }, 1000);
     return () => clearInterval(check);
-  }, []);
+  }, [logoutTime]);
 
   return (
     <Dialog open={open} onClose={handleClose}>

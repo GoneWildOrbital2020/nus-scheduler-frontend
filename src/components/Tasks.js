@@ -182,7 +182,6 @@ const Tasks = ({ name, token }) => {
       );
   }, [name]);
   const [curItem, setCurItem] = React.useState({});
-  console.log(items);
   const updatePos = (item) => {
     fetch(`${url}/tasks/${name}/${item.id}`, {
       method: 'PUT',
@@ -207,7 +206,6 @@ const Tasks = ({ name, token }) => {
     ) {
       return;
     }
-    console.log(result);
     const item = {
       ...items[source.droppableId][source.index],
       index: destination.index,

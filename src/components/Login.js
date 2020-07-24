@@ -226,8 +226,8 @@ Login.propTypes = {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    ToggleLogin: (email, token, username, avatar) =>
-      dispatch(toggleLogin(email, token, username, avatar)),
+    ToggleLogin: (email, token, username, avatar, logoutTime) =>
+      dispatch(toggleLogin(email, token, username, avatar, logoutTime)),
   };
 };
 

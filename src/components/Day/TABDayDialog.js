@@ -171,7 +171,6 @@ const DayDialog = ({
     setNewEvents(tmp);
     setCount(count + 1);
   };
-  console.log(newEvents);
   React.useEffect(() => {
     if (newEvents.length === 0) addEvent();
   }, []);

@@ -34,7 +34,6 @@ const DayTile = ({ index, token, propEvents, activeMonth, activeYear }) => {
         propEvents.map((event) => {
           let start = null;
           if (event.start) {
-            console.log(event.start);
             start = new Date(event.start);
           }
           let end = null;
