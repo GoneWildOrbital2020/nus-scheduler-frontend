@@ -12,14 +12,13 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Logo from '../images/logov5light.png';
 import { light, dark } from '../Colors';
-import { url } from './Constant';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: dark,
     position: 'fixed',
     zIndex: 1400,
-    height: '75px',
+    height: '64px',
     top: '0',
   },
   menuButton: {
@@ -98,11 +97,7 @@ const Navbar = (props) => {
                 {avatar === '' ? (
                   <AccountCircleIcon className={classes.avatar} />
                 ) : (
-                  <img
-                    className={classes.avatar}
-                    src={`${url}${avatar}`}
-                    alt="profile"
-                  />
+                  <img className={classes.avatar} src={avatar} alt="profile" />
                 )}
                 <Typography className={classes.typography}>
                   {username}

@@ -87,10 +87,10 @@ const ForgotPassword = () => {
   return (
     <>
       <Paper className={classes.paper}>
-        <Typography className={classes.typography}>Password Reset</Typography>
+        <Typography className={classes.typography}>Reset Password</Typography>
         <Typography className={classes.text}>
-          If you have forgotten your password, simply enter your corresponding
-          email address and we will send a link to reset your password.
+          Please enter your email address and we will send a link to reset your
+          password.
         </Typography>
         <TextField
           className={classes.textField}
