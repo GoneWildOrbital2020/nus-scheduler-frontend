@@ -29,6 +29,7 @@ import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
+import Loader from 'react-loader-spinner';
 import { light, dark } from '../Colors';
 import Notification from './Notification';
 import { url, monthProperties, fileUrl } from './Constant';
@@ -105,19 +106,15 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   typography: {
-    // fontSize: '1.5rem',
     [theme.breakpoints.down('xs')]: {
       fontSize: '1rem',
     },
-    // fontWeight: 'bold',
     color: dark,
   },
   typography2: {
-    // fontSize: '1.5rem',
     [theme.breakpoints.down('xs')]: {
       fontSize: '1rem',
     },
-    // fontWeight: 'bold',
     marginBottom: '1rem',
     alignSelf: 'flex-start',
   },
@@ -143,6 +140,7 @@ const Upload = (props) => {
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState('');
   const [severity, setSeverity] = useState('success');
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchFile = fetch(`${url}/upload/get/file/${groupName}`, {
@@ -232,6 +230,7 @@ const Upload = (props) => {
 
   const handleUploadImage = (event) => {
     event.preventDefault();
+    setIsLoading(true);
     const data = new FormData();
     data.append('identifier', total + 1);
     data.append('name', name);
@@ -244,6 +243,7 @@ const Upload = (props) => {
       body: data,
     })
       .then((res) => {
+        setIsLoading(false);
         if (res.status !== 201) {
           throw new Error('Upload image failed!');
         } else {
@@ -263,6 +263,7 @@ const Upload = (props) => {
 
   const handleUploadFile = (event) => {
     event.preventDefault();
+    setIsLoading(true);
     const data = new FormData();
     data.append('identifier', total + 1);
     data.append('name', name);
@@ -275,6 +276,7 @@ const Upload = (props) => {
       body: data,
     })
       .then((res) => {
+        setIsLoading(false);
         if (res.status !== 201) {
           throw new Error('Upload file failed!');
         } else {
@@ -476,53 +478,61 @@ const Upload = (props) => {
             onChange={handleChangeName}
             className={classes.textField}
           />
-          <label htmlFor="image-upload">
-            <input
-              className={classes.input}
-              id="image-upload"
-              type="file"
-              onChange={handleUploadImage}
-              disabled={!name}
-            />
-            <Button
-              variant="contained"
-              color="primary"
-              className={classes.button}
-              component="span"
-              disabled={!name}
-              style={
-                extraSmall
-                  ? {
-                      margin: '1rem 0',
-                      display: 'block',
-                      width: '75%',
-                      textAlign: 'center',
-                    }
-                  : { margin: '0 1rem' }
-              }
-            >
-              Upload Image
-            </Button>
-          </label>
-          <label htmlFor="file-upload">
-            <input
-              className={classes.input}
-              id="file-upload"
-              type="file"
-              onChange={handleUploadFile}
-              disabled={!name}
-            />
-            <Button
-              variant="contained"
-              color="primary"
-              className={classes.button}
-              component="span"
-              disabled={!name}
-              style={extraSmall ? { width: '75%', textAlign: 'center' } : {}}
-            >
-              Upload File
-            </Button>
-          </label>
+          {isLoading ? (
+            <Loader type="TailSpin" color={dark} height={80} width={80} />
+          ) : (
+            <>
+              <label htmlFor="image-upload">
+                <input
+                  className={classes.input}
+                  id="image-upload"
+                  type="file"
+                  onChange={handleUploadImage}
+                  disabled={!name}
+                />
+                <Button
+                  variant="contained"
+                  color="primary"
+                  className={classes.button}
+                  component="span"
+                  disabled={!name}
+                  style={
+                    extraSmall
+                      ? {
+                          margin: '1rem 0',
+                          display: 'block',
+                          width: '75%',
+                          textAlign: 'center',
+                        }
+                      : { margin: '0 1rem' }
+                  }
+                >
+                  Upload Image
+                </Button>
+              </label>
+              <label htmlFor="file-upload">
+                <input
+                  className={classes.input}
+                  id="file-upload"
+                  type="file"
+                  onChange={handleUploadFile}
+                  disabled={!name}
+                />
+                <Button
+                  variant="contained"
+                  color="primary"
+                  className={classes.button}
+                  component="span"
+                  disabled={!name}
+                  style={
+                    extraSmall ? { width: '75%', textAlign: 'center' } : {}
+                  }
+                >
+                  Upload File
+                </Button>
+              </label>
+            </>
+          )}
           <Notification
             open={open}
             handleClose={handleClose}

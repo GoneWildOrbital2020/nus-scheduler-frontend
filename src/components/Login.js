@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import Loader from 'react-loader-spinner';
 import { toggleLogin } from '../redux/Actions';
 import { dark, light } from '../Colors';
 import Notification from './Notification';
@@ -45,6 +46,7 @@ const Login = (props) => {
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState('');
   const [severity, setSeverity] = useState('success');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChangeEmail = (event) => {
     setEmail(event.target.value);
@@ -55,8 +57,8 @@ const Login = (props) => {
   };
 
   const handleSubmit = (event) => {
-    // TODO: validate data
     event.preventDefault();
+    setIsLoading(true);
     const data = {
       email,
       password,
@@ -69,6 +71,7 @@ const Login = (props) => {
       body: JSON.stringify(data),
     })
       .then((res) => {
+        setIsLoading(false);
         if (res.status === 403) {
           throw new Error('Account has not been activated!');
         }
@@ -129,6 +132,12 @@ const Login = (props) => {
 
   return (
     <div className={classes.login}>
+      <Notification
+        message={message}
+        handleClose={handleClose}
+        open={open}
+        severity={severity}
+      />
       <div className={classes.form}>
         <Typography variant="h4" style={{ color: dark }}>
           WELCOME
@@ -154,50 +163,58 @@ const Login = (props) => {
             />
           </div>
         </form>
-        <Button
-          className={classes.button}
-          onClick={handleSubmit}
-          variant="contained"
-          color="primary"
-        >
-          LOG IN
-        </Button>
-        <Notification
-          message={message}
-          handleClose={handleClose}
-          open={open}
-          severity={severity}
-        />
-        <Typography
-          variant="body2"
-          style={{ color: dark, marginTop: '1rem', marginBottom: '0.25rem' }}
-        >
-          Not a user?
-        </Typography>
-        <Link className={classes.link} to="/signup">
-          <Button
-            className={classes.button}
-            variant="contained"
-            color="primary"
-          >
-            SIGN UP
-          </Button>
-        </Link>
-        <Typography
-          variant="body2"
-          style={{ color: dark, marginTop: '1rem', marginBottom: '0.25rem' }}
-        >
-          Forgot password?
-        </Typography>
-        <Link to="/forgotPassword">
-          <Button
-            className={classes.button}
-            variant="contained"
-            color="primary"
-          >
-            Reset Password
-          </Button>
-        </Link>
+        {isLoading ? (
+          <Loader type="ThreeDots" color={dark} height={80} width={80} />
+        ) : (
+          <>
+            <Button
+              className={classes.button}
+              onClick={handleSubmit}
+              variant="contained"
+              color="primary"
+            >
+              LOG IN
+            </Button>
+            <Typography
+              variant="body2"
+              style={{
+                color: dark,
+                marginTop: '1rem',
+                marginBottom: '0.25rem',
+              }}
+            >
+              Not a user?
+            </Typography>
+            <Link className={classes.link} to="/signup">
+              <Button
+                className={classes.button}
+                variant="contained"
+                color="primary"
+              >
+                SIGN UP
+              </Button>
+            </Link>
+            <Typography
+              variant="body2"
+              style={{
+                color: dark,
+                marginTop: '1rem',
+                marginBottom: '0.25rem',
+              }}
+            >
+              Forgot password?
+            </Typography>
+            <Link to="/forgotPassword">
+              <Button
+                className={classes.button}
+                variant="contained"
+                color="primary"
+              >
+                Reset Password
+              </Button>
+            </Link>
+          </>
+        )}
       </div>
     </div>
   );

@@ -8,6 +8,7 @@ import {
   Button,
   TextField,
 } from '@material-ui/core';
+import Loader from 'react-loader-spinner';
 import { url } from './Constant';
 import { light, dark } from '../Colors';
 import Notification from './Notification';
@@ -44,6 +45,7 @@ const Authenticate = (props) => {
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState('');
   const [severity, setSeverity] = useState('success');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -67,6 +69,7 @@ const Authenticate = (props) => {
   };
 
   const handleSubmit = (event) => {
+    setIsLoading(true);
     event.preventDefault();
     const data = {
       email,
@@ -81,6 +84,7 @@ const Authenticate = (props) => {
       body: JSON.stringify(data),
     })
       .then((res) => {
+        setIsLoading(false);
         if (!res.ok) {
           throw new Error('Reset password failed!');
         }
@@ -98,7 +102,7 @@ const Authenticate = (props) => {
   return (
     <>
       <Paper className={classes.paper}>
-        <Typography className={classes.typography}>Password Reset</Typography>
+        <Typography className={classes.typography}>Reset Password</Typography>
         <TextField
           className={classes.textField}
           variant="outlined"
@@ -117,15 +121,19 @@ const Authenticate = (props) => {
           defaultValue={retype}
           onChange={handleChangeRetype}
         />
-        <Button
-          className={classes.button}
-          variant="contained"
-          color="primary"
-          onClick={handleSubmit}
-          disabled={check()}
-        >
-          Submit
-        </Button>
+        {isLoading ? (
+          <Loader type="ThreeDots" color={dark} height={80} width={80} />
+        ) : (
+          <Button
+            className={classes.button}
+            variant="contained"
+            color="primary"
+            onClick={handleSubmit}
+            disabled={check()}
+          >
+            Submit
+          </Button>
+        )}
       </Paper>
       <Notification
         message={message}

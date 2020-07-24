@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { TextField, Button, Typography } from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
+import Loader from 'react-loader-spinner';
 import { dark, light } from '../Colors';
 import Notification from './Notification';
 import { url } from './Constant';
@@ -37,6 +38,7 @@ const Signup = ({ ...routerProps }) => {
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState('');
   const [severity, setSeverity] = useState('success');
+  const [isLoading, setIsLoading] = useState(false);
   const { history } = routerProps;
 
   const handleChangeUsername = (event) => {
@@ -53,6 +55,7 @@ const Signup = ({ ...routerProps }) => {
 
   const handleSubmit = (event) => {
     // TODO: validate data
+    setIsLoading(true);
     event.preventDefault();
     const data = {
       email,
@@ -67,6 +70,7 @@ const Signup = ({ ...routerProps }) => {
       body: JSON.stringify(data),
     })
       .then((res) => {
+        setIsLoading(false);
         if (res.status === 400 || res.status === 500) {
           throw new Error('Sign up failed, please try again!');
         }
@@ -93,6 +97,12 @@ const Signup = ({ ...routerProps }) => {
 
   return (
     <div className={classes.signup}>
+      <Notification
+        open={open}
+        handleClose={handleClose}
+        severity={severity}
+        message={message}
+      />
       <div className={classes.form} style={{ backgroundColor: light }}>
         <Typography variant="h4" style={{ color: dark }}>
           JOIN NOW
@@ -127,20 +137,18 @@ const Signup = ({ ...routerProps }) => {
             />
           </div>
         </form>
-        <Button
-          className={classes.button}
-          onClick={handleSubmit}
-          variant="contained"
-          color="primary"
-        >
-          SIGN UP
-        </Button>
-        <Notification
-          open={open}
-          handleClose={handleClose}
-          severity={severity}
-          message={message}
-        />
+        {isLoading ? (
+          <Loader type="ThreeDots" color={dark} height={80} width={80} />
+        ) : (
+          <Button
+            className={classes.button}
+            onClick={handleSubmit}
+            variant="contained"
+            color="primary"
+          >
+            SIGN UP
+          </Button>
+        )}
       </div>
     </div>
   );

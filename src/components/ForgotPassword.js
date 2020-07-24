@@ -6,6 +6,7 @@ import {
   makeStyles,
   Button,
 } from '@material-ui/core';
+import Loader from 'react-loader-spinner';
 import { dark, light } from '../Colors';
 import { url } from './Constant';
 import Notification from './Notification';
@@ -44,6 +45,7 @@ const ForgotPassword = () => {
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState('');
   const [severity, setSeverity] = useState('success');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -54,6 +56,7 @@ const ForgotPassword = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    setIsLoading(true);
     const data = {
       email,
     };
@@ -65,6 +68,7 @@ const ForgotPassword = () => {
       body: JSON.stringify(data),
     })
       .then((res) => {
+        setIsLoading(false);
         if (!res.ok) {
           throw new Error('Account with current email not found!');
         }
@@ -100,15 +104,19 @@ const ForgotPassword = () => {
           defaultValue={email}
           onChange={handleChange}
         />
-        <Button
-          className={classes.button}
-          variant="contained"
-          color="primary"
-          onClick={handleSubmit}
-          disabled={!email}
-        >
-          Submit
-        </Button>
+        {isLoading ? (
+          <Loader type="ThreeDots" color={dark} height={80} width={80} />
+        ) : (
+          <Button
+            className={classes.button}
+            variant="contained"
+            color="primary"
+            onClick={handleSubmit}
+            disabled={!email}
+          >
+            Submit
+          </Button>
+        )}
       </Paper>
       <Notification
         message={message}
