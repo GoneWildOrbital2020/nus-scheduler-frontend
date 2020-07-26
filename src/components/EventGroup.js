@@ -64,7 +64,7 @@ const EventGroup = ({ name, path, username, token, ...routerProps }) => {
       },
     };
     fetch(`${url}/events/activity/${name}`, options);
-    history.replace('/');
+    history.replace('/calendar');
   };
   return !extraSmall ? (
     <>
