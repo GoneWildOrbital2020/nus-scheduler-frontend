@@ -88,6 +88,7 @@ const DayTile = ({ index, token, propEvents, activeMonth, activeYear }) => {
   };
 
   const saveEvents = (e) => {
+    console.log(e);
     saveEventsToDB(activeYear, activeMonth, index, e);
     setCurrEvents(e);
   };

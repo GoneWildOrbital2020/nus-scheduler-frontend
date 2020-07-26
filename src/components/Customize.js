@@ -106,6 +106,7 @@ const Customize = ({ name, token, numOfEvents, dispatch }) => {
   };
 
   const [events, setEvents] = React.useState({ empty: true });
+  const [date, setDate] = React.useState({});
   const fetchEvents = () =>
     fetch(`${url}/events/activity/${name}`, {
       method: 'GET',
@@ -121,6 +122,12 @@ const Customize = ({ name, token, numOfEvents, dispatch }) => {
       .then((response) => response.json())
       .then((data) => {
         setEvents(data.rep.sort((a, b) => a.id - b.id));
+        setDate(
+          data.rep.reduce((result, item) => {
+            result[item.id] = new Date();
+            return result;
+          }, {}),
+        );
       });
   }, [name]);
   const [open, setOpen] = React.useState(false);
@@ -261,9 +268,8 @@ const Customize = ({ name, token, numOfEvents, dispatch }) => {
     fetch(`${url}/events/${name}/${key}/all`, options);
   };
 
-  const [date, setDate] = React.useState(new Date());
-
-  const handleDate = (value) => setDate(value);
+  const handleDate = (key) => (value) =>
+    setDate((state) => ({ ...state, [key]: value }));
 
   const handleAddDate = (add) => () => {
     const options = {
@@ -275,7 +281,6 @@ const Customize = ({ name, token, numOfEvents, dispatch }) => {
       body: JSON.stringify({
         data: {
           index: numOfEvents,
-
           title: add.title,
           description: add.description,
           start: add.start,
@@ -283,9 +288,9 @@ const Customize = ({ name, token, numOfEvents, dispatch }) => {
           location: add.location,
           color: add.color,
         },
-        day: date.getDate(),
-        month: date.getMonth(),
-        year: date.getFullYear(),
+        day: date[add.key].getDate(),
+        month: date[add.key].getMonth(),
+        year: date[add.key].getFullYear(),
       }),
     };
     fetch(`${url}/events/${name}/${add.key}`, options)
@@ -368,8 +373,8 @@ const Customize = ({ name, token, numOfEvents, dispatch }) => {
               </Grid>
               <div className={classes.bottomButtons}>
                 <DatePicker
-                  value={date}
-                  onChange={handleDate}
+                  value={date[value.id]}
+                  onChange={handleDate(value.id)}
                   format="d MMM yyyy"
                   className={classes.calendar}
                   inputVariant="outlined"
