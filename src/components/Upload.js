@@ -231,10 +231,11 @@ const Upload = (props) => {
   const handleUploadImage = (event) => {
     event.preventDefault();
     setIsLoading(true);
+    const currFile = event.target.files[0];
     const data = new FormData();
     data.append('identifier', total + 1);
     data.append('name', name);
-    data.append('image', event.target.files[0]);
+    data.append('image', currFile);
     fetch(`${url}/upload/image/${groupName}`, {
       method: 'POST',
       headers: {
@@ -246,13 +247,31 @@ const Upload = (props) => {
         setIsLoading(false);
         if (res.status !== 201) {
           throw new Error('Upload image failed!');
-        } else {
-          setTotal(total + 1);
-          setSeverity('success');
-          setOpen(true);
-          setMessage('Upload image successful!');
-          window.location.reload();
         }
+        return res.json();
+      })
+      .then((json) => {
+        const newTableData = [...tableData];
+        const obj = {};
+        const date = new Date();
+        const day = date.getUTCDate();
+        const month = monthProperties[date.getUTCMonth()].name;
+        const year = date.getUTCFullYear();
+        const hourMinuteSecond = date.toTimeString().substring(0, 8);
+        obj.identifier = json.identifier;
+        obj.name = json.name;
+        obj.date = `${day} ${month} ${year} ${hourMinuteSecond}`;
+        obj.fileType = currFile.name.substring(
+          currFile.name.lastIndexOf('.') + 1,
+          currFile.name.length,
+        );
+        obj.download = json.image;
+        newTableData.push(obj);
+        setTableData(newTableData);
+        setTotal(total + 1);
+        setSeverity('success');
+        setOpen(true);
+        setMessage('Upload image successful!');
       })
       .catch((err) => {
         setSeverity('error');
@@ -264,10 +283,11 @@ const Upload = (props) => {
   const handleUploadFile = (event) => {
     event.preventDefault();
     setIsLoading(true);
+    const currFile = event.target.files[0];
     const data = new FormData();
     data.append('identifier', total + 1);
     data.append('name', name);
-    data.append('file', event.target.files[0]);
+    data.append('file', currFile);
     fetch(`${url}/upload/file/${groupName}`, {
       method: 'POST',
       headers: {
@@ -279,13 +299,31 @@ const Upload = (props) => {
         setIsLoading(false);
         if (res.status !== 201) {
           throw new Error('Upload file failed!');
-        } else {
-          setTotal(total + 1);
-          setSeverity('success');
-          setOpen(true);
-          setMessage('Upload file successful!');
-          window.location.reload();
         }
+        return res.json();
+      })
+      .then((json) => {
+        const newTableData = [...tableData];
+        const obj = {};
+        const date = new Date();
+        const day = date.getUTCDate();
+        const month = monthProperties[date.getUTCMonth()].name;
+        const year = date.getUTCFullYear();
+        const hourMinuteSecond = date.toTimeString().substring(0, 8);
+        obj.identifier = json.identifier;
+        obj.name = json.name;
+        obj.date = `${day} ${month} ${year} ${hourMinuteSecond}`;
+        obj.fileType = currFile.name.substring(
+          currFile.name.lastIndexOf('.') + 1,
+          currFile.name.length,
+        );
+        obj.download = json.file;
+        newTableData.push(obj);
+        setTableData(newTableData);
+        setTotal(total + 1);
+        setSeverity('success');
+        setOpen(true);
+        setMessage('Upload file successful!');
       })
       .catch((err) => {
         setSeverity('error');
