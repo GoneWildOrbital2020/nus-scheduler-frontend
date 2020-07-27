@@ -6,6 +6,7 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
+  ListItemSecondaryAction,
   ListSubheader,
   Collapse,
   Divider,
@@ -36,6 +37,7 @@ import {
   Close,
 } from '@material-ui/icons';
 import { Link, withRouter } from 'react-router-dom';
+import Loader from 'react-loader-spinner';
 import { toggleLogout } from '../redux/Actions';
 import { dark, light } from '../Colors';
 import { url } from './Constant';
@@ -61,6 +63,7 @@ const DrawerMobile = ({
   const [openAlert, setOpenAlert] = React.useState(false);
   const [message, setMessage] = React.useState('');
   const [severity, setSeverity] = React.useState('success');
+  const [isLoading, setIsLoading] = React.useState(false);
   const { history, location } = routeProps;
 
   const handleClose = (event, reason) => {
@@ -88,6 +91,7 @@ const DrawerMobile = ({
     event.preventDefault();
     const reader = new FileReader();
     reader.onload = (e) => {
+      setIsLoading(true);
       fetch(`${url}/events/nusmod/`, {
         method: 'POST',
         headers: {
@@ -95,12 +99,20 @@ const DrawerMobile = ({
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ ics: e.target.result }),
-      }).catch(() => {
-        setSeverity('error');
-        setOpenAlert(true);
-        setMessage('Failed to upload calendar!');
-      });
-      window.location.reload();
+      })
+        .then((res) => {
+          setIsLoading(false);
+          if (res.status !== 200) {
+            throw new Error('Failed to upload calendar!');
+          } else {
+            window.location.reload();
+          }
+        })
+        .catch(() => {
+          setSeverity('error');
+          setOpenAlert(true);
+          setMessage('Failed to upload calendar!');
+        });
     };
     reader.readAsText(event.target.files[0]);
   };
@@ -216,6 +228,13 @@ const DrawerMobile = ({
             accept=".ics"
             onChange={handleUpload}
           />
+          {isLoading ? (
+            <ListItemSecondaryAction>
+              <Loader type="TailSpin" color={dark} height={30} width={30} />
+            </ListItemSecondaryAction>
+          ) : (
+            <></>
+          )}
         </ListItem>
         <ListItem onClick={handleLogout} button divider>
           <ListItemIcon>
