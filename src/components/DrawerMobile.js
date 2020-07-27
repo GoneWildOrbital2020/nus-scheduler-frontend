@@ -137,7 +137,7 @@ const DrawerMobile = ({
       },
     };
     fetch(`${url}/events/activity/${moduleName}`, options);
-    history.replace('/');
+    history.replace('/calendar');
   };
 
   React.useEffect(() => {

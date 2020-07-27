@@ -1,5 +1,8 @@
 # NUS Scheduler Frontend
 
+## Try It Out Yourself
+Please visit https://nus-scheduler.netlify.app/ and happy scheduling :smiley:.
+
 ## Running The Frontend Locally
 - ### Prerequisites
   1. **Yarn** </br>
