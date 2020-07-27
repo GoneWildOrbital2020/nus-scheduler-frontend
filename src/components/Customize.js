@@ -321,12 +321,13 @@ const Customize = ({ name, token, numOfEvents, dispatch }) => {
     };
     fetch(`${url}/events/rep/${name}`, options)
       .then((response) => response.json())
-      .then(({ id }) =>
+      .then(({ id }) => {
         setEvents((state) => {
           const newRep = { id, name: repName, events: [] };
           return state.concat([newRep]);
-        }),
-      );
+        });
+        setDate((state) => ({ ...state, [id]: new Date() }));
+      });
     setRepName('');
   };
 
